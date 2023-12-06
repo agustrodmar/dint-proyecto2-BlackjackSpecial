@@ -5,13 +5,14 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.data.Card
 import com.arodmar432p.blackjackspecial.data.Deck
 import com.arodmar432p.blackjackspecial.data.Player
 import com.arodmar432p.blackjackspecial.data.Rank
 
-class BlackjackGameViewModel(application: Application) : AndroidViewModel(application) {
-    private val deck = Deck(application.applicationContext)
+class BlackjackGameViewModel : ViewModel() {
+    private val deck = Deck()
     private val _players = MutableLiveData<List<Player>>(emptyList())
     val players: LiveData<List<Player>> get() = _players
     private val _winner = MutableLiveData<Player?>()
@@ -23,9 +24,8 @@ class BlackjackGameViewModel(application: Application) : AndroidViewModel(applic
 
     init {
         _gameInProgress.value = false
-        // Añade dos jugadores al inicio
-        val player1 = Player("Player 1", mutableListOf(), 0) // Asume que los puntos iniciales son 0
-        val player2 = Player("Player 2", mutableListOf(), 0) // Asume que los puntos iniciales son 0
+        val player1 = Player("Player 1", mutableListOf(), 0)
+        val player2 = Player("Player 2", mutableListOf(), 0)
         _players.value = listOf(player1, player2)
         _currentTurn.value = player1
     }
@@ -44,7 +44,6 @@ class BlackjackGameViewModel(application: Application) : AndroidViewModel(applic
         _gameInProgress.value = true
     }
 
-    // Esta función se encarga de repartir dos cartas al inicio
     fun startDeal(numCards: Int) {
         for (i in 0 until numCards) {
             for (player in _players.value!!) {
@@ -53,16 +52,28 @@ class BlackjackGameViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    // Función del código de Diego, interesante si en el futuro quiero añadir un nombre a los
-    // jugadores
-    /*
-    fun playerTurn(name: String): Player? {
-        return _players.value?.find { it.name == name }
+    fun hitMe(player: Player) {
+        if (_currentTurn.value == player) {
+            requestCard(player)
+        }
     }
 
-*/
+    fun pass(player: Player) {
+        if (_currentTurn.value == player) {
+            passTurn()
+        }
+    }
 
-    fun passTurn() {
+    private fun requestCard(player: Player) {
+        player.hand.add(deck.getCard())
+
+        if (calculatePoints(player.hand) > 21) {
+            _winner.value = _players.value?.first { it != player }
+            _gameInProgress.value = false
+        }
+    }
+
+    private fun passTurn() {
         val currentPlayer = _currentTurn.value
         val nextPlayer = _players.value?.let { players ->
             val currentIndex = players.indexOf(currentPlayer)
@@ -80,17 +91,6 @@ class BlackjackGameViewModel(application: Application) : AndroidViewModel(applic
                 currentPlayerPoints > nextPlayerPoints -> currentPlayer
                 else -> nextPlayer
             }
-            _gameInProgress.value = false
-        }
-    }
-
-    fun requestCard(player: Player) {
-        if (_currentTurn.value != player) return
-
-        player.hand.add(deck.getCard())
-
-        if (calculatePoints(player.hand) > 21) {
-            _winner.value = _players.value?.first { it != player }
             _gameInProgress.value = false
         }
     }

@@ -6,5 +6,5 @@ data class Card(
     val suit: Suit,
     val minPoints: Int,
     val maxPoints: Int,
-    val idDrawable: Int,
+    val idDrawable: String,
 )

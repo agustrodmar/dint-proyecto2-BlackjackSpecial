@@ -81,15 +81,6 @@ fun MainMenu(navController: NavController) {
             }
 
             Button(
-                onClick = { /* Cargar Partida */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                border = BorderStroke(2.dp, Color.White),
-                modifier = Modifier.sizeIn(minWidth = 200.dp, minHeight = 50.dp)
-            ) {
-                Text("Cargar Partida", color = Color.Black)
-            }
-
-            Button(
                 onClick = { navController.navigate("Resultados") },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 border = BorderStroke(2.dp, Color.White),
