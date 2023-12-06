@@ -31,8 +31,9 @@ class BlackjackGameViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun startGame() {
+        restartGame()
         deck.shuffle()
-        dealCards(2)
+        startDeal(2)
         for (player in _players.value!!) {
             if (calculatePoints(player.hand) == 21) {
                 _winner.value = player
@@ -43,7 +44,8 @@ class BlackjackGameViewModel(application: Application) : AndroidViewModel(applic
         _gameInProgress.value = true
     }
 
-    fun dealCards(numCards: Int) {
+    // Esta función se encarga de repartir dos cartas al inicio
+    fun startDeal(numCards: Int) {
         for (i in 0 until numCards) {
             for (player in _players.value!!) {
                 player.hand.add(deck.getCard())
@@ -51,9 +53,14 @@ class BlackjackGameViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
+    // Función del código de Diego, interesante si en el futuro quiero añadir un nombre a los
+    // jugadores
+    /*
     fun playerTurn(name: String): Player? {
         return _players.value?.find { it.name == name }
     }
+
+*/
 
     fun passTurn() {
         val currentPlayer = _currentTurn.value
@@ -78,6 +85,8 @@ class BlackjackGameViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun requestCard(player: Player) {
+        if (_currentTurn.value != player) return
+
         player.hand.add(deck.getCard())
 
         if (calculatePoints(player.hand) > 21) {
@@ -108,8 +117,11 @@ class BlackjackGameViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun restartGame() {
-        _players.value = emptyList()
+        for (player in _players.value!!) {
+            player.hand.clear()
+        }
         _currentTurn.value = _players.value?.first()
         _gameInProgress.value = false
     }
 }
+

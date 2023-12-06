@@ -19,9 +19,16 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
     val players by gameViewModel.players.observeAsState(initial = emptyList())
     val winner by gameViewModel.winner.observeAsState()
     val gameInProgress by gameViewModel.gameInProgress.observeAsState(initial = false)
+    val currentTurn by gameViewModel.currentTurn.observeAsState()
 
     Column {
         Text(text = "Blackjack Game")
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Muestra el turno actual
+        currentTurn?.let {
+            Text(text = "Turno: ${it.name}")
+        }
         Spacer(modifier = Modifier.height(16.dp))
 
         if (gameInProgress) {
@@ -38,7 +45,6 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
         }
     }
 }
-
 
 @Composable
 fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {

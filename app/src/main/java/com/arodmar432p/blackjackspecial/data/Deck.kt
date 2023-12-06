@@ -40,6 +40,7 @@ class Deck(private val context: Context) {
         return cardsList.removeAt(cardsList.size - 1)
     }
 
+    /*
     fun dealCards(players: List<Player>, numCards: Int) {
         for (i in 0 until numCards) {
             for (player in players) {
@@ -47,7 +48,11 @@ class Deck(private val context: Context) {
             }
         }
     }
+    */
 
+
+    // Función que usa Diego para el carta más alta, es iinteresante para llevar el control de
+    // cartas que quedan en la baraja.
     fun getCardsTotal(): Int {
         return cardsList.size
     }
