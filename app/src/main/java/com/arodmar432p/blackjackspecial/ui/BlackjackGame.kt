@@ -1,15 +1,17 @@
 package com.arodmar432p.blackjackspecial.ui
 
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -56,9 +58,10 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
             Spacer(modifier = Modifier.height(16.dp))
 
             if (gameInProgress) {
-                players.forEach { player ->
-                    PlayerCard(player, gameViewModel)
+                players.forEachIndexed { index, player ->
+                    PlayerCard(player, gameViewModel, index)
                 }
+
             } else {
                 winner?.let { winner ->
                     Text(text = "Winner is: ${winner.name}", color = Color.White)
@@ -68,39 +71,43 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                     border = BorderStroke(2.dp, Color.White)
                 ) {
-                    Text(text = "Start Game", color = Color.White)
+                    Text(text = "Start Game", color = Color.Black)
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
-    Card(
-        modifier = Modifier.padding(8.dp),
-        // elevation = 4.dp
-    ) {
-        Column {
-            Text(text = "Player: ${player.name}", color = Color.White)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Points: ${gameViewModel.calculatePoints(player.hand)}", color = Color.White)
-            Spacer(modifier = Modifier.height(8.dp))
+fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int) {
+    Column {
+        Text(text = "Player: ${player.name}", color = Color.White)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Points: ${gameViewModel.calculatePoints(player.hand)}", color = Color.White)
+        Spacer(modifier = Modifier.height(8.dp))
 
-            // Muestra las cartas del jugador
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy((-75).dp),
-                verticalAlignment = Alignment.CenterVertically,
-                contentPadding = PaddingValues(20.dp)
-            ) {
-                items(player.hand) { card ->
-                    val cardResource = getCardResource(card.idDrawable)
-                    Image(painterResource(id = cardResource), contentDescription = null)
-                }
+        // Muestra las cartas del jugador
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) {
+            player.hand.forEachIndexed { cardIndex, card ->
+                val cardResource = getCardResource(card.idDrawable)
+                Image(
+                    painterResource(id = cardResource),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(150.dp)
+                        .width(75.dp)
+                        .offset(x = (cardIndex * 30).dp)
+                )
             }
+        }
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
+        Row {
             Button(
                 onClick = { gameViewModel.hitMe(player) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
@@ -109,7 +116,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
                 Text(text = "Hit Me", color = Color.White)
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             Button(
                 onClick = { gameViewModel.pass(player) },
@@ -178,3 +185,12 @@ fun getCardResource(cardName: String): Int {
          else -> R.drawable.bocabajo
     }
 }
+/*
+@Preview(showBackground = true)
+@Composable
+fun BlackjackScreenPreview() {
+    // Provide a mock ViewModel for the preview
+    val mockViewModel = BlackjackGameViewModel(mockResources, mockResourcesFaceDown)
+    BlackjackScreen(mockViewModel)
+}
+*/
