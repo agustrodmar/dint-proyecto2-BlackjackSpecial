@@ -11,8 +11,8 @@ class Deck {
     private fun createDeck() {
         for (suit in Suit.values()) {
             for (rank in Rank.values()) {
-                val minPoints = if (rank == Rank.ACE) 1 else rank.ordinal
-                val maxPoints = if (rank == Rank.ACE) 11 else rank.ordinal
+                val minPoints = if (rank == Rank.ACE) 1 else if (rank.ordinal > 10) 10 else rank.ordinal
+                val maxPoints = if (rank == Rank.ACE) 11 else if (rank.ordinal > 10) 10 else rank.ordinal
 
                 val idDrawable = when (suit) {
                     Suit.HEARTS -> "corazones"

@@ -1,6 +1,7 @@
 package com.arodmar432p.blackjackspecial.ui
 
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -93,6 +94,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
             player.hand.forEachIndexed { cardIndex, card ->
+                Log.d("PlayerCard", "Card name: ${card.idDrawable}")
                 val cardResource = getCardResource(card.idDrawable)
                 Image(
                     painterResource(id = cardResource),
@@ -100,7 +102,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int
                     modifier = Modifier
                         .height(150.dp)
                         .width(75.dp)
-                        .offset(x = (cardIndex * 30).dp)
+                        .offset(x = (cardIndex * 50).dp)  // Aumenta este valor para separar más las cartas
                 )
             }
         }
@@ -146,7 +148,7 @@ fun getCardResource(cardName: String): Int {
         "diamantesa" -> R.drawable.diamantesa
         "diamantes2" -> R.drawable.diamantes2
         "diamantes3" -> R.drawable.diamantes3
-        "diamantes44" -> R.drawable.diamantes4
+        "diamantes4" -> R.drawable.diamantes4
         "diamantes5" -> R.drawable.diamantes5
         "diamantes6" -> R.drawable.diamantes6
         "diamantes7" -> R.drawable.diamantes7

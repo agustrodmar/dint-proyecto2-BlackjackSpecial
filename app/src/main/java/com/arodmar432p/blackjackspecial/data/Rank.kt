@@ -3,7 +3,6 @@ package com.arodmar432p.blackjackspecial.data
 /**
  * Enum class representing the names or ranks of playing cards.
  *
- * @property NONE Represents an undefined or placeholder card name.
  * @property ACE Represents the Ace card.
  * @property TWO Represents the Two card.
  * @property THREE Represents the Three card.
@@ -19,7 +18,6 @@ package com.arodmar432p.blackjackspecial.data
  * @property KING Represents the King card.
  */
 enum class Rank {
-    NONE,
     ACE,
     TWO,
     THREE,

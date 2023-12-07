@@ -1,6 +1,7 @@
 package com.arodmar432p.blackjackspecial.ui
 
 import android.app.Application
+import android.util.Log
 
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -53,11 +54,14 @@ class BlackjackGameViewModel : ViewModel() {
     }
 
     fun hitMe(player: Player) {
+        Log.d("BlackjackGameViewModel", "Hit Me button pressed for ${player.name}")
         if (_currentTurn.value == player) {
             requestCard(player)
+            if (_gameInProgress.value == true) {
+                passTurn()
+            }
         }
     }
-
     fun pass(player: Player) {
         if (_currentTurn.value == player) {
             passTurn()
@@ -101,7 +105,7 @@ class BlackjackGameViewModel : ViewModel() {
 
         for (card in hand) {
             total += if (card.rank != Rank.ACE) {
-                card.maxPoints
+                if (card.rank.ordinal >= Rank.JACK.ordinal) 10 else card.rank.ordinal + 1
             } else {
                 aces++
                 card.maxPoints
