@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -82,6 +83,22 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
 
 @Composable
 fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int) {
+
+    val winner by gameViewModel.winner.observeAsState()
+
+    if (winner != null) {
+        AlertDialog(
+            onDismissRequest = { gameViewModel.closeDialog() },
+            title = { Text(text = "Game Over") },
+            text = { Text(text = "Winner is: ${winner!!.name}") },
+            confirmButton = {
+                Button(onClick = { gameViewModel.closeDialog() }) {
+                    Text("Aceptar")
+                }
+            }
+        )
+    }
+
     Column {
         Text(text = "Player: ${player.name}", color = Color.White)
         Spacer(modifier = Modifier.height(8.dp))
@@ -106,6 +123,9 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int
                 )
             }
         }
+
+        gameViewModel.checkForBlackjack()
+
 
         Spacer(modifier = Modifier.height(8.dp))
 

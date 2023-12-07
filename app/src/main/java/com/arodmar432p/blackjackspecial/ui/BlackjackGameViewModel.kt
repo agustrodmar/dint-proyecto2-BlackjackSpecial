@@ -23,26 +23,35 @@ class BlackjackGameViewModel : ViewModel() {
     private val _gameInProgress = MutableLiveData<Boolean>()
     val gameInProgress: LiveData<Boolean> get() = _gameInProgress
 
+    private val _showDialog = MutableLiveData<Boolean>() // Para declarar el ganador
+    val showDialog: LiveData<Boolean> get() = _showDialog
+
+
     init {
         _gameInProgress.value = false
         val player1 = Player("Player 1", mutableListOf(), 0)
         val player2 = Player("Player 2", mutableListOf(), 0)
         _players.value = listOf(player1, player2)
         _currentTurn.value = player1
+        _showDialog.value = false
     }
 
     fun startGame() {
+        _winner.value = null
+        _showDialog.value = false
         restartGame()
         deck.shuffle()
         startDeal(2)
-        for (player in _players.value!!) {
-            if (calculatePoints(player.hand) == 21) {
-                _winner.value = player
-                _gameInProgress.value = false
-                return
-            }
-        }
         _gameInProgress.value = true
+    }
+    private fun endGame(winner: Player) {
+        _winner.value = winner
+        _showDialog.value = true
+    }
+
+    fun closeDialog() {
+        _showDialog.value = false
+        _gameInProgress.value = false
     }
 
     fun startDeal(numCards: Int) {
@@ -72,8 +81,7 @@ class BlackjackGameViewModel : ViewModel() {
         player.hand.add(deck.getCard())
 
         if (calculatePoints(player.hand) > 21) {
-            _winner.value = _players.value?.first { it != player }
-            _gameInProgress.value = false
+            endGame(_players.value?.first { it != player }!!)
         }
     }
 
@@ -89,13 +97,13 @@ class BlackjackGameViewModel : ViewModel() {
         if (_currentTurn.value == _players.value?.first()) {
             val currentPlayerPoints = calculatePoints(currentPlayer!!.hand)
             val nextPlayerPoints = calculatePoints(nextPlayer!!.hand)
-            _winner.value = when {
+            val winner = when {
                 currentPlayerPoints > 21 -> nextPlayer
                 nextPlayerPoints > 21 -> currentPlayer
                 currentPlayerPoints > nextPlayerPoints -> currentPlayer
                 else -> nextPlayer
             }
-            _gameInProgress.value = false
+            endGame(winner!!)
         }
     }
 
@@ -118,6 +126,16 @@ class BlackjackGameViewModel : ViewModel() {
         }
 
         return total
+    }
+
+    fun checkForBlackjack() {
+        for (player in _players.value!!) {
+            if (calculatePoints(player.hand) == 21) {
+                _winner.value = player
+                _showDialog.value = true
+                return
+            }
+        }
     }
 
     fun restartGame() {
