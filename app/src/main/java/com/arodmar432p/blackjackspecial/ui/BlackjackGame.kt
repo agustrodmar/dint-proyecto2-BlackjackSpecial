@@ -123,8 +123,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int
         Spacer(modifier = Modifier.height(8.dp))
 
         // Muestra las cartas del jugador
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Box(
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
             player.hand.forEachIndexed { cardIndex, card ->
@@ -141,10 +140,11 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int
                     modifier = Modifier
                         .height(150.dp)
                         .width(75.dp)
-                        .offset(x = (cardIndex * 50).dp)
+                        .offset(x = (cardIndex * 15).dp, y = (cardIndex * 20).dp)
                 )
             }
         }
+
 
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -227,12 +227,3 @@ fun getCardResource(cardName: String): Int {
          else -> R.drawable.bocabajo
     }
 }
-/*
-@Preview(showBackground = true)
-@Composable
-fun BlackjackScreenPreview() {
-    // Provide a mock ViewModel for the preview
-    val mockViewModel = BlackjackGameViewModel(mockResources, mockResourcesFaceDown)
-    BlackjackScreen(mockViewModel)
-}
-*/
