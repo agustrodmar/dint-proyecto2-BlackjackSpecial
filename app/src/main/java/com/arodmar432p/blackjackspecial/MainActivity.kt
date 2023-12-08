@@ -15,6 +15,7 @@ import com.arodmar432p.blackjackspecial.ui.BlackjackGameViewModel
 import com.arodmar432p.blackjackspecial.ui.BlackjackScreen
 import com.arodmar432p.blackjackspecial.ui.MainMenu
 import com.arodmar432p.blackjackspecial.data.BlackjackRoutes
+import com.arodmar432p.blackjackspecial.ui.ResultsScreen
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
 
@@ -40,10 +41,15 @@ class MainActivity : ComponentActivity() {
                         startDestination = BlackjackRoutes.MainMenuScreen.route
                     ) {
                         composable(BlackjackRoutes.MainMenuScreen.route) {
-                            MainMenu(navController = navController)
+                            MainMenu(navController = navController, gameViewModel = gameViewModel)
                         }
                         composable(BlackjackRoutes.BlackjackScreen.route) {
                             BlackjackScreen(
+                                gameViewModel = gameViewModel
+                            )
+                        }
+                        composable(BlackjackRoutes.ResultsScreen.route) {
+                            ResultsScreen(
                                 gameViewModel = gameViewModel
                             )
                         }
@@ -51,5 +57,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        gameViewModel.eventCloseApp.observe(this) { event ->
+            if (event) {
+                finish()
+                gameViewModel.onAppClosed()
+            }
+        }
+
     }
 }

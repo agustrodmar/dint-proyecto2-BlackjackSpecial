@@ -26,9 +26,11 @@ import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.data.BlackjackRoutes
 
 @Composable
-fun MainMenu(navController: NavController) {
+fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel) {
     val openDialog = remember { mutableStateOf(false) }
     val background = painterResource(id = R.drawable.tapete)
+
+
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Image(
@@ -81,7 +83,7 @@ fun MainMenu(navController: NavController) {
             }
 
             Button(
-                onClick = { navController.navigate("Resultados") },
+                onClick = { navController.navigate(BlackjackRoutes.ResultsScreen.route) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 border = BorderStroke(2.dp, Color.White),
                 modifier = Modifier.sizeIn(minWidth = 200.dp, minHeight = 50.dp)
@@ -90,7 +92,7 @@ fun MainMenu(navController: NavController) {
             }
 
             Button(
-                onClick = { /* Salir */ },
+                onClick = { gameViewModel.closeApp() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 border = BorderStroke(2.dp, Color.White),
                 modifier = Modifier.sizeIn(minWidth = 200.dp, minHeight = 50.dp)

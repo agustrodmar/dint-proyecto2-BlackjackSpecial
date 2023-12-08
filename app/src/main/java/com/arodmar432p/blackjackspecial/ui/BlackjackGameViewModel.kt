@@ -26,6 +26,17 @@ class BlackjackGameViewModel : ViewModel() {
     private val _showDialog = MutableLiveData<Boolean>() // Para declarar el ganador
     val showDialog: LiveData<Boolean> get() = _showDialog
 
+    private val _player1Wins = MutableLiveData<Int>(0)
+
+    // Para manejar mi pantalla de Resultados
+    val player1Wins: LiveData<Int> get() = _player1Wins
+
+    private val _player2Wins = MutableLiveData<Int>(0)
+    val player2Wins: LiveData<Int> get() = _player2Wins
+
+    private val _eventCloseApp = MutableLiveData<Boolean>()
+    val eventCloseApp: LiveData<Boolean> get() = _eventCloseApp
+
 
 
 
@@ -52,6 +63,11 @@ class BlackjackGameViewModel : ViewModel() {
         if (winner != null) {
             _winner.value = winner
             _showDialog.value = true
+            if (winner.name == "Player 1") {
+                _player1Wins.value = (_player1Wins.value ?: 0) + 1
+            } else if (winner.name == "Player 2") {
+                _player2Wins.value = (_player2Wins.value ?: 0) + 1
+            }
         } else {
             _winner.value = null
             _showDialog.value = true
@@ -155,6 +171,14 @@ class BlackjackGameViewModel : ViewModel() {
         }
         _currentTurn.value = _players.value?.first()
         _gameInProgress.value = false
+    }
+
+    fun closeApp() {
+        _eventCloseApp.value = true
+    }
+
+    fun onAppClosed() {
+        _eventCloseApp.value = false
     }
 }
 
