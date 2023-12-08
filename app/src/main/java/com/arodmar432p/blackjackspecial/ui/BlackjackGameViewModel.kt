@@ -27,13 +27,17 @@ class BlackjackGameViewModel : ViewModel() {
     val showDialog: LiveData<Boolean> get() = _showDialog
 
 
+
+
     init {
         _gameInProgress.value = false
         val player1 = Player("Player 1", mutableListOf(), 0)
         val player2 = Player("Player 2", mutableListOf(), 0)
         _players.value = listOf(player1, player2)
         _currentTurn.value = player1
+        checkForBlackjack()
         _showDialog.value = false
+
     }
 
     fun startGame() {
@@ -44,9 +48,14 @@ class BlackjackGameViewModel : ViewModel() {
         startDeal(2)
         _gameInProgress.value = true
     }
-    private fun endGame(winner: Player) {
-        _winner.value = winner
-        _showDialog.value = true
+    private fun endGame(winner: Player?) {
+        if (winner != null) {
+            _winner.value = winner
+            _showDialog.value = true
+        } else {
+            _winner.value = null
+            _showDialog.value = true
+        }
     }
 
     fun closeDialog() {
@@ -101,11 +110,13 @@ class BlackjackGameViewModel : ViewModel() {
                 currentPlayerPoints > 21 -> nextPlayer
                 nextPlayerPoints > 21 -> currentPlayer
                 currentPlayerPoints > nextPlayerPoints -> currentPlayer
-                else -> nextPlayer
+                currentPlayerPoints < nextPlayerPoints -> nextPlayer
+                else -> null  // Con esto pienso manejar el empate
             }
-            endGame(winner!!)
+            endGame(winner)
         }
     }
+
 
     fun calculatePoints(hand: List<Card>): Int {
         var total = 0

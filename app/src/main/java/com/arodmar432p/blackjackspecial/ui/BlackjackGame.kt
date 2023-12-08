@@ -97,10 +97,22 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int
                 }
             }
         )
+      // Con este condicional manejo que sea empate.
+    } else if (gameViewModel.showDialog.value == true) {
+        AlertDialog(
+            onDismissRequest = { gameViewModel.closeDialog() },
+            title = { Text(text = "Game Over") },
+            text = { Text(text = "El resultado es de empate") },
+            confirmButton = {
+                Button(onClick = { gameViewModel.closeDialog() }) {
+                    Text("Aceptar")
+                }
+            }
+        )
     }
 
     Column {
-        Text(text = "Player: ${player.name}", color = Color.White)
+        Text(text = "${player.name}", color = Color.White)
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Points: ${gameViewModel.calculatePoints(player.hand)}", color = Color.White)
         Spacer(modifier = Modifier.height(8.dp))
@@ -123,8 +135,6 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int
                 )
             }
         }
-
-        gameViewModel.checkForBlackjack()
 
 
         Spacer(modifier = Modifier.height(8.dp))
