@@ -61,7 +61,7 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
 
             if (gameInProgress) {
                 players.forEachIndexed { index, player ->
-                    PlayerCard(player, gameViewModel, index)
+                    currentTurn?.let { PlayerCard(player, gameViewModel, index, currentTurn = it) }
                 }
 
             } else {
@@ -82,7 +82,7 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
 
 
 @Composable
-fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int) {
+fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int, currentTurn: Player) {
 
     val winner by gameViewModel.winner.observeAsState()
 
@@ -114,7 +114,12 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int
     Column {
         Text(text = "${player.name}", color = Color.White)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Points: ${gameViewModel.calculatePoints(player.hand)}", color = Color.White)
+
+        // Debe mostrar los puntos solo cuando el jugador tenga el turno
+        if (gameViewModel.currentTurn.value == player) {
+            Text(text = "Points: ${gameViewModel.calculatePoints(player.hand)}", color = Color.White)
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
 
         // Muestra las cartas del jugador
@@ -123,15 +128,20 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel, index: Int
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
             player.hand.forEachIndexed { cardIndex, card ->
-                Log.d("PlayerCard", "Card name: ${card.idDrawable}")
-                val cardResource = getCardResource(card.idDrawable)
+                val isGameOver = gameViewModel.winner.value != null || gameViewModel.showDialog.value == true
+                val shouldHideCard = gameViewModel.currentTurn.value != player && cardIndex != 0 && !isGameOver
+                val cardResource = if (shouldHideCard) {
+                    getCardResource("bocabajo")
+                } else {
+                    getCardResource(card.idDrawable)
+                }
                 Image(
                     painterResource(id = cardResource),
                     contentDescription = null,
                     modifier = Modifier
                         .height(150.dp)
                         .width(75.dp)
-                        .offset(x = (cardIndex * 50).dp)  // Aumenta este valor para separar más las cartas
+                        .offset(x = (cardIndex * 50).dp)
                 )
             }
         }
