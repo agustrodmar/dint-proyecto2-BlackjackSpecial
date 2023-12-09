@@ -48,6 +48,11 @@ class Deck {
         cardsList.shuffle()
     }
 
+    fun hasCards(): Boolean {
+        return cardsList.isNotEmpty()
+    }
+
+
     fun getCard(): Card {
         if (cardsList.isEmpty()) {
             throw IllegalStateException("Deck is empty!")

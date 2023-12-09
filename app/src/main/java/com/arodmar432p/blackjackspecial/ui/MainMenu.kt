@@ -65,7 +65,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                                 border = BorderStroke(2.dp, Color.White)
                             ) {
-                                Text("Contra la máquina")
+                                Text("Contra la mesa")
                             }
                             Button(
                                 onClick = { navController.navigate(BlackjackRoutes.BlackjackScreen.route) },

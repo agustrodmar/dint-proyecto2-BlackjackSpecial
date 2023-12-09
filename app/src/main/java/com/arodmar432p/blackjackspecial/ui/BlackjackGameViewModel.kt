@@ -96,6 +96,7 @@ class BlackjackGameViewModel : ViewModel() {
             }
         }
     }
+
     fun pass(player: Player) {
         if (_currentTurn.value == player) {
             passTurn()
