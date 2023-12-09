@@ -1,6 +1,5 @@
 package com.arodmar432p.blackjackspecial.ui
 
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -25,13 +24,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.data.Player
 
 @Composable
-fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
+fun BlackjackDealerScreen(gameViewModel: BlackjackDealerViewModel) {
     val backgroundImage = painterResource(id = R.drawable.tapete)
     val players by gameViewModel.players.observeAsState(initial = emptyList())
     val winner by gameViewModel.winner.observeAsState()
@@ -63,7 +63,7 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
 
             if (gameInProgress) {
                 players.forEachIndexed { index, player ->
-                    currentTurn?.let { PlayerCard(player, gameViewModel) }
+                    PlayerCardDealer(player, gameViewModel)
                 }
 
             } else {
@@ -82,9 +82,8 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
     }
 }
 
-
 @Composable
-fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
+fun PlayerCardDealer(player: Player, gameViewModel: BlackjackDealerViewModel) {
     val winner by gameViewModel.winner.observeAsState()
 
     if (winner != null) {
@@ -136,48 +135,51 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
                 val isGameOver = gameViewModel.winner.value != null || gameViewModel.showDialog.value == true
                 val shouldHideCard = gameViewModel.currentTurn.value != player && cardIndex != 0 && !isGameOver
                 val cardResource = if (shouldHideCard) {
-                    getCardResource("bocabajo")
+                    "bocabajo"
                 } else {
-                    getCardResource(card.idDrawable)
+                    card.idDrawable
                 }
+
                 Image(
-                    painterResource(id = cardResource),
+                    painter = painterResource(id = LocalContext.current.resources.getIdentifier(cardResource, "drawable", LocalContext.current.packageName)),
                     contentDescription = null,
                     modifier = Modifier
-                        .height(150.dp)
-                        .width(75.dp)
-                        .offset(x = (cardIndex * 15).dp, y = (cardIndex * 20).dp)
+                        .height(200.dp)
+                        .width(100.dp)
+                        .offset(y = (-cardIndex * 12).dp)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(25.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = { gameViewModel.hitMe(player) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                border = BorderStroke(2.dp, Color.White)
+        if (player.name == "Player") {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text(text = "Hit Me", color = Color.White)
-            }
+                Button(
+                    onClick = { gameViewModel.hitMe(player) },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                    border = BorderStroke(2.dp, Color.White)
+                ) {
+                    Text(text = "Hit Me", color = Color.White)
+                }
 
-            Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
-            Button(
-                onClick = { gameViewModel.pass(player) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                border = BorderStroke(2.dp, Color.White)
-            ) {
-                Text(text = "Pass", color = Color.White)
+                Button(
+                    onClick = { gameViewModel.pass(player) },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                    border = BorderStroke(2.dp, Color.White)
+                ) {
+                    Text(text = "Pass", color = Color.White)
+                }
             }
         }
     }
 }
-fun getCardResource(cardName: String): Int {
+fun getCardResourceDealer(cardName: String): Int {
     return when (cardName) {
         "corazonesa" -> R.drawable.corazonesa
         "corazones2" -> R.drawable.corazones2
@@ -231,6 +233,6 @@ fun getCardResource(cardName: String): Int {
         "trebolesj" -> R.drawable.trebolesj
         "trebolesq" -> R.drawable.trebolesq
         "trebolesk" -> R.drawable.trebolesk
-         else -> R.drawable.bocabajo
+        else -> R.drawable.bocabajo
     }
 }

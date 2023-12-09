@@ -15,6 +15,8 @@ import com.arodmar432p.blackjackspecial.ui.BlackjackGameViewModel
 import com.arodmar432p.blackjackspecial.ui.BlackjackScreen
 import com.arodmar432p.blackjackspecial.ui.MainMenu
 import com.arodmar432p.blackjackspecial.data.BlackjackRoutes
+import com.arodmar432p.blackjackspecial.ui.BlackjackDealerScreen
+import com.arodmar432p.blackjackspecial.ui.BlackjackDealerViewModel
 import com.arodmar432p.blackjackspecial.ui.ResultsScreen
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
@@ -22,7 +24,9 @@ import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
 
 class MainActivity : ComponentActivity() {
-    private val gameViewModel: BlackjackGameViewModel by viewModels()
+    private val vsGameViewModel: BlackjackGameViewModel by viewModels()
+
+    private val dealerGameViewModel: BlackjackDealerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,27 +45,26 @@ class MainActivity : ComponentActivity() {
                         startDestination = BlackjackRoutes.MainMenuScreen.route
                     ) {
                         composable(BlackjackRoutes.MainMenuScreen.route) {
-                            MainMenu(navController = navController, gameViewModel = gameViewModel)
+                            MainMenu(navController = navController, gameViewModel = vsGameViewModel)
                         }
                         composable(BlackjackRoutes.BlackjackScreen.route) {
-                            BlackjackScreen(
-                                gameViewModel = gameViewModel
-                            )
+                            BlackjackScreen(gameViewModel = vsGameViewModel)
+                        }
+                        composable(BlackjackRoutes.BlackjackDealerScreen.route) {
+                            BlackjackDealerScreen(gameViewModel = dealerGameViewModel)
                         }
                         composable(BlackjackRoutes.ResultsScreen.route) {
-                            ResultsScreen(
-                                gameViewModel = gameViewModel
-                            )
+                            ResultsScreen(gameViewModel = vsGameViewModel)
                         }
                     }
                 }
             }
         }
 
-        gameViewModel.eventCloseApp.observe(this) { event ->
+        vsGameViewModel.eventCloseApp.observe(this) { event ->
             if (event) {
                 finish()
-                gameViewModel.onAppClosed()
+                vsGameViewModel.onAppClosed()
             }
         }
 
