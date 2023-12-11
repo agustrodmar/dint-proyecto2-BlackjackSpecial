@@ -15,9 +15,9 @@ import com.arodmar432p.blackjackspecial.ui.BlackjackGameViewModel
 import com.arodmar432p.blackjackspecial.ui.BlackjackScreen
 import com.arodmar432p.blackjackspecial.ui.MainMenu
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
-import com.arodmar432p.blackjackspecial.cardGames.data.ui.BlackjackDealerScreen
+import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerScreen
 import com.arodmar432p.blackjackspecial.cardGames.data.ui.BlackjackDealerViewModel
-import com.arodmar432p.blackjackspecial.ui.ResultsScreen
+import com.arodmar432p.blackjackspecial.cardGames.ui.ResultsScreen
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
 

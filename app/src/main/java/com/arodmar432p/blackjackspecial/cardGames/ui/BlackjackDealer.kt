@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.cardGames.data.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
+import com.arodmar432p.blackjackspecial.cardGames.data.ui.BlackjackDealerViewModel
 
 
 @Composable
@@ -35,6 +37,7 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
     val playerHand by blackjackDealerViewModel.playerHand.observeAsState(listOf())
     val dealerHand by blackjackDealerViewModel.dealerHand.observeAsState(listOf())
     val gameInProgress by blackjackDealerViewModel.gameInProgress.observeAsState(false)
+    val isGameOver by blackjackDealerViewModel.isGameOver.observeAsState(false)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -44,16 +47,36 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
             contentScale = ContentScale.FillBounds
         )
 
-        if (gameInProgress) {
+        if (gameInProgress || isGameOver) {
             GameScreen(blackjackDealerViewModel, playerPoints, dealerPoints, playerHand, dealerHand)
         } else {
             StartScreen(blackjackDealerViewModel, winner)
+        }
+
+        if (isGameOver) {
+            AlertDialog(
+                onDismissRequest = { blackjackDealerViewModel.closeDialog() },
+                title = { Text(text = "Game Over") },
+                text = { Text(text = "Winner is: $winner") },
+                confirmButton = {
+                    Button(onClick = { blackjackDealerViewModel.closeDialog() }) {
+                        Text("Aceptar")
+                    }
+                }
+            )
         }
     }
 }
 
 @Composable
 fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel, winner: String?) {
+    val gameReset by blackjackDealerViewModel.gameReset.observeAsState(false)
+
+    if (gameReset) {
+        blackjackDealerViewModel.startGame()
+        blackjackDealerViewModel.gameReset.value = false
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,7 +98,11 @@ fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel, winner: Stri
 }
 
 @Composable
-fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints: Int, dealerPoints: Int, playerHand: List<Card>, dealerHand: List<Card>) {
+fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints: Int, dealerPoints:
+Int, playerHand: List<Card>, dealerHand: List<Card>) {
+
+    val isGameOver by blackjackDealerViewModel.isGameOver.observeAsState(false)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -83,18 +110,18 @@ fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints:
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        // Aquí puedes cambiar el tamaño de las cartas del dealer
+
+        // tamaño de las cartas de la mesa
         Row(
             modifier = Modifier.offset { IntOffset((dealerHand.size * 15).dp.roundToPx(), (dealerHand.size * 20).dp.roundToPx()) }
         ) {
             dealerHand.forEachIndexed { index, card ->
-                val cardResource = if (index != 0) R.drawable.bocabajo else getCardResourceDealer(card.idDrawable)
-                Image(painter = painterResource(id = cardResource),
-                    contentDescription = "Dealer Card",
-                    modifier = Modifier.size(75.dp, 150.dp))
+                val cardResource = if (index != 0 && !isGameOver) R.drawable.bocabajo else getCardResourceDealer(card.idDrawable)
+                Image(painter = painterResource(id = cardResource), contentDescription = "Dealer Card", modifier = Modifier.size(75.dp, 150.dp))
             }
         }
-        Text(text = "Player Points: $playerPoints")
+        Text(text = "Player Points: $playerPoints",
+             color = Color.White)
 
         Row(
             modifier = Modifier.offset { IntOffset((playerHand.size * 15).dp.roundToPx(), (playerHand.size * 20).dp.roundToPx()) }
