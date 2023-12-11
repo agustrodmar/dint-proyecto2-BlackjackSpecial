@@ -1,65 +1,123 @@
 package com.arodmar432p.blackjackspecial.ui
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.data.Player
 
 
 @Composable
-fun BlackjackDealerScreen(viewModel: BlackjackDealerViewModel) {
-    val players by viewModel.players.observeAsState()
-    val winner by viewModel.winner.observeAsState()
-    val showDialog by viewModel.showDialog.observeAsState()
-    val gameInProgress by viewModel.gameInProgress.observeAsState()
+fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
+    val playerPoints by blackjackDealerViewModel.playerPoints.observeAsState(0)
+    val dealerPoints by blackjackDealerViewModel.dealerPoints.observeAsState(0)
+    val winner by blackjackDealerViewModel.winner.observeAsState("")
+    val playerHand by blackjackDealerViewModel.playerHand.observeAsState(listOf())
+    val dealerHand by blackjackDealerViewModel.dealerHand.observeAsState(listOf())
+    val gameInProgress by blackjackDealerViewModel.gameInProgress.observeAsState(false)
 
-    Column {
-        Button(onClick = { viewModel.startGame() }) {
-            Text("Start Game")
-        }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.tapete),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillBounds
+        )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        players?.forEach { player ->
-            PlayerCardDealer(player = player, onHitMeClick = { viewModel.hitMe() }, onPassClick = { viewModel.stand() })
-        }
-
-        if (showDialog == true) {
-            AlertDialog(
-                onDismissRequest = {},
-                title = { Text("Game Over") },
-                text = { Text("The winner is ${winner?.name}") },
-                confirmButton = {
-                    Button(onClick = { viewModel.startGame() }) {
-                        Text("Play Again")
-                    }
-                }
-            )
+        if (gameInProgress) {
+            GameScreen(blackjackDealerViewModel, playerPoints, dealerPoints, playerHand, dealerHand)
+        } else {
+            StartScreen(blackjackDealerViewModel, winner)
         }
     }
 }
 
 @Composable
-fun PlayerCardDealer(player: Player, onHitMeClick: () -> Unit, onPassClick: () -> Unit) {
-    Column {
-        Text(text = player.name)
-        player.hand.forEach { card ->
-            Text(text = "${card.rank} of ${card.suit}")
+fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel, winner: String?) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        winner?.let {
+            Text(text = "Winner: $winner", color = Color.White)
         }
-        Button(onClick = onHitMeClick) {
-            Text("Hit Me")
+        Button(
+            onClick = { blackjackDealerViewModel.startGame() },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+            border = BorderStroke(2.dp, Color.White)
+        ) {
+            Text("Start Game", color = Color.Black)
         }
-        Button(onClick = onPassClick) {
-            Text("Pass")
+    }
+}
+
+@Composable
+fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints: Int, dealerPoints: Int, playerHand: List<Card>, dealerHand: List<Card>) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Text(text = "Player Points: $playerPoints")
+        Row(
+            modifier = Modifier.offset { IntOffset((playerHand.size * 10).dp.roundToPx(), 0) }
+        ) {
+            playerHand.forEach { card ->
+                Image(painter = painterResource(id = getCardResourceDealer(card.idDrawable)), contentDescription = "Player Card", modifier = Modifier.size(50.dp))
+            }
+        }
+        Text(text = "Dealer Points: $dealerPoints")
+        Row(
+            modifier = Modifier.offset { IntOffset((dealerHand.size * 10).dp.roundToPx(), 0) }
+        ) {
+            dealerHand.forEach { card ->
+                Image(painter = painterResource(id = getCardResourceDealer(card.idDrawable)), contentDescription = "Dealer Card", modifier = Modifier.size(50.dp))
+            }
+        }
+
+        Row {
+            Button(
+                onClick = { blackjackDealerViewModel.playerTurn() },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                border = BorderStroke(2.dp, Color.White)
+            ) {
+                Text("Hit", color = Color.Black)
+            }
+            Button(
+                onClick = { blackjackDealerViewModel.stand() },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                border = BorderStroke(2.dp, Color.White)
+            ) {
+                Text("Stand", color = Color.Black)
+            }
         }
     }
 }
