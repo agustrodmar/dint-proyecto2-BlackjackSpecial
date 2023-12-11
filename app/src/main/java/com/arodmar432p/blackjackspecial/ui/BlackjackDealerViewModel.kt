@@ -19,6 +19,7 @@ class BlackjackDealerViewModel : ViewModel() {
     val dealerPoints = MutableLiveData<Int>()
     val playerHand = MutableLiveData<List<Card>>()
     val dealerHand = MutableLiveData<List<Card>>()
+    val gameInProgress = MutableLiveData<Boolean>()
 
     fun startGame() {
         deck.shuffle()
@@ -30,8 +31,10 @@ class BlackjackDealerViewModel : ViewModel() {
         dealer.hand.add(deck.getCard())
         playerHand.value = player.hand
         dealerHand.value = dealer.hand
+        gameInProgress.value = true
         calculatePoints()
     }
+
 
 
     fun playerTurn() {
@@ -70,5 +73,6 @@ class BlackjackDealerViewModel : ViewModel() {
             dealer.points > player.points -> winner.value = "Dealer"
             else -> winner.value = "Draw"
         }
+        gameInProgress.value = false
     }
 }
