@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
 import com.arodmar432p.blackjackspecial.cardGames.data.Deck
 import com.arodmar432p.blackjackspecial.cardGames.data.Player
+import com.arodmar432p.blackjackspecial.cardGames.data.Rank
 
 class BlackjackDealerViewModel : ViewModel() {
     val deck = Deck()
@@ -54,9 +55,30 @@ class BlackjackDealerViewModel : ViewModel() {
         dealerTurn()
     }
 
+    private fun calculatePoints(player: Player): Int {
+        var total = 0
+        var aces = 0
+
+        for (card in player.hand) {
+            total += if (card.rank != Rank.ACE) {
+                if (card.rank.ordinal >= Rank.JACK.ordinal) 10 else card.rank.ordinal + 1
+            } else {
+                aces++
+                card.maxPoints
+            }
+        }
+
+        while (total > 21 && aces > 0) {
+            total -= 10
+            aces--
+        }
+
+        return total
+    }
+
     private fun calculatePoints() {
-        player.points = player.hand.sumOf { it.maxPoints }
-        dealer.points = dealer.hand.sumOf { it.maxPoints }
+        player.points = calculatePoints(player)
+        dealer.points = calculatePoints(dealer)
         playerPoints.value = player.points
         dealerPoints.value = dealer.points
     }

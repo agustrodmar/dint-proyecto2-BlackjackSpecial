@@ -89,16 +89,20 @@ fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints:
         ) {
             dealerHand.forEachIndexed { index, card ->
                 val cardResource = if (index != 0) R.drawable.bocabajo else getCardResourceDealer(card.idDrawable)
-                Image(painter = painterResource(id = cardResource), contentDescription = "Dealer Card", modifier = Modifier.size(75.dp, 150.dp))
+                Image(painter = painterResource(id = cardResource),
+                    contentDescription = "Dealer Card",
+                    modifier = Modifier.size(75.dp, 150.dp))
             }
         }
         Text(text = "Player Points: $playerPoints")
-        // Aquí puedes cambiar el tamaño de las cartas del jugador
+
         Row(
             modifier = Modifier.offset { IntOffset((playerHand.size * 15).dp.roundToPx(), (playerHand.size * 20).dp.roundToPx()) }
         ) {
             playerHand.forEach { card ->
-                Image(painter = painterResource(id = getCardResourceDealer(card.idDrawable)), contentDescription = "Player Card", modifier = Modifier.size(75.dp, 150.dp))
+                Image(painter = painterResource(id = getCardResourceDealer(card.idDrawable)),
+                    contentDescription = "Player Card",
+                    modifier = Modifier.size(75.dp, 150.dp))
             }
         }
 
