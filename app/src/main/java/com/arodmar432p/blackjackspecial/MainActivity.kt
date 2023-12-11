@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.arodmar432p.blackjackspecial.ui.BlackjackGameViewModel
-import com.arodmar432p.blackjackspecial.ui.BlackjackScreen
-import com.arodmar432p.blackjackspecial.ui.MainMenu
+import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackGameViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackScreen
+import com.arodmar432p.blackjackspecial.cardGames.ui.MainMenu
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerScreen
-import com.arodmar432p.blackjackspecial.cardGames.data.ui.BlackjackDealerViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.ResultsScreen
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 

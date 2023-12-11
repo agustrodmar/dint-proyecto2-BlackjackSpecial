@@ -20,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arodmar432p.blackjackspecial.R
-import com.arodmar432p.blackjackspecial.ui.BlackjackGameViewModel
 
 @Composable
 fun ResultsScreen(gameViewModel: BlackjackGameViewModel) {

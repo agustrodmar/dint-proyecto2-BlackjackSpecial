@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui
 
 
 import androidx.compose.foundation.BorderStroke
@@ -62,7 +62,7 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
             Spacer(modifier = Modifier.height(16.dp))
 
             if (gameInProgress) {
-                players.forEachIndexed { index, player ->
+                players.forEachIndexed { _, player ->
                     currentTurn?.let { PlayerCard(player, gameViewModel) }
                 }
 
@@ -118,7 +118,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Text(text = "${player.name}", color = Color.White)
+        Text(text = player.name, color = Color.White)
         Spacer(modifier = Modifier.height(8.dp))
 
         // Debe mostrar los puntos solo cuando el jugador tenga el turno
@@ -136,12 +136,12 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
                 val isGameOver = gameViewModel.winner.value != null || gameViewModel.showDialog.value == true
                 val shouldHideCard = gameViewModel.currentTurn.value != player && cardIndex != 0 && !isGameOver
                 val cardResource = if (shouldHideCard) {
-                    getCardResource("bocabajo")
+                    R.drawable.bocabajo
                 } else {
-                    getCardResource(card.idDrawable)
+                    card.idDrawable
                 }
                 Image(
-                    painterResource(id = cardResource),
+                    painterResource(id = cardResource!!),
                     contentDescription = null,
                     modifier = Modifier
                         .height(150.dp)
@@ -175,62 +175,5 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
                 Text(text = "Pass", color = Color.Black)
             }
         }
-    }
-}
-fun getCardResource(cardName: String): Int {
-    return when (cardName) {
-        "corazonesa" -> R.drawable.corazonesa
-        "corazones2" -> R.drawable.corazones2
-        "corazones3" -> R.drawable.corazones3
-        "corazones4" -> R.drawable.corazones4
-        "corazones5" -> R.drawable.corazones5
-        "corazones6" -> R.drawable.corazones6
-        "corazones7" -> R.drawable.corazones7
-        "corazones8" -> R.drawable.corazones8
-        "corazones9" -> R.drawable.corazones9
-        "corazones10" -> R.drawable.corazones10
-        "corazonesj" -> R.drawable.corazonesj
-        "corazonesq" -> R.drawable.corazonesq
-        "corazonesk" -> R.drawable.corazonesk
-        "diamantesa" -> R.drawable.diamantesa
-        "diamantes2" -> R.drawable.diamantes2
-        "diamantes3" -> R.drawable.diamantes3
-        "diamantes4" -> R.drawable.diamantes4
-        "diamantes5" -> R.drawable.diamantes5
-        "diamantes6" -> R.drawable.diamantes6
-        "diamantes7" -> R.drawable.diamantes7
-        "diamantes8" -> R.drawable.diamantes8
-        "diamantes9" -> R.drawable.diamantes9
-        "diamantes10" -> R.drawable.diamantes10
-        "diamantesj" -> R.drawable.diamantesj
-        "diamantesq" -> R.drawable.diamantesq
-        "diamantesk" -> R.drawable.diamantesk
-        "picasa" -> R.drawable.picasa
-        "picas2" -> R.drawable.picas2
-        "picas3" -> R.drawable.picas3
-        "picas4" -> R.drawable.picas4
-        "picas5" -> R.drawable.picas5
-        "picas6" -> R.drawable.picas6
-        "picas7" -> R.drawable.picas7
-        "picas8" -> R.drawable.picas8
-        "picas9" -> R.drawable.picas9
-        "picas10" -> R.drawable.picas10
-        "picasj" -> R.drawable.picasj
-        "picasq" -> R.drawable.picasq
-        "picask" -> R.drawable.picask
-        "trebolesa" -> R.drawable.trebolesa
-        "treboles2" -> R.drawable.treboles2
-        "treboles3" -> R.drawable.treboles3
-        "treboles4" -> R.drawable.treboles4
-        "treboles5" -> R.drawable.treboles5
-        "treboles6" -> R.drawable.treboles6
-        "treboles7" -> R.drawable.treboles7
-        "treboles8" -> R.drawable.treboles8
-        "treboles9" -> R.drawable.treboles9
-        "treboles10" -> R.drawable.treboles10
-        "trebolesj" -> R.drawable.trebolesj
-        "trebolesq" -> R.drawable.trebolesq
-        "trebolesk" -> R.drawable.trebolesk
-         else -> R.drawable.bocabajo
     }
 }

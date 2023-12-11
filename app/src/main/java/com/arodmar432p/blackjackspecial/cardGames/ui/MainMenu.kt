@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
+
 
 @Composable
 fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel) {

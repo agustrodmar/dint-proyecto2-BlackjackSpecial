@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
-import com.arodmar432p.blackjackspecial.cardGames.data.ui.BlackjackDealerViewModel
 
 
 @Composable
@@ -59,7 +58,10 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
                 title = { Text(text = "Game Over") },
                 text = { Text(text = "Winner is: $winner") },
                 confirmButton = {
-                    Button(onClick = { blackjackDealerViewModel.closeDialog() }) {
+                    Button(onClick = {
+                        blackjackDealerViewModel.closeDialog()
+                        blackjackDealerViewModel.startGame()  // Añade esta línea
+                    }) {
                         Text("Aceptar")
                     }
                 }
@@ -98,9 +100,7 @@ fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel, winner: Stri
 }
 
 @Composable
-fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints: Int, dealerPoints:
-Int, playerHand: List<Card>, dealerHand: List<Card>) {
-
+fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints: Int, dealerPoints: Int, playerHand: List<Card>, dealerHand: List<Card>) {
     val isGameOver by blackjackDealerViewModel.isGameOver.observeAsState(false)
 
     Column(
@@ -110,26 +110,26 @@ Int, playerHand: List<Card>, dealerHand: List<Card>) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-
         // tamaño de las cartas de la mesa
         Row(
             modifier = Modifier.offset { IntOffset((dealerHand.size * 15).dp.roundToPx(), (dealerHand.size * 20).dp.roundToPx()) }
         ) {
             dealerHand.forEachIndexed { index, card ->
-                val cardResource = if (index != 0 && !isGameOver) R.drawable.bocabajo else getCardResourceDealer(card.idDrawable)
-                Image(painter = painterResource(id = cardResource), contentDescription = "Dealer Card", modifier = Modifier.size(75.dp, 150.dp))
+                val cardResource = if (index != 0 && !isGameOver) R.drawable.bocabajo else card.idDrawable
+                Image(painter = painterResource(id = cardResource!!), contentDescription = "Dealer Card", modifier = Modifier.size(75.dp, 150.dp))
             }
         }
-        Text(text = "Player Points: $playerPoints",
-             color = Color.White)
+        Text(text = "Player Points: $playerPoints", color = Color.White)
 
         Row(
             modifier = Modifier.offset { IntOffset((playerHand.size * 15).dp.roundToPx(), (playerHand.size * 20).dp.roundToPx()) }
         ) {
             playerHand.forEach { card ->
-                Image(painter = painterResource(id = getCardResourceDealer(card.idDrawable)),
-                    contentDescription = "Player Card",
-                    modifier = Modifier.size(75.dp, 150.dp))
+                Image(
+                    painter = painterResource(id = card.idDrawable!!),
+                    contentDescription = "Card ${card.rank} of ${card.suit}",
+                    modifier = Modifier.size(75.dp, 150.dp)
+                )
             }
         }
 
@@ -151,62 +151,3 @@ Int, playerHand: List<Card>, dealerHand: List<Card>) {
         }
     }
 }
-
-fun getCardResourceDealer(cardName: String): Int {
-    return when (cardName) {
-        "corazonesa" -> R.drawable.corazonesa
-        "corazones2" -> R.drawable.corazones2
-        "corazones3" -> R.drawable.corazones3
-        "corazones4" -> R.drawable.corazones4
-        "corazones5" -> R.drawable.corazones5
-        "corazones6" -> R.drawable.corazones6
-        "corazones7" -> R.drawable.corazones7
-        "corazones8" -> R.drawable.corazones8
-        "corazones9" -> R.drawable.corazones9
-        "corazones10" -> R.drawable.corazones10
-        "corazonesj" -> R.drawable.corazonesj
-        "corazonesq" -> R.drawable.corazonesq
-        "corazonesk" -> R.drawable.corazonesk
-        "diamantesa" -> R.drawable.diamantesa
-        "diamantes2" -> R.drawable.diamantes2
-        "diamantes3" -> R.drawable.diamantes3
-        "diamantes4" -> R.drawable.diamantes4
-        "diamantes5" -> R.drawable.diamantes5
-        "diamantes6" -> R.drawable.diamantes6
-        "diamantes7" -> R.drawable.diamantes7
-        "diamantes8" -> R.drawable.diamantes8
-        "diamantes9" -> R.drawable.diamantes9
-        "diamantes10" -> R.drawable.diamantes10
-        "diamantesj" -> R.drawable.diamantesj
-        "diamantesq" -> R.drawable.diamantesq
-        "diamantesk" -> R.drawable.diamantesk
-        "picasa" -> R.drawable.picasa
-        "picas2" -> R.drawable.picas2
-        "picas3" -> R.drawable.picas3
-        "picas4" -> R.drawable.picas4
-        "picas5" -> R.drawable.picas5
-        "picas6" -> R.drawable.picas6
-        "picas7" -> R.drawable.picas7
-        "picas8" -> R.drawable.picas8
-        "picas9" -> R.drawable.picas9
-        "picas10" -> R.drawable.picas10
-        "picasj" -> R.drawable.picasj
-        "picasq" -> R.drawable.picasq
-        "picask" -> R.drawable.picask
-        "trebolesa" -> R.drawable.trebolesa
-        "treboles2" -> R.drawable.treboles2
-        "treboles3" -> R.drawable.treboles3
-        "treboles4" -> R.drawable.treboles4
-        "treboles5" -> R.drawable.treboles5
-        "treboles6" -> R.drawable.treboles6
-        "treboles7" -> R.drawable.treboles7
-        "treboles8" -> R.drawable.treboles8
-        "treboles9" -> R.drawable.treboles9
-        "treboles10" -> R.drawable.treboles10
-        "trebolesj" -> R.drawable.trebolesj
-        "trebolesq" -> R.drawable.trebolesq
-        "trebolesk" -> R.drawable.trebolesk
-        else -> R.drawable.bocabajo
-    }
-}
-
