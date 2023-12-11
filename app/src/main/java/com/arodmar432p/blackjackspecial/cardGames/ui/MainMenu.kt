@@ -59,20 +59,25 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                     onDismissRequest = { openDialog.value = false },
                     title = { Text("Elige un modo de juego", color= Color.White) },
                     text = {
-                        Column {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
                             Button(
                                 onClick = { navController.navigate(BlackjackRoutes.BlackjackDealerScreen.route) },
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                                border = BorderStroke(2.dp, Color.White)
+                                border = BorderStroke(2.dp, Color.White),
+                                modifier = Modifier.sizeIn(minWidth = 200.dp, minHeight = 50.dp)
                             ) {
-                                Text("Contra la mesa")
+                                Text("Contra la mesa", color = Color.Black)
                             }
                             Button(
                                 onClick = { navController.navigate(BlackjackRoutes.BlackjackScreen.route) },
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                                border = BorderStroke(2.dp, Color.White)
+                                border = BorderStroke(2.dp, Color.White),
+                                modifier = Modifier.sizeIn(minWidth = 200.dp, minHeight = 50.dp)
                             ) {
-                                Text("2 jugadores")
+                                Text("2 jugadores", color = Color.Black)
                             }
                         }
                     },

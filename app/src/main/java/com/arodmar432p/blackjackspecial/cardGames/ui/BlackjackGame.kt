@@ -162,7 +162,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 border = BorderStroke(2.dp, Color.White)
             ) {
-                Text(text = "Hit Me", color = Color.White)
+                Text(text = "Hit Me", color = Color.Black)
             }
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -172,7 +172,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 border = BorderStroke(2.dp, Color.White)
             ) {
-                Text(text = "Pass", color = Color.White)
+                Text(text = "Pass", color = Color.Black)
             }
         }
     }
