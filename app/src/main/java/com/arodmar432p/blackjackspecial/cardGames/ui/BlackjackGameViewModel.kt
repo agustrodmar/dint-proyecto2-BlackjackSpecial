@@ -7,10 +7,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.arodmar432p.blackjackspecial.data.Card
-import com.arodmar432p.blackjackspecial.data.Deck
-import com.arodmar432p.blackjackspecial.data.Player
-import com.arodmar432p.blackjackspecial.data.Rank
+import com.arodmar432p.blackjackspecial.cardGames.data.Card
+import com.arodmar432p.blackjackspecial.cardGames.data.Deck
+import com.arodmar432p.blackjackspecial.cardGames.data.Player
+import com.arodmar432p.blackjackspecial.cardGames.data.Rank
 
 class BlackjackGameViewModel : ViewModel() {
     private val deck = Deck()

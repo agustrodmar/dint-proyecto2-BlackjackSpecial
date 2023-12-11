@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.data
+package com.arodmar432p.blackjackspecial.cardGames.data
 
 /**
  * Enum class representing the suits of playing cards.

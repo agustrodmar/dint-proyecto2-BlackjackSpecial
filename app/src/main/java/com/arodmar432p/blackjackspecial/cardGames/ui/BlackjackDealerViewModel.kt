@@ -1,14 +1,10 @@
-package com.arodmar432p.blackjackspecial.ui
+package com.arodmar432p.blackjackspecial.cardGames.data.ui
 
-import android.util.Log
-
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.arodmar432p.blackjackspecial.data.Card
-import com.arodmar432p.blackjackspecial.data.Deck
-import com.arodmar432p.blackjackspecial.data.Player
-import com.arodmar432p.blackjackspecial.data.Rank
+import com.arodmar432p.blackjackspecial.cardGames.data.Card
+import com.arodmar432p.blackjackspecial.cardGames.data.Deck
+import com.arodmar432p.blackjackspecial.cardGames.data.Player
 
 class BlackjackDealerViewModel : ViewModel() {
     val deck = Deck()

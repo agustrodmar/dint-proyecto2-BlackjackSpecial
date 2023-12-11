@@ -28,7 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
-import com.arodmar432p.blackjackspecial.data.Player
+import com.arodmar432p.blackjackspecial.cardGames.data.Player
 
 @Composable
 fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {

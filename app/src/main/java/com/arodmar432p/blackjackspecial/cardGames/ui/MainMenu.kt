@@ -23,7 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
-import com.arodmar432p.blackjackspecial.data.BlackjackRoutes
+import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 
 @Composable
 fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel) {

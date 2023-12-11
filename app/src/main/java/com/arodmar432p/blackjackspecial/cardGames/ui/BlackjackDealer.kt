@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.ui
+package com.arodmar432p.blackjackspecial.cardGames.data.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -27,8 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
-import com.arodmar432p.blackjackspecial.data.Card
-import com.arodmar432p.blackjackspecial.data.Player
+import com.arodmar432p.blackjackspecial.cardGames.data.Card
 
 
 @Composable
@@ -87,20 +83,22 @@ fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints:
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Text(text = "Player Points: $playerPoints")
+        // Aquí puedes cambiar el tamaño de las cartas del dealer
         Row(
-            modifier = Modifier.offset { IntOffset((playerHand.size * 10).dp.roundToPx(), 0) }
+            modifier = Modifier.offset { IntOffset((dealerHand.size * 15).dp.roundToPx(), (dealerHand.size * 20).dp.roundToPx()) }
         ) {
-            playerHand.forEach { card ->
-                Image(painter = painterResource(id = getCardResourceDealer(card.idDrawable)), contentDescription = "Player Card", modifier = Modifier.size(50.dp))
+            dealerHand.forEachIndexed { index, card ->
+                val cardResource = if (index != 0) R.drawable.bocabajo else getCardResourceDealer(card.idDrawable)
+                Image(painter = painterResource(id = cardResource), contentDescription = "Dealer Card", modifier = Modifier.size(75.dp, 150.dp))
             }
         }
-        Text(text = "Dealer Points: $dealerPoints")
+        Text(text = "Player Points: $playerPoints")
+        // Aquí puedes cambiar el tamaño de las cartas del jugador
         Row(
-            modifier = Modifier.offset { IntOffset((dealerHand.size * 10).dp.roundToPx(), 0) }
+            modifier = Modifier.offset { IntOffset((playerHand.size * 15).dp.roundToPx(), (playerHand.size * 20).dp.roundToPx()) }
         ) {
-            dealerHand.forEach { card ->
-                Image(painter = painterResource(id = getCardResourceDealer(card.idDrawable)), contentDescription = "Dealer Card", modifier = Modifier.size(50.dp))
+            playerHand.forEach { card ->
+                Image(painter = painterResource(id = getCardResourceDealer(card.idDrawable)), contentDescription = "Player Card", modifier = Modifier.size(75.dp, 150.dp))
             }
         }
 
@@ -122,6 +120,7 @@ fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints:
         }
     }
 }
+
 fun getCardResourceDealer(cardName: String): Int {
     return when (cardName) {
         "corazonesa" -> R.drawable.corazonesa

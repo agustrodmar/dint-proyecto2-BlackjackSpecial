@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.data
+package com.arodmar432p.blackjackspecial.cardGames.data
 
 sealed class BlackjackRoutes(val route: String) {
     object MainMenuScreen : BlackjackRoutes("mainMenuScreen")
