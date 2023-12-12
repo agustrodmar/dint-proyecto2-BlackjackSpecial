@@ -25,4 +25,6 @@ sealed class BlackjackRoutes(val route: String) {
      * Represents the results screen route.
      */
     object ResultsScreen : BlackjackRoutes("ResultsScreen")
+
+    object BetScreen : BlackjackRoutes("BetScreen")
 }

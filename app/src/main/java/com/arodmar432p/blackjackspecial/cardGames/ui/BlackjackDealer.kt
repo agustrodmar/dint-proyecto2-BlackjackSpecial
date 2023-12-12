@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,7 +26,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
+import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
 
 
@@ -34,7 +37,7 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Card
  * @param blackjackDealerViewModel The ViewModel for the dealer.
  */
 @Composable
-fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
+fun BlackjackDealerScreen(navController: NavController,  blackjackDealerViewModel: BlackjackDealerViewModel) {
     // Get the game state from the ViewModel
     val playerPoints by blackjackDealerViewModel.playerPoints.observeAsState(0)
     val winner by blackjackDealerViewModel.winner.observeAsState("")
@@ -75,8 +78,8 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
                     val context = LocalContext.current
                     Button(onClick = {
                         blackjackDealerViewModel.closeDialog()
+                        navController.navigate(BlackjackRoutes.BetScreen.route)
                         blackjackDealerViewModel.startGame()
-                        blackjackDealerViewModel.playDealSound(context)
                     }) {
                         Text("Aceptar")
                     }
@@ -205,6 +208,43 @@ fun GameScreen(
                 border = BorderStroke(2.dp, Color.White)
             ) {
                 Text("Plantarse", color = Color.Black)
+            }
+        }
+    }
+}
+
+@Composable
+fun BetScreen (blackjackDealerViewModel: BlackjackDealerViewModel, navController: NavController) {
+    val playerChips by blackjackDealerViewModel.playerChips.observeAsState(0)
+    val currentBet by blackjackDealerViewModel.currentBet.observeAsState(0)
+    val context = LocalContext.current
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.tapete),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillBounds
+        )
+
+        Column {
+            Text("Fichas: $playerChips", color = Color.White)
+            Text("Apuesta actual: $currentBet", color = Color.White)
+            Slider(
+                value = currentBet.toFloat(),
+                onValueChange = { newValue -> blackjackDealerViewModel.placeBet(newValue.toInt()) },
+                valueRange = 0f..playerChips.toFloat(),
+                steps = 0
+            )
+            Button(
+                onClick = {
+                    navController.navigate(BlackjackRoutes.BlackjackDealerScreen.route)
+                    blackjackDealerViewModel.betSound(context)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                border = BorderStroke(2.dp, Color.White)
+            ) {
+                Text("Empezar juego", color = Color.Black)
             }
         }
     }

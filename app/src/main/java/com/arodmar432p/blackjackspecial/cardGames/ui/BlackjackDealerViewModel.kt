@@ -1,8 +1,12 @@
 package com.arodmar432p.blackjackspecial.cardGames.ui
 
+import android.app.Application
 import android.content.Context
 import android.media.MediaPlayer
 import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.R
@@ -14,7 +18,8 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Rank
 /**
  * A ViewModel class representing the dealer in the game of Blackjack.
  */
-class BlackjackDealerViewModel : ViewModel() {
+class BlackjackDealerViewModel(application: Application)
+    : AndroidViewModel(application) {
 
     // The deck of cards
     private val deck = Deck(cardImageMap = mapOf("corazonesa" to  R.drawable.corazonesa,
@@ -86,9 +91,16 @@ class BlackjackDealerViewModel : ViewModel() {
     val gameInProgress = MutableLiveData<Boolean>()
     val isGameOver = MutableLiveData(false)
     val gameReset = MutableLiveData(false)
+    private val _playerChips = MutableLiveData(5000)
+    val playerChips: LiveData<Int> get() = _playerChips
+    private val _currentBet = MutableLiveData(0)
+    val currentBet: LiveData<Int> get() = _currentBet
 
     // MediaPlayer to play the shuffle sound
     private var dealSoundPlayer: MediaPlayer? = null
+
+    // MediaPlayer to play chips sound
+    private var chipSoundPlayer: MediaPlayer? = null
 
     /**
      * Starts a new game.
@@ -108,6 +120,37 @@ class BlackjackDealerViewModel : ViewModel() {
         dealerHand.value = dealer.hand
         gameInProgress.value = true
         calculatePoints()
+    }
+
+
+    /**
+     * Let a player bet against the Dealer
+     */
+    fun placeBet(amount: Int) {
+        if (amount <= _playerChips.value!!) {
+            _currentBet.value = amount
+            _playerChips.value = _playerChips.value!! - amount
+        } else {
+            // Mostrar un Toast
+            Toast.makeText(getApplication(),
+                "No tienes suficientes fichas para esta apuesta",
+                Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * Function that handles win scenerarios
+     */
+    fun winBet() {
+        _playerChips.value = _playerChips.value!! + (_currentBet.value!! * 1.5).toInt()
+        _currentBet.value = 0
+    }
+
+    /**
+     * Function that handles scenerarios where player loose.
+     */
+    fun loseBet() {
+        _currentBet.value = 0
     }
 
     /**
@@ -209,6 +252,7 @@ class BlackjackDealerViewModel : ViewModel() {
 
     /**
      * Plays the deal sound.
+     *
      * @param context The context to use to create the MediaPlayer.
      */
     fun playDealSound(context: Context) {
@@ -218,5 +262,17 @@ class BlackjackDealerViewModel : ViewModel() {
         } catch (e: Exception) {
             Log.e("BlackjackDealerViewModel", "Error playing deal sound: ${e.message}")
         }
+    }
+
+    /**
+     * Plays the chips sound.
+     *
+     * @param context The context to use to create the MediaPlayer
+     */
+    fun betSound(context: Context) {
+        try {
+            chipSoundPlayer = MediaPlayer.create(context, R.raw.fichas)
+            chipSoundPlayer?.start()
+        } catch (e: Exception) {}
     }
 }
