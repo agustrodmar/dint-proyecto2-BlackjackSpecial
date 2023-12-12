@@ -2,6 +2,7 @@ package com.arodmar432p.blackjackspecial.cardGames.ui
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.R
@@ -146,7 +147,7 @@ class BlackjackDealerViewModel : ViewModel() {
      * @param player The player to calculate points for.
      * @return The total points.
      */
-    private fun calculatePoints(player: Player): Int {
+    private fun calculateCardPoints(player: Player): Int {
         var total = 0
         var aces = 0
 
@@ -173,11 +174,16 @@ class BlackjackDealerViewModel : ViewModel() {
      * Calculates the points for both the player and the dealer.
      */
     private fun calculatePoints() {
-        player.points = calculatePoints(player)
-        dealer.points = calculatePoints(dealer)
-        playerPoints.value = player.points
-        dealerPoints.value = dealer.points
+        for (currentPlayer in listOf(player, dealer)) {
+            currentPlayer.points = calculateCardPoints(currentPlayer)
+            if (currentPlayer == player) {
+                playerPoints.value = currentPlayer.points
+            } else {
+                dealerPoints.value = currentPlayer.points
+            }
+        }
     }
+
 
     /**
      * Ends the turn and determines the winner.
@@ -206,7 +212,11 @@ class BlackjackDealerViewModel : ViewModel() {
      * @param context The context to use to create the MediaPlayer.
      */
     fun playDealSound(context: Context) {
-        dealSoundPlayer = MediaPlayer.create(context, R.raw.repartir)
-        dealSoundPlayer?.start()
+        try {
+            dealSoundPlayer = MediaPlayer.create(context, R.raw.repartir)
+            dealSoundPlayer?.start()
+        } catch (e: Exception) {
+            Log.e("BlackjackDealerViewModel", "Error playing deal sound: ${e.message}")
+        }
     }
 }

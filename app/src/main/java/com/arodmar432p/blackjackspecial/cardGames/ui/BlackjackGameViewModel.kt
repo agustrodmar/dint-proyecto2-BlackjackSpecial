@@ -120,7 +120,7 @@ class BlackjackGameViewModel : ViewModel() {
         _showDialog.value = false
         restartGame()
         deck.shuffle()
-        startDeal(2)
+        startDeal()
         _gameInProgress.value = true
     }
 
@@ -155,8 +155,8 @@ class BlackjackGameViewModel : ViewModel() {
      * Deals a specified number of cards to each player.
      * @param numCards The number of cards to deal.
      */
-    private fun startDeal(numCards: Int) {
-        for (i in 0 until numCards) {
+    private fun startDeal() {
+        for (i in 0 until 2) {
             for (player in _players.value!!) {
                 player.hand.add(deck.getCard())
             }
@@ -227,9 +227,22 @@ class BlackjackGameViewModel : ViewModel() {
 
 
     /**
-     * Calculates the points for a hand of cards.
-     * @param hand The hand of cards.
-     * @return The total points.
+     * Calculates the points for a single card.
+     * @param card The card to calculate points for.
+     * @return The points value of the card.
+     */
+    private fun calculateCardPoints(card: Card): Int {
+        return if (card.rank != Rank.ACE) {
+            if (card.rank.ordinal >= Rank.JACK.ordinal) 10 else card.rank.ordinal + 1
+        } else {
+            card.maxPoints
+        }
+    }
+
+    /**
+     * Calculates the total points for a hand of cards.
+     * @param hand The hand of cards to calculate points for.
+     * @return The total points of the hand.
      */
     fun calculatePoints(hand: List<Card>): Int {
         var total = 0
@@ -237,11 +250,9 @@ class BlackjackGameViewModel : ViewModel() {
 
         // Calculate the total points, taking into account the value of aces
         for (card in hand) {
-            total += if (card.rank != Rank.ACE) {
-                if (card.rank.ordinal >= Rank.JACK.ordinal) 10 else card.rank.ordinal + 1
-            } else {
+            total += calculateCardPoints(card)
+            if (card.rank == Rank.ACE) {
                 aces++
-                card.maxPoints
             }
         }
 
@@ -283,15 +294,19 @@ class BlackjackGameViewModel : ViewModel() {
      * @param context The context to use to create the MediaPlayer.
      */
     fun toggleMusic(context: Context) {
-        if (isPlaying) {
-            mediaPlayer?.stop()
-            mediaPlayer?.release()
-            mediaPlayer = null
-            isPlaying = false
-        } else {
-            mediaPlayer = MediaPlayer.create(context, R.raw.blackjack)
-            mediaPlayer?.start()
-            isPlaying = true
+        try {
+            if (isPlaying) {
+                mediaPlayer?.stop()
+                mediaPlayer?.release()
+                mediaPlayer = null
+                isPlaying = false
+            } else {
+                mediaPlayer = MediaPlayer.create(context, R.raw.blackjack)
+                mediaPlayer?.start()
+                isPlaying = true
+            }
+        } catch (e: Exception) {
+            Log.e("BlackjackGameViewModel", "Error al reproducir la música: ${e.message}")
         }
     }
 

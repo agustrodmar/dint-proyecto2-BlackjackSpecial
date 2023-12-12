@@ -23,8 +23,10 @@ class Deck(cardImageMap: Map<String, Int>) {
                 // Loop through each rank
                 for (rank in Rank.values()) {
                     // Determine the minimum and maximum points for the card
-                    val minPoints = if (rank == Rank.ACE) 1 else if (rank.ordinal > 10) 10 else rank.ordinal
-                    val maxPoints = if (rank == Rank.ACE) 11 else if (rank.ordinal > 10) 10 else rank.ordinal
+                    val minPoints =
+                        if (rank == Rank.ACE) 1 else if (rank.ordinal > 10) 10 else rank.ordinal
+                    val maxPoints =
+                        if (rank == Rank.ACE) 11 else if (rank.ordinal > 10) 10 else rank.ordinal
 
                     // Construct the drawable name for the card image
                     val idDrawableName = when (suit) {
@@ -86,9 +88,8 @@ class Deck(cardImageMap: Map<String, Int>) {
      */
     fun getCard(): Card {
         if (cardsList.isEmpty()) {
-            throw IllegalStateException("Deck is empty!")
+            throw IllegalStateException("No se puede obtener una carta porque el mazo está vacío.")
         }
-        // Remove the last card from the list and return it
         return cardsList.removeAt(cardsList.size - 1)
     }
 }
