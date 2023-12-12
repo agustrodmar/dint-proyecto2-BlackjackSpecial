@@ -89,9 +89,10 @@ class BlackjackDealerViewModel(application: Application)
     private val dealerPoints = MutableLiveData<Int>()
     val playerHand = MutableLiveData<List<Card>>()
     val dealerHand = MutableLiveData<List<Card>>()
-    val gameInProgress = MutableLiveData<Boolean>()
     val isGameOver = MutableLiveData(false)
     val gameReset = MutableLiveData(false)
+    private val _gameInProgress = MutableLiveData<Boolean>()
+    val gameInProgress: LiveData<Boolean> get() = _gameInProgress
     private val _playerChips = MutableLiveData(5000)
     val playerChips: LiveData<Int> get() = _playerChips
     private val _currentBet = MutableLiveData(0)
@@ -122,7 +123,7 @@ class BlackjackDealerViewModel(application: Application)
         // Update the LiveData objects
         playerHand.value = player.hand
         dealerHand.value = dealer.hand
-        gameInProgress.value = true
+        _gameInProgress.value = true
         calculatePoints()
     }
 
@@ -145,17 +146,54 @@ class BlackjackDealerViewModel(application: Application)
     /**
      * Function that handles win scenerarios
      */
-    fun winBet() {
+    private fun winBet() {
         _playerChips.value = _playerChips.value!! + (_currentBet.value!! * 2)
         _currentBet.value = 0
     }
 
     /**
-     * Function that handles scenerarios where player loose.
+     * Function that handles scenerarios where player lose.
      */
-    fun loseBet() {
+    private fun loseBet() {
         _currentBet.value = 0
     }
+
+    private fun draw() {
+        _playerChips.value = _playerChips.value!! + _currentBet.value!!
+        _currentBet.value = 0
+    }
+
+    private fun checkWinner() {
+        calculatePoints()
+        val playerPoints = playerPoints.value
+        val dealerPoints = dealerPoints.value
+
+        if (playerPoints != null) {
+            if (dealerPoints != null) {
+                if (playerPoints > 21 || dealerPoints > 21) {
+                    if (playerPoints > 21) {
+                        loseBet()
+                    } else {
+                        winBet()
+                    }
+                } else {
+                    if (playerPoints > dealerPoints) {
+                        winBet()
+                    } else if (dealerPoints > playerPoints) {
+                        loseBet()
+                    } else {
+                        draw()
+                    }
+                }
+            }
+        }
+    }
+
+    fun endGame() {
+        checkWinner()
+        _gameInProgress.value = false
+    }
+
 
     /**
      * Handles the player's turn.
@@ -254,6 +292,7 @@ class BlackjackDealerViewModel(application: Application)
         gameReset.value = true
     }
 
+
     /**
      * Plays the deal sound.
      *
@@ -277,6 +316,8 @@ class BlackjackDealerViewModel(application: Application)
         try {
             chipSoundPlayer = MediaPlayer.create(context, R.raw.fichas)
             chipSoundPlayer?.start()
-        } catch (e: Exception) {}
+        } catch (e: Exception) {
+            Log.e("BlackjackDealerViewModel", "Error playing chips sound: ${e.message}")
+        }
     }
 }
