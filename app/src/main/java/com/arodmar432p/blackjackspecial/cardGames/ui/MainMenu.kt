@@ -29,14 +29,21 @@ import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 
 
+/**
+ * A composable function to display the main menu of the Blackjack game.
+ * @param navController The NavController for navigation.
+ * @param gameViewModel The ViewModel for the game.
+ */
 @Composable
 fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel) {
+    // Remember a mutable state for the open dialog
     val openDialog = remember { mutableStateOf(false) }
+    // Get the background image
     val background = painterResource(id = R.drawable.menu)
+    // Get the current context
     val context = LocalContext.current
 
-
-
+    // Display the main menu
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Image(
             painter = background,
@@ -50,6 +57,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.padding(16.dp)
         ) {
+            // Start game button
             Button(
                 onClick = { openDialog.value = true },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
@@ -59,6 +67,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                 Text("Empezar Partida", color = Color.Black)
             }
 
+            // Dialog to choose game mode
             if (openDialog.value) {
                 AlertDialog(
                     onDismissRequest = { openDialog.value = false },
@@ -68,6 +77,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
+                            // Button to start game against the table
                             Button(
                                 onClick = { navController.navigate(BlackjackRoutes.BlackjackDealerScreen.route) },
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
@@ -76,6 +86,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                             ) {
                                 Text("Contra la mesa", color = Color.Black)
                             }
+                            // Button to start game with two players
                             Button(
                                 onClick = { navController.navigate(BlackjackRoutes.BlackjackScreen.route) },
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
@@ -92,6 +103,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                 )
             }
 
+            // Results button
             Button(
                 onClick = { navController.navigate(BlackjackRoutes.ResultsScreen.route) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
@@ -101,6 +113,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                 Text("Resultados", color = Color.Black)
             }
 
+            // Exit button
             Button(
                 onClick = { gameViewModel.closeApp() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
@@ -112,9 +125,10 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
         }
     }
 
+    // Music toggle button
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
         IconButton(onClick = { gameViewModel.toggleMusic(context) }) {
-            Icon(painterResource(R.drawable.icmusicnote), contentDescription = "Activar/Desactivar Música")
+            Icon(painterResource(R.drawable.icmusicnote), contentDescription = "Toggle Music")
         }
     }
 }

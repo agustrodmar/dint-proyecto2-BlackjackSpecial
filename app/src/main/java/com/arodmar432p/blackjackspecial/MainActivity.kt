@@ -23,15 +23,19 @@ import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
 
 
+/**
+ * The main activity of the Blackjack game.
+ */
 class MainActivity : ComponentActivity() {
+    // ViewModel for the vs game
     private val vsGameViewModel: BlackjackGameViewModel by viewModels()
 
+    // ViewModel for the dealer game
     private val dealerGameViewModel: BlackjackDealerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             BlackjackSpecialTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -61,12 +65,12 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        // Observe the event to close the app
         vsGameViewModel.eventCloseApp.observe(this) { event ->
             if (event) {
                 finish()
                 vsGameViewModel.onAppClosed()
             }
         }
-
     }
 }

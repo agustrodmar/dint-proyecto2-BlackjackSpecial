@@ -1,5 +1,7 @@
 package com.arodmar432p.blackjackspecial.cardGames.ui
 
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.R
@@ -8,7 +10,12 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Deck
 import com.arodmar432p.blackjackspecial.cardGames.data.Player
 import com.arodmar432p.blackjackspecial.cardGames.data.Rank
 
+/**
+ * A ViewModel class representing the dealer in the game of Blackjack.
+ */
 class BlackjackDealerViewModel : ViewModel() {
+
+    // The deck of cards
     private val deck = Deck(cardImageMap = mapOf("corazonesa" to  R.drawable.corazonesa,
         "corazones2" to  R.drawable.corazones2,
         "corazones3" to  R.drawable.corazones3,
@@ -62,8 +69,14 @@ class BlackjackDealerViewModel : ViewModel() {
         "trebolesq" to  R.drawable.trebolesq,
         "trebolesk" to R.drawable.trebolesk,
     ))
+
+    // The player
     private val player = Player("Player", mutableListOf(), 0)
+
+    // The dealer
     private val dealer = Player("Dealer", mutableListOf(), 0)
+
+    // LiveData objects to hold the game state
     val winner = MutableLiveData<String>()
     val playerPoints = MutableLiveData<Int>()
     val dealerPoints = MutableLiveData<Int>()
@@ -73,23 +86,34 @@ class BlackjackDealerViewModel : ViewModel() {
     val isGameOver = MutableLiveData(false)
     val gameReset = MutableLiveData(false)
 
+    // MediaPlayer to play the shuffle sound
+    private var dealSoundPlayer: MediaPlayer? = null
+
+    /**
+     * Starts a new game.
+     */
     fun startGame() {
+        // Shuffle the deck and clear the hands
         deck.shuffle()
         player.hand.clear()
         dealer.hand.clear()
+        // Deal two cards to each player
         player.hand.add(deck.getCard())
         dealer.hand.add(deck.getCard())
         player.hand.add(deck.getCard())
         dealer.hand.add(deck.getCard())
+        // Update the LiveData objects
         playerHand.value = player.hand
         dealerHand.value = dealer.hand
         gameInProgress.value = true
         calculatePoints()
     }
 
-
-
+    /**
+     * Handles the player's turn.
+     */
     fun playerTurn() {
+        // If the deck has cards, add a card to the player's hand
         if (deck.hasCards()) {
             player.hand.add(deck.getCard())
             playerHand.value = player.hand
@@ -97,7 +121,11 @@ class BlackjackDealerViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Handles the dealer's turn.
+     */
     private fun dealerTurn() {
+        // While the dealer has less than 17 points and the deck has cards, add a card to the dealer's hand
         while (dealer.points < 17 && deck.hasCards()) {
             dealer.hand.add(deck.getCard())
             dealerHand.value = dealer.hand
@@ -106,14 +134,23 @@ class BlackjackDealerViewModel : ViewModel() {
         endTurn()
     }
 
+    /**
+     * Ends the player's turn and starts the dealer's turn.
+     */
     fun stand() {
         dealerTurn()
     }
 
+    /**
+     * Calculates the points for a player.
+     * @param player The player to calculate points for.
+     * @return The total points.
+     */
     private fun calculatePoints(player: Player): Int {
         var total = 0
         var aces = 0
 
+        // Calculate the total points, taking into account the value of aces
         for (card in player.hand) {
             total += if (card.rank != Rank.ACE) {
                 if (card.rank.ordinal >= Rank.JACK.ordinal) 10 else card.rank.ordinal + 1
@@ -123,6 +160,7 @@ class BlackjackDealerViewModel : ViewModel() {
             }
         }
 
+        // If the total is over 21 and there are aces, subtract 10 for each ace
         while (total > 21 && aces > 0) {
             total -= 10
             aces--
@@ -131,6 +169,9 @@ class BlackjackDealerViewModel : ViewModel() {
         return total
     }
 
+    /**
+     * Calculates the points for both the player and the dealer.
+     */
     private fun calculatePoints() {
         player.points = calculatePoints(player)
         dealer.points = calculatePoints(dealer)
@@ -138,6 +179,9 @@ class BlackjackDealerViewModel : ViewModel() {
         dealerPoints.value = dealer.points
     }
 
+    /**
+     * Ends the turn and determines the winner.
+     */
     private fun endTurn() {
         when {
             player.points > 21 -> winner.value = "Dealer"
@@ -149,8 +193,20 @@ class BlackjackDealerViewModel : ViewModel() {
         isGameOver.value = true
     }
 
+    /**
+     * Closes the game over dialog and resets the game.
+     */
     fun closeDialog() {
         isGameOver.value = false
         gameReset.value = true
+    }
+
+    /**
+     * Plays the deal sound.
+     * @param context The context to use to create the MediaPlayer.
+     */
+    fun playDealSound(context: Context) {
+        dealSoundPlayer = MediaPlayer.create(context, R.raw.repartir)
+        dealSoundPlayer?.start()
     }
 }

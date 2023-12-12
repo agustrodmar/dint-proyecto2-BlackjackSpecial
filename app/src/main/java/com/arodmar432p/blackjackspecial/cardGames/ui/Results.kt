@@ -21,6 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arodmar432p.blackjackspecial.R
 
+/**
+ * A composable function to display the results screen.
+ * @param gameViewModel The ViewModel for the game.
+ */
 @Composable
 fun ResultsScreen(gameViewModel: BlackjackGameViewModel) {
     val player1Wins by gameViewModel.player1Wins.observeAsState(initial = 0)

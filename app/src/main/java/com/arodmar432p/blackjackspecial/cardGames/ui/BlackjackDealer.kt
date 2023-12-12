@@ -21,11 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
+
 
 
 @Composable
@@ -55,12 +57,20 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
         if (isGameOver) {
             AlertDialog(
                 onDismissRequest = { blackjackDealerViewModel.closeDialog() },
-                title = { Text(text = "Game Over") },
-                text = { Text(text = "Winner is: $winner") },
+                title = { Text(text = "Fin de la ronda") },
+                text = {
+                    if (winner == "Draw") {
+                        Text(text = "Empate")
+                    } else {
+                        Text(text = "El ganador es: $winner")
+                    }
+                },
                 confirmButton = {
+                    val context = LocalContext.current
                     Button(onClick = {
                         blackjackDealerViewModel.closeDialog()
-                        blackjackDealerViewModel.startGame()  // Añade esta línea
+                        blackjackDealerViewModel.startGame()
+                        blackjackDealerViewModel.playDealSound(context)
                     }) {
                         Text("Aceptar")
                     }

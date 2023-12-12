@@ -13,7 +13,11 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Deck
 import com.arodmar432p.blackjackspecial.cardGames.data.Player
 import com.arodmar432p.blackjackspecial.cardGames.data.Rank
 
+/**
+ * A ViewModel class representing the game of Blackjack.
+ */
 class BlackjackGameViewModel : ViewModel() {
+    // The deck of cards
     private val deck = Deck(cardImageMap = mapOf("corazonesa" to  R.drawable.corazonesa,
         "corazones2" to  R.drawable.corazones2,
         "corazones3" to  R.drawable.corazones3,
@@ -67,6 +71,8 @@ class BlackjackGameViewModel : ViewModel() {
         "trebolesq" to  R.drawable.trebolesq,
         "trebolesk" to R.drawable.trebolesk,
     ))
+
+    // LiveData objects to hold the game state
     private val _players = MutableLiveData<List<Player>>(emptyList())
     val players: LiveData<List<Player>> get() = _players
     private val _winner = MutableLiveData<Player?>()
@@ -76,8 +82,8 @@ class BlackjackGameViewModel : ViewModel() {
     private val _gameInProgress = MutableLiveData<Boolean>()
     val gameInProgress: LiveData<Boolean> get() = _gameInProgress
 
-    private val _showDialog = MutableLiveData<Boolean>() // Para declarar el ganador
-    val showDialog: LiveData<Boolean> get() = _showDialog
+    private val _showDialog = MutableLiveData<Boolean>() // To declare the winner
+    val showDialog: LiveData<Boolean> get() = _showDialog// To handle my Results screen
 
     private val _player1Wins = MutableLiveData(0)
 
@@ -106,6 +112,9 @@ class BlackjackGameViewModel : ViewModel() {
 
     }
 
+    /**
+     * Starts a new game.
+     */
     fun startGame() {
         _winner.value = null
         _showDialog.value = false
@@ -114,6 +123,11 @@ class BlackjackGameViewModel : ViewModel() {
         startDeal(2)
         _gameInProgress.value = true
     }
+
+    /**
+     * Ends the game and declares the winner.
+     * @param winner The winner of the game.
+     */
     private fun endGame(winner: Player?) {
         if (winner != null) {
             _winner.value = winner
@@ -129,11 +143,18 @@ class BlackjackGameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Closes the game over dialog and resets the game.
+     */
     fun closeDialog() {
         _showDialog.value = false
         _gameInProgress.value = false
     }
 
+    /**
+     * Deals a specified number of cards to each player.
+     * @param numCards The number of cards to deal.
+     */
     private fun startDeal(numCards: Int) {
         for (i in 0 until numCards) {
             for (player in _players.value!!) {
@@ -142,6 +163,10 @@ class BlackjackGameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Handles the player's turn when they choose to hit.
+     * @param player The player who is hitting.
+     */
     fun hitMe(player: Player) {
         Log.d("BlackjackGameViewModel", "Hit Me button pressed for ${player.name}")
         if (_currentTurn.value == player) {
@@ -152,12 +177,20 @@ class BlackjackGameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Handles the player's turn when they choose to pass.
+     * @param player The player who is passing.
+     */
     fun pass(player: Player) {
         if (_currentTurn.value == player) {
             passTurn()
         }
     }
 
+    /**
+     * Requests a card for a player.
+     * @param player The player who is requesting a card.
+     */
     private fun requestCard(player: Player) {
         player.hand.add(deck.getCard())
 
@@ -166,6 +199,9 @@ class BlackjackGameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Passes the turn to the next player.
+     */
     private fun passTurn() {
         val currentPlayer = _currentTurn.value
         val nextPlayer = _players.value?.let { players ->
@@ -183,17 +219,23 @@ class BlackjackGameViewModel : ViewModel() {
                 nextPlayerPoints > 21 -> currentPlayer
                 currentPlayerPoints > nextPlayerPoints -> currentPlayer
                 currentPlayerPoints < nextPlayerPoints -> nextPlayer
-                else -> null  // Con esto pienso manejar el empate
+                else -> null  // // This is how I plan to handle a tie
             }
             endGame(winner)
         }
     }
 
 
+    /**
+     * Calculates the points for a hand of cards.
+     * @param hand The hand of cards.
+     * @return The total points.
+     */
     fun calculatePoints(hand: List<Card>): Int {
         var total = 0
         var aces = 0
 
+        // Calculate the total points, taking into account the value of aces
         for (card in hand) {
             total += if (card.rank != Rank.ACE) {
                 if (card.rank.ordinal >= Rank.JACK.ordinal) 10 else card.rank.ordinal + 1
@@ -203,6 +245,7 @@ class BlackjackGameViewModel : ViewModel() {
             }
         }
 
+        // If the total is over 21 and there are aces, subtract 10 for each ace
         while (total > 21 && aces > 0) {
             total -= 10
             aces--
@@ -211,6 +254,9 @@ class BlackjackGameViewModel : ViewModel() {
         return total
     }
 
+    /**
+     * Checks for a blackjack at the start of the game.
+     */
     private fun checkForBlackjack() {
         for (player in _players.value!!) {
             if (calculatePoints(player.hand) == 21) {
@@ -221,6 +267,9 @@ class BlackjackGameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Restarts the game by clearing the players' hands and resetting the game state.
+     */
     private fun restartGame() {
         for (player in _players.value!!) {
             player.hand.clear()
@@ -229,6 +278,10 @@ class BlackjackGameViewModel : ViewModel() {
         _gameInProgress.value = false
     }
 
+    /**
+     * Toggles the music on and off.
+     * @param context The context to use to create the MediaPlayer.
+     */
     fun toggleMusic(context: Context) {
         if (isPlaying) {
             mediaPlayer?.stop()
@@ -242,21 +295,33 @@ class BlackjackGameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Stops the music.
+     */
     private fun stopMusic() {
         mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
     }
 
+    /**
+     * Stops the music when the ViewModel is cleared.
+     */
     override fun onCleared() {
         super.onCleared()
         stopMusic()
     }
 
+    /**
+     * Closes the app.
+     */
     fun closeApp() {
         _eventCloseApp.value = true
     }
 
+    /**
+     * Resets the close app event after the app is closed.
+     */
     fun onAppClosed() {
         _eventCloseApp.value = false
     }

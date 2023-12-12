@@ -30,14 +30,22 @@ import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Player
 
+
+/**
+ * A composable function to display the Blackjack game screen.
+ * @param gameViewModel The ViewModel for the game.
+ */
+
 @Composable
 fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
+    // Get the game state from the ViewModel
     val backgroundImage = painterResource(id = R.drawable.tapete)
     val players by gameViewModel.players.observeAsState(initial = emptyList())
     val winner by gameViewModel.winner.observeAsState()
     val gameInProgress by gameViewModel.gameInProgress.observeAsState(initial = false)
     val currentTurn by gameViewModel.currentTurn.observeAsState()
 
+    // Display the game screen
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = backgroundImage,
@@ -55,12 +63,13 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Muestra el turno actual
+            // Display the current turn
             currentTurn?.let {
                 Text(text = "Turno: ${it.name}", color = Color.White)
             }
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Display the players' cards or the winner and start game button
             if (gameInProgress) {
                 players.forEachIndexed { _, player ->
                     currentTurn?.let { PlayerCard(player, gameViewModel) }
@@ -83,10 +92,17 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
 }
 
 
+/**
+ * A composable function to display a player's card.
+ * @param player The player.
+ * @param gameViewModel The ViewModel for the game.
+ */
 @Composable
 fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
+    // Get the winner from the ViewModel
     val winner by gameViewModel.winner.observeAsState()
 
+    // Display a dialog if the game is over
     if (winner != null) {
         AlertDialog(
             onDismissRequest = { gameViewModel.closeDialog() },
@@ -111,6 +127,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
         )
     }
 
+    // Display the player's name, points, and cards
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -121,14 +138,14 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
         Text(text = player.name, color = Color.White)
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Debe mostrar los puntos solo cuando el jugador tenga el turno
+        // Display the points only when it's the player's turn
         if (gameViewModel.currentTurn.value == player) {
             Text(text = "Points: ${gameViewModel.calculatePoints(player.hand)}", color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Muestra las cartas del jugador
+        // Display the player's cards
         Box(
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
