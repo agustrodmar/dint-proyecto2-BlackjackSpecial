@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -29,7 +32,8 @@ import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 @Composable
 fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel) {
     val openDialog = remember { mutableStateOf(false) }
-    val background = painterResource(id = R.drawable.tapete)
+    val background = painterResource(id = R.drawable.menu)
+    val context = LocalContext.current
 
 
 
@@ -105,6 +109,12 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
             ) {
                 Text("Salir", color = Color.Black)
             }
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
+        IconButton(onClick = { gameViewModel.toggleMusic(context) }) {
+            Icon(painterResource(R.drawable.icmusicnote), contentDescription = "Activar/Desactivar Música")
         }
     }
 }

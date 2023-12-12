@@ -112,24 +112,38 @@ fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints:
     ) {
         // tamaño de las cartas de la mesa
         Row(
-            modifier = Modifier.offset { IntOffset((dealerHand.size * 15).dp.roundToPx(), (dealerHand.size * 20).dp.roundToPx()) }
+            horizontalArrangement = Arrangement.spacedBy((-80).dp)
         ) {
             dealerHand.forEachIndexed { index, card ->
                 val cardResource = if (index != 0 && !isGameOver) R.drawable.bocabajo else card.idDrawable
-                Image(painter = painterResource(id = cardResource!!), contentDescription = "Dealer Card", modifier = Modifier.size(75.dp, 150.dp))
+                Box(
+                    modifier = Modifier
+                        .size(90.dp, 150.dp)
+                        .offset { IntOffset((index * 50).dp.roundToPx(), (index * 20).dp.roundToPx()) }
+                ) {
+                    Image(
+                        painter = painterResource(id = cardResource!!),
+                        contentDescription = "Dealer Card"
+                    )
+                }
             }
         }
         Text(text = "Player Points: $playerPoints", color = Color.White)
 
         Row(
-            modifier = Modifier.offset { IntOffset((playerHand.size * 15).dp.roundToPx(), (playerHand.size * 20).dp.roundToPx()) }
+            horizontalArrangement = Arrangement.spacedBy((-80).dp)
         ) {
-            playerHand.forEach { card ->
-                Image(
-                    painter = painterResource(id = card.idDrawable!!),
-                    contentDescription = "Card ${card.rank} of ${card.suit}",
-                    modifier = Modifier.size(75.dp, 150.dp)
-                )
+            playerHand.forEachIndexed { index, card ->
+                Box(
+                    modifier = Modifier
+                        .size(90.dp, 150.dp)
+                        .offset { IntOffset((index * 50).dp.roundToPx(), (index * 20).dp.roundToPx()) }
+                ) {
+                    Image(
+                        painter = painterResource(id = card.idDrawable!!),
+                        contentDescription = "Card ${card.rank} of ${card.suit}"
+                    )
+                }
             }
         }
 
@@ -139,14 +153,14 @@ fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints:
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 border = BorderStroke(2.dp, Color.White)
             ) {
-                Text("Hit", color = Color.Black)
+                Text("Dame carta", color = Color.Black)
             }
             Button(
                 onClick = { blackjackDealerViewModel.stand() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 border = BorderStroke(2.dp, Color.White)
             ) {
-                Text("Stand", color = Color.Black)
+                Text("Plantarse", color = Color.Black)
             }
         }
     }

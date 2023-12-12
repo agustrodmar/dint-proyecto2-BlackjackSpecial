@@ -1,5 +1,7 @@
 package com.arodmar432p.blackjackspecial.cardGames.ui
 
+import android.content.Context
+import android.media.MediaPlayer
 import android.util.Log
 
 import androidx.lifecycle.LiveData
@@ -88,7 +90,9 @@ class BlackjackGameViewModel : ViewModel() {
     private val _eventCloseApp = MutableLiveData<Boolean>()
     val eventCloseApp: LiveData<Boolean> get() = _eventCloseApp
 
+    private var mediaPlayer: MediaPlayer? = null
 
+    private var isPlaying = false
 
 
     init {
@@ -223,6 +227,30 @@ class BlackjackGameViewModel : ViewModel() {
         }
         _currentTurn.value = _players.value?.first()
         _gameInProgress.value = false
+    }
+
+    fun toggleMusic(context: Context) {
+        if (isPlaying) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+            isPlaying = false
+        } else {
+            mediaPlayer = MediaPlayer.create(context, R.raw.blackjack)
+            mediaPlayer?.start()
+            isPlaying = true
+        }
+    }
+
+    private fun stopMusic() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stopMusic()
     }
 
     fun closeApp() {
