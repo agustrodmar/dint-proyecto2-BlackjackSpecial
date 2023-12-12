@@ -79,7 +79,7 @@ class BlackjackDealerViewModel : ViewModel() {
     // LiveData objects to hold the game state
     val winner = MutableLiveData<String>()
     val playerPoints = MutableLiveData<Int>()
-    val dealerPoints = MutableLiveData<Int>()
+    private val dealerPoints = MutableLiveData<Int>()
     val playerHand = MutableLiveData<List<Card>>()
     val dealerHand = MutableLiveData<List<Card>>()
     val gameInProgress = MutableLiveData<Boolean>()

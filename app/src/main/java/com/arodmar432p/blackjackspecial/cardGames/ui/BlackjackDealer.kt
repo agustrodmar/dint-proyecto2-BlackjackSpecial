@@ -29,17 +29,21 @@ import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
 
 
-
+/**
+ * A composable function to display the Blackjack dealer screen.
+ * @param blackjackDealerViewModel The ViewModel for the dealer.
+ */
 @Composable
 fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
+    // Get the game state from the ViewModel
     val playerPoints by blackjackDealerViewModel.playerPoints.observeAsState(0)
-    val dealerPoints by blackjackDealerViewModel.dealerPoints.observeAsState(0)
     val winner by blackjackDealerViewModel.winner.observeAsState("")
     val playerHand by blackjackDealerViewModel.playerHand.observeAsState(listOf())
     val dealerHand by blackjackDealerViewModel.dealerHand.observeAsState(listOf())
     val gameInProgress by blackjackDealerViewModel.gameInProgress.observeAsState(false)
     val isGameOver by blackjackDealerViewModel.isGameOver.observeAsState(false)
 
+    // Display the dealer screen
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.tapete),
@@ -48,12 +52,14 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
             contentScale = ContentScale.FillBounds
         )
 
+        // Display the game screen or the start screen
         if (gameInProgress || isGameOver) {
-            GameScreen(blackjackDealerViewModel, playerPoints, dealerPoints, playerHand, dealerHand)
+            GameScreen(blackjackDealerViewModel, playerPoints, playerHand, dealerHand)
         } else {
             StartScreen(blackjackDealerViewModel, winner)
         }
 
+        // Display a dialog when the game is over
         if (isGameOver) {
             AlertDialog(
                 onDismissRequest = { blackjackDealerViewModel.closeDialog() },
@@ -80,15 +86,24 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
     }
 }
 
+/**
+ * A composable function to display the start screen of the Blackjack game.
+ * @param blackjackDealerViewModel The ViewModel for the dealer.
+ * @param winner The winner of the game.
+ */
 @Composable
 fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel, winner: String?) {
+
+    // Get the game reset state from the ViewModel
     val gameReset by blackjackDealerViewModel.gameReset.observeAsState(false)
 
+    // Start a new game when the game is reset
     if (gameReset) {
         blackjackDealerViewModel.startGame()
         blackjackDealerViewModel.gameReset.value = false
     }
 
+    // Display the start screen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -96,23 +111,40 @@ fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel, winner: Stri
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
+
+        // Display the winner
         winner?.let {
             Text(text = "Winner: $winner", color = Color.White)
         }
+        // Start game button
         Button(
             onClick = { blackjackDealerViewModel.startGame() },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
             border = BorderStroke(2.dp, Color.White)
         ) {
-            Text("Start Game", color = Color.Black)
+            Text("Empezar ronda", color = Color.Black)
         }
     }
 }
 
+/**
+ * A composable function to display the game screen of the Blackjack game.
+ * @param blackjackDealerViewModel The ViewModel for the dealer.
+ * @param playerPoints The points of the player.
+ * @param playerHand The hand of the player.
+ * @param dealerHand The hand of the dealer.
+ */
 @Composable
-fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints: Int, dealerPoints: Int, playerHand: List<Card>, dealerHand: List<Card>) {
+fun GameScreen(
+    blackjackDealerViewModel: BlackjackDealerViewModel,
+    playerPoints: Int,
+    playerHand: List<Card>,
+    dealerHand: List<Card>
+) {
+    // Get the game over state from the ViewModel
     val isGameOver by blackjackDealerViewModel.isGameOver.observeAsState(false)
 
+    // Display the game screen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -120,7 +152,8 @@ fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints:
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        // tamaño de las cartas de la mesa
+
+        // Display the dealer's cards
         Row(
             horizontalArrangement = Arrangement.spacedBy((-80).dp)
         ) {
@@ -157,6 +190,7 @@ fun GameScreen(blackjackDealerViewModel: BlackjackDealerViewModel, playerPoints:
             }
         }
 
+        // Display the hit and stand buttons
         Row {
             Button(
                 onClick = { blackjackDealerViewModel.playerTurn() },

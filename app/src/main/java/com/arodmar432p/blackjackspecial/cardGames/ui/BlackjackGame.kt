@@ -84,7 +84,7 @@ fun BlackjackScreen(gameViewModel: BlackjackGameViewModel) {
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                     border = BorderStroke(2.dp, Color.White)
                 ) {
-                    Text(text = "Start Game", color = Color.Black)
+                    Text(text = "Empezar ronda", color = Color.Black)
                 }
             }
         }
@@ -140,7 +140,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
 
         // Display the points only when it's the player's turn
         if (gameViewModel.currentTurn.value == player) {
-            Text(text = "Points: ${gameViewModel.calculatePoints(player.hand)}", color = Color.White)
+            Text(text = "Puntos: ${gameViewModel.calculatePoints(player.hand)}", color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -179,7 +179,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 border = BorderStroke(2.dp, Color.White)
             ) {
-                Text(text = "Hit Me", color = Color.Black)
+                Text(text = "Dame carta", color = Color.Black)
             }
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -189,7 +189,7 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 border = BorderStroke(2.dp, Color.White)
             ) {
-                Text(text = "Pass", color = Color.Black)
+                Text(text = "Plantarse", color = Color.Black)
             }
         }
     }

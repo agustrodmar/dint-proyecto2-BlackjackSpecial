@@ -44,7 +44,7 @@ fun ResultsScreen(gameViewModel: BlackjackGameViewModel) {
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.padding(16.dp)
     ) {
-        Text(text = "Resultados", color = Color.White, fontSize = 24.sp)
+        Text(text = "Resultados 1vs1", color = Color.White, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Victorias del Jugador 1: $player1Wins", color = Color.White)
         Text(text = "Victorias del Jugador 2: $player2Wins", color = Color.White)
