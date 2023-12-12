@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -214,10 +215,11 @@ fun GameScreen(
 }
 
 @Composable
-fun BetScreen (blackjackDealerViewModel: BlackjackDealerViewModel, navController: NavController) {
+fun BetScreen(blackjackDealerViewModel: BlackjackDealerViewModel, navController: NavController) {
     val playerChips by blackjackDealerViewModel.playerChips.observeAsState(0)
     val currentBet by blackjackDealerViewModel.currentBet.observeAsState(0)
     val context = LocalContext.current
+    val isStartGameButtonEnabled by blackjackDealerViewModel.isStartGameButtonEnabled.observeAsState(false)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -227,14 +229,21 @@ fun BetScreen (blackjackDealerViewModel: BlackjackDealerViewModel, navController
             contentScale = ContentScale.FillBounds
         )
 
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text("Fichas: $playerChips", color = Color.White)
             Text("Apuesta actual: $currentBet", color = Color.White)
             Slider(
                 value = currentBet.toFloat(),
                 onValueChange = { newValue -> blackjackDealerViewModel.placeBet(newValue.toInt()) },
                 valueRange = 0f..playerChips.toFloat(),
-                steps = 0
+                steps = 0,
+                modifier = Modifier.width(200.dp)
             )
             Button(
                 onClick = {
@@ -242,7 +251,8 @@ fun BetScreen (blackjackDealerViewModel: BlackjackDealerViewModel, navController
                     blackjackDealerViewModel.betSound(context)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                border = BorderStroke(2.dp, Color.White)
+                border = BorderStroke(2.dp, Color.White),
+                enabled = isStartGameButtonEnabled
             ) {
                 Text("Empezar juego", color = Color.Black)
             }

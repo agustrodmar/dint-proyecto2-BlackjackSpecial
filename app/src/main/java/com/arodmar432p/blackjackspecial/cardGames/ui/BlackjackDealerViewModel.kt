@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
 import com.arodmar432p.blackjackspecial.cardGames.data.Deck
@@ -102,6 +103,9 @@ class BlackjackDealerViewModel(application: Application)
     // MediaPlayer to play chips sound
     private var chipSoundPlayer: MediaPlayer? = null
 
+    // Button that allows player to Bet or not...
+    val isStartGameButtonEnabled: LiveData<Boolean> get() = _currentBet.map { it > 0 }
+
     /**
      * Starts a new game.
      */
@@ -142,7 +146,7 @@ class BlackjackDealerViewModel(application: Application)
      * Function that handles win scenerarios
      */
     fun winBet() {
-        _playerChips.value = _playerChips.value!! + (_currentBet.value!! * 1.5).toInt()
+        _playerChips.value = _playerChips.value!! + (_currentBet.value!! * 2)
         _currentBet.value = 0
     }
 
