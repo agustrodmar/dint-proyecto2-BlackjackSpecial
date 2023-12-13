@@ -79,7 +79,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                         ) {
                             // Button to start game against the table
                             Button(
-                                onClick = { navController.navigate(BlackjackRoutes.BetScreen.route) },
+                                onClick = { navController.navigate(BlackjackRoutes.BlackjackDealerScreen.route) },
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                                 border = BorderStroke(2.dp, Color.White),
                                 modifier = Modifier.sizeIn(minWidth = 200.dp, minHeight = 50.dp)

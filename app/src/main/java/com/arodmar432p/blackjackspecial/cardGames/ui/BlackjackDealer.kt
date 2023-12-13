@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,6 +33,7 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Card
 
 /**
  * A composable function to display the Blackjack dealer screen.
+ *
  * @param blackjackDealerViewModel The ViewModel for the dealer.
  */
 @Composable
@@ -63,34 +62,32 @@ fun BlackjackDealerScreen(navController: NavController,  blackjackDealerViewMode
             StartScreen(blackjackDealerViewModel, winner)
         }
 
-        // Display a dialog when the game is over
-        if (isGameOver) {
-            blackjackDealerViewModel.endGame()
-
-            AlertDialog(
-                onDismissRequest = { blackjackDealerViewModel.closeDialog() },
-                title = { Text(text = "Fin de la ronda") },
-                text = {
-                    if (winner == "Draw") {
-                        Text(text = "Empate")
-                    } else {
-                        Text(text = "El ganador es: $winner")
-                    }
-                },
-                confirmButton = {
-                    val context = LocalContext.current
-                    Button(onClick = {
-                        blackjackDealerViewModel.closeDialog()
-                        navController.navigate(BlackjackRoutes.BetScreen.route)
-                        blackjackDealerViewModel.startGame()
-                    }) {
-                        Text("Aceptar")
-                    }
+        AlertDialog(
+            onDismissRequest = { blackjackDealerViewModel.closeDialog() },
+            title = { Text(text = "Fin de la ronda") },
+            text = {
+                if (winner == "Draw") {
+                    Text(text = "Empate")
+                } else {
+                    Text(text = "El ganador es: $winner")
+                  }
+            },
+            confirmButton = {
+                val context = LocalContext.current
+                Button(onClick = {
+                    blackjackDealerViewModel.closeDialog()
+                    blackjackDealerViewModel.playDealSound(context)
+                    navController.navigate(BlackjackRoutes.BlackjackDealerScreen.route)
+                    blackjackDealerViewModel.startGame()
                 }
-            )
-        }
+                ) {
+                    Text("Aceptar")
+                  }
+            }
+        )
     }
 }
+
 
 /**
  * A composable function to display the start screen of the Blackjack game.
@@ -135,6 +132,7 @@ fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel, winner: Stri
 
 /**
  * A composable function to display the game screen of the Blackjack game.
+ *
  * @param blackjackDealerViewModel The ViewModel for the dealer.
  * @param playerPoints The points of the player.
  * @param playerHand The hand of the player.
