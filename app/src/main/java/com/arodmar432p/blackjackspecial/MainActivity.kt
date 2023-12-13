@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                             BlackjackScreen(gameViewModel = vsGameViewModel)
                         }
                         composable(BlackjackRoutes.BlackjackDealerScreen.route) {
-                            BlackjackDealerScreen(blackjackDealerViewModel = dealerGameViewModel, navController = navController)
+                            BlackjackDealerScreen(blackjackDealerViewModel = dealerGameViewModel)
                         }
                         composable(BlackjackRoutes.ResultsScreen.route) {
                             ResultsScreen(gameViewModel = vsGameViewModel)
