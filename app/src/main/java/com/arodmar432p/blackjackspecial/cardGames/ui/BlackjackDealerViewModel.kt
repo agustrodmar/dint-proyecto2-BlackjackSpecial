@@ -107,9 +107,18 @@ class BlackjackDealerViewModel(application: Application)
     // Button that allows player to Bet or not...
     val isStartGameButtonEnabled: LiveData<Boolean> get() = _currentBet.map { it > 0 }
 
+    var sliderValue = MutableLiveData<Int>()
     /**
      * Starts a new game.
      */
+
+    init {
+        if (_currentBet.value == 0) {
+
+        }
+    }
+
+
     fun startGame() {
         // Shuffle the deck and clear the hands
         deck.shuffle()
@@ -131,12 +140,12 @@ class BlackjackDealerViewModel(application: Application)
     /**
      * Let a player bet against the Dealer
      */
-    fun placeBet(amount: Int) {
-        if (amount <= _playerChips.value!!) {
-            _currentBet.value = amount
-            _playerChips.value = _playerChips.value!! - amount
+    fun placeBet() {
+        if (sliderValue.value!! <= _playerChips.value!!) {
+            _currentBet.value = sliderValue.value
+            _playerChips.value = _playerChips.value!! - sliderValue.value!!
         } else {
-            // Mostrar un Toast
+            // Toast Message
             Toast.makeText(getApplication(),
                 "No tienes suficientes fichas para esta apuesta",
                 Toast.LENGTH_SHORT).show()
@@ -162,6 +171,21 @@ class BlackjackDealerViewModel(application: Application)
         _playerChips.value = _playerChips.value!! + _currentBet.value!!
         _currentBet.value = 0
     }
+
+    fun increaseBet() {
+        if (_playerChips.value!! > _currentBet.value!!) {
+            _currentBet.value = _currentBet.value!! + 1
+            _playerChips.value = _playerChips.value!! - 1
+        }
+    }
+
+    fun decreaseBet() {
+        if (_currentBet.value!! > 0) {
+            _currentBet.value = _currentBet.value!! - 1
+            _playerChips.value = _playerChips.value!! + 1
+        }
+    }
+
 
     private fun checkWinner() {
         calculatePoints()
@@ -190,6 +214,7 @@ class BlackjackDealerViewModel(application: Application)
     }
 
     fun endGame() {
+        calculatePoints()
         checkWinner()
         _gameInProgress.value = false
     }

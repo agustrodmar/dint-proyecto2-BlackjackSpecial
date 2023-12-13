@@ -34,11 +34,12 @@ class MainActivity : ComponentActivity() {
     // ViewModel for the dealer game
     private val dealerGameViewModel: BlackjackDealerViewModel by viewModels()
 
+    private val blackjackDealerViewModel: BlackjackDealerViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             BlackjackSpecialTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -56,13 +57,13 @@ class MainActivity : ComponentActivity() {
                             BlackjackScreen(gameViewModel = vsGameViewModel)
                         }
                         composable(BlackjackRoutes.BlackjackDealerScreen.route) {
-                            BlackjackDealerScreen(blackjackDealerViewModel = dealerGameViewModel, navController = navController)
+                            BlackjackDealerScreen(blackjackDealerViewModel = blackjackDealerViewModel, navController = navController)
                         }
                         composable(BlackjackRoutes.ResultsScreen.route) {
                             ResultsScreen(gameViewModel = vsGameViewModel)
                         }
                         composable(BlackjackRoutes.BetScreen.route) {
-                            BetScreen(blackjackDealerViewModel = dealerGameViewModel, navController)
+                            BetScreen(blackjackDealerViewModel = blackjackDealerViewModel, navController)
                         }
                     }
                 }

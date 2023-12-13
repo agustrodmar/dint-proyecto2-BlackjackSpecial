@@ -65,6 +65,8 @@ fun BlackjackDealerScreen(navController: NavController,  blackjackDealerViewMode
 
         // Display a dialog when the game is over
         if (isGameOver) {
+            blackjackDealerViewModel.endGame()
+
             AlertDialog(
                 onDismissRequest = { blackjackDealerViewModel.closeDialog() },
                 title = { Text(text = "Fin de la ronda") },
@@ -214,48 +216,3 @@ fun GameScreen(
     }
 }
 
-@Composable
-fun BetScreen(blackjackDealerViewModel: BlackjackDealerViewModel, navController: NavController) {
-    val playerChips by blackjackDealerViewModel.playerChips.observeAsState(0)
-    val currentBet by blackjackDealerViewModel.currentBet.observeAsState(0)
-    val context = LocalContext.current
-    val isStartGameButtonEnabled by blackjackDealerViewModel.isStartGameButtonEnabled.observeAsState(false)
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.tapete),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text("Fichas: $playerChips", color = Color.White)
-            Text("Apuesta actual: $currentBet", color = Color.White)
-            Slider(
-                value = currentBet.toFloat(),
-                onValueChange = { newValue -> blackjackDealerViewModel.placeBet(newValue.toInt()) },
-                valueRange = 0f..playerChips.toFloat(),
-                steps = 0,
-                modifier = Modifier.width(200.dp)
-            )
-            Button(
-                onClick = {
-                    navController.navigate(BlackjackRoutes.BlackjackDealerScreen.route)
-                    blackjackDealerViewModel.betSound(context)
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                border = BorderStroke(2.dp, Color.White),
-                enabled = isStartGameButtonEnabled
-            ) {
-                Text("Empezar juego", color = Color.Black)
-            }
-        }
-    }
-}

@@ -86,8 +86,6 @@ class BlackjackGameViewModel : ViewModel() {
     val showDialog: LiveData<Boolean> get() = _showDialog// To handle my Results screen
 
     private val _player1Wins = MutableLiveData(0)
-
-    // Para manejar mi pantalla de Resultados
     val player1Wins: LiveData<Int> get() = _player1Wins
 
     private val _player2Wins = MutableLiveData(0)
@@ -165,6 +163,7 @@ class BlackjackGameViewModel : ViewModel() {
 
     /**
      * Handles the player's turn when they choose to hit.
+     *
      * @param player The player who is hitting.
      */
     fun hitMe(player: Player) {
@@ -179,6 +178,7 @@ class BlackjackGameViewModel : ViewModel() {
 
     /**
      * Handles the player's turn when they choose to pass.
+     *
      * @param player The player who is passing.
      */
     fun pass(player: Player) {
@@ -189,6 +189,7 @@ class BlackjackGameViewModel : ViewModel() {
 
     /**
      * Requests a card for a player.
+     *
      * @param player The player who is requesting a card.
      */
     private fun requestCard(player: Player) {
