@@ -57,7 +57,7 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
         if (gameInProgress || isGameOver) {
             GameScreen(blackjackDealerViewModel, playerPoints, playerHand, dealerHand)
         } else {
-            StartScreen(blackjackDealerViewModel, winner)
+            StartScreen(blackjackDealerViewModel)
         }
 
         // Display a dialog when the game is over
@@ -78,8 +78,11 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
                         blackjackDealerViewModel.closeDialog()
                         blackjackDealerViewModel.startGame()
                         blackjackDealerViewModel.playDealSound(context)
-                    }) {
+                    },  colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                        border = BorderStroke(2.dp, Color.White)
+                        ) {
                         Text("Aceptar")
+
                     }
                 }
             )
@@ -94,7 +97,7 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
  * @param winner The winner of the game.
  */
 @Composable
-fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel, winner: String?) {
+fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
 
     // Get the game reset state from the ViewModel
     val gameReset by blackjackDealerViewModel.gameReset.observeAsState(false)
@@ -114,17 +117,13 @@ fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel, winner: Stri
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
 
-        // Display the winner
-        winner?.let {
-            Text(text = "Winner: $winner", color = Color.White)
-        }
         // Start game button
         Button(
             onClick = { blackjackDealerViewModel.startGame() },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
             border = BorderStroke(2.dp, Color.White)
         ) {
-            Text("Empezar ronda", color = Color.Black)
+            Text("Empezar Partida", color = Color.Black)
         }
     }
 }

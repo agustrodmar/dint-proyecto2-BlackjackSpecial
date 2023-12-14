@@ -167,7 +167,6 @@ class BlackjackGameViewModel : ViewModel() {
      * @param player The player who is hitting.
      */
     fun hitMe(player: Player) {
-        Log.d("BlackjackGameViewModel", "Hit Me button pressed for ${player.name}")
         if (_currentTurn.value == player) {
             requestCard(player)
             if (_gameInProgress.value == true) {

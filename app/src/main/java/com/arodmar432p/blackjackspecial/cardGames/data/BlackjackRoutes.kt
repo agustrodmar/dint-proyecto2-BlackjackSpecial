@@ -2,6 +2,7 @@ package com.arodmar432p.blackjackspecial.cardGames.data
 
 /**
  * A sealed class representing the different routes in the Blackjack game.
+ *
  * @property route The string representation of the route.
  */
 sealed class BlackjackRoutes(val route: String) {

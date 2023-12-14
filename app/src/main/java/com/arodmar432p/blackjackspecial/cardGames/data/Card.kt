@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 
 /**
  * A data class representing a card in the game of Blackjack.
+ *
  * @property rank The rank of the card.
  * @property suit The suit of the card.
  * @property minPoints The minimum points the card can contribute in the game.

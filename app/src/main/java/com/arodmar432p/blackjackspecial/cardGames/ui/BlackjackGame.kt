@@ -120,7 +120,10 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
             title = { Text(text = "Game Over") },
             text = { Text(text = "El resultado es de empate") },
             confirmButton = {
-                Button(onClick = { gameViewModel.closeDialog() }) {
+                Button(onClick = { gameViewModel.closeDialog() },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                    border = BorderStroke(2.dp, Color.White)
+                    ) {
                     Text("Aceptar")
                 }
             }
@@ -151,9 +154,10 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
         ) {
             player.hand.forEachIndexed { cardIndex, card ->
                 val isGameOver = gameViewModel.winner.value != null || gameViewModel.showDialog.value == true
-                val shouldHideCard = gameViewModel.currentTurn.value != player && cardIndex != 0 && !isGameOver
+                val shouldHideCard = gameViewModel.currentTurn.value != player && cardIndex != 0 &&
+                        !isGameOver
                 val cardResource = if (shouldHideCard) {
-                    R.drawable.bocabajo
+                    R.drawable.bocabajo2
                 } else {
                     card.idDrawable
                 }

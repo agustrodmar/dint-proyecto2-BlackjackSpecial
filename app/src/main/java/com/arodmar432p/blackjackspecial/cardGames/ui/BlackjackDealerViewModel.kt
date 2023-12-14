@@ -75,7 +75,7 @@ class BlackjackDealerViewModel : ViewModel() {
     private val player = Player("Player", mutableListOf(), 0)
 
     // The dealer
-    private val dealer = Player("Dealer", mutableListOf(), 0)
+    private val dealer = Player("La mesa", mutableListOf(), 0)
 
     // LiveData objects to hold the game state
     val winner = MutableLiveData<String>()
@@ -144,6 +144,7 @@ class BlackjackDealerViewModel : ViewModel() {
 
     /**
      * Calculates the points for a player.
+     *
      * @param player The player to calculate points for.
      * @return The total points.
      */
@@ -209,6 +210,7 @@ class BlackjackDealerViewModel : ViewModel() {
 
     /**
      * Plays the deal sound.
+     *
      * @param context The context to use to create the MediaPlayer.
      */
     fun playDealSound(context: Context) {

@@ -3,6 +3,7 @@ package com.arodmar432p.blackjackspecial.cardGames.data
 
 /**
  * A class representing a deck of cards in the game of Blackjack.
+ *
  * @property cardImageMap A map containing the image resources for the cards.
  */
 class Deck(cardImageMap: Map<String, Int>) {
@@ -13,6 +14,7 @@ class Deck(cardImageMap: Map<String, Int>) {
     companion object {
         /**
          * Creates a deck of cards.
+         *
          * @param cardImageMap A map containing the image resources for the cards.
          * @return An ArrayList of Card objects representing a deck of cards.
          */
@@ -75,6 +77,7 @@ class Deck(cardImageMap: Map<String, Int>) {
 
     /**
      * Checks if the deck has cards.
+     *
      * @return A Boolean indicating whether the deck has cards.
      */
     fun hasCards(): Boolean {
@@ -83,6 +86,7 @@ class Deck(cardImageMap: Map<String, Int>) {
 
     /**
      * Gets a card from the deck.
+     *
      * @return A Card object.
      * @throws IllegalStateException If the deck is empty.
      */
