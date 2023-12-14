@@ -64,7 +64,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                 border = BorderStroke(2.dp, Color.White),
                 modifier = Modifier.sizeIn(minWidth = 200.dp, minHeight = 50.dp)
             ) {
-                Text("Empezar Partida", color = Color.Black)
+                Text("Blackjack", color = Color.Black)
             }
 
             // Dialog to choose game mode
@@ -101,6 +101,15 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                     dismissButton = { },
                     containerColor = Color.Black
                 )
+            }
+
+            Button(
+                onClick = {navController.navigate(BlackjackRoutes.HighestCardScreen.route) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                border = BorderStroke(2.dp, Color.White),
+                modifier = Modifier.sizeIn(minWidth = 200.dp, minHeight = 50.dp)
+            ) {
+                Text("La carta más alta", color = Color.Black)
             }
 
             // Results button

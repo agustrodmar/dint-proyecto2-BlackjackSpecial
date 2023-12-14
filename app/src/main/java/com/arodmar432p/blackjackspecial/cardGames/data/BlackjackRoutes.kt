@@ -10,7 +10,7 @@ sealed class BlackjackRoutes(val route: String) {
     /**
      * Represents the main menu screen route.
      */
-    object MainMenuScreen : BlackjackRoutes("mainMenuScreen")
+    object MainMenuScreen : BlackjackRoutes("MainMenuScreen")
 
     /**
      * Represents the Blackjack game screen route.
@@ -26,5 +26,10 @@ sealed class BlackjackRoutes(val route: String) {
      * Represents the results screen route.
      */
     object ResultsScreen : BlackjackRoutes("ResultsScreen")
+
+    /**
+     * Represents the Highest Card Game Screen
+     */
+    object HighestCardScreen : BlackjackRoutes("HighestCardScreen")
 
 }

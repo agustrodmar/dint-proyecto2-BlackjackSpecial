@@ -109,11 +109,15 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
             title = { Text(text = "Game Over") },
             text = { Text(text = "Winner is: ${winner!!.name}") },
             confirmButton = {
-                Button(onClick = { gameViewModel.closeDialog() }) {
-                    Text("Aceptar")
+                Button(onClick = { gameViewModel.closeDialog() },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                    border = BorderStroke(2.dp, Color.White)) {
+                    Text("Aceptar",
+                        color = Color.Black)
                 }
             }
         )
+
     } else if (gameViewModel.showDialog.value == true) {
         AlertDialog(
             onDismissRequest = { gameViewModel.closeDialog() },

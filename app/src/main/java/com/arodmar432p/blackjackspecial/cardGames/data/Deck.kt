@@ -1,12 +1,11 @@
 package com.arodmar432p.blackjackspecial.cardGames.data
 
-
 /**
  * A class representing a deck of cards in the game of Blackjack.
  *
  * @property cardImageMap A map containing the image resources for the cards.
  */
-class Deck(cardImageMap: Map<String, Int>) {
+class Deck(private val cardImageMap: Map<String, Int>) {
 
     /**
      * Companion object to create a deck of cards.
@@ -65,13 +64,29 @@ class Deck(cardImageMap: Map<String, Int>) {
         }
     }
 
+
     // Create the deck of cards
-    private val cardsList = createDeck(cardImageMap)
+    val cardsList = createDeck(cardImageMap)
+
+
+    /**
+     * Resets the deck of cards.
+     *
+     * This function recreates the deck to ensure all cards are present.
+     */
+    private fun reset() {
+        cardsList.clear()
+        cardsList.addAll(createDeck(cardImageMap))
+    }
 
     /**
      * Shuffles the deck of cards.
+     *
+     * This function first resets the deck to ensure all cards are present,
+     * then shuffles the cards.
      */
     fun shuffle() {
+        reset()
         cardsList.shuffle()
     }
 

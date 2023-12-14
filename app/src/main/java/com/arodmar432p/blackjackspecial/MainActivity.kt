@@ -17,6 +17,8 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.MainMenu
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.HighestCardScreen
+import com.arodmar432p.blackjackspecial.cardGames.ui.HighestCardViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.ResultsScreen
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
@@ -32,6 +34,9 @@ class MainActivity : ComponentActivity() {
 
     // ViewModel for the dealer game
     private val dealerGameViewModel: BlackjackDealerViewModel by viewModels()
+
+    // ViewModel for the Highest Card game
+    private val highestCardViewModel : HighestCardViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +64,10 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(BlackjackRoutes.ResultsScreen.route) {
                             ResultsScreen(gameViewModel = vsGameViewModel)
+                        }
+
+                        composable(BlackjackRoutes.HighestCardScreen.route) {
+                            HighestCardScreen(highestCardViewModel = highestCardViewModel)
                         }
                     }
                 }
