@@ -23,13 +23,19 @@ import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 
 
+/**
+ * Composable function for the HighestCard game screen.
+ *
+ * This function displays the game UI, including the current card, the remaining cards,
+ * and the "Hit Me" and "Reset" buttons. It observes the current card and the deck state
+ * from the provided ViewModel to update the UI as the game progresses.
+ *
+ * @param highestCardViewModel The ViewModel for the HighestCard game.
+ */
 @Composable
 fun HighestCardScreen(highestCardViewModel: HighestCardViewModel) {
     // Observe the current card
     val currentCard by highestCardViewModel.currentCard.observeAsState()
-
-    // Observe if game needs to be reset
-    val isDeckReset by highestCardViewModel.isDeckReset.observeAsState()
 
     // Load the background image
     val backgroundImage = painterResource(id = R.drawable.tapete)
