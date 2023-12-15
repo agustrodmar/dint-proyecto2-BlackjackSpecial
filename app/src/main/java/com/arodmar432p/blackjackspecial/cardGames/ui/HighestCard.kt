@@ -41,7 +41,7 @@ fun HighestCardScreen(highestCardViewModel: HighestCardViewModel) {
     val backgroundImage = painterResource(id = R.drawable.tapete)
 
     // Load the face down card image
-    val faceDownImage = painterResource(id = R.drawable.bocabajo)
+    val faceDownImage = painterResource(id = R.drawable.bocabajo3)
 
     // Create a Box to layer the background image and the game UI
     Box(modifier = Modifier.fillMaxSize()) {
