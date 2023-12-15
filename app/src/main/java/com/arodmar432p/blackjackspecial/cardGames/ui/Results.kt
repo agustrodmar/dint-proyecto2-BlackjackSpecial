@@ -23,6 +23,7 @@ import com.arodmar432p.blackjackspecial.R
 
 /**
  * A composable function to display the results screen.
+ *
  * @param gameViewModel The ViewModel for the game.
  */
 @Composable

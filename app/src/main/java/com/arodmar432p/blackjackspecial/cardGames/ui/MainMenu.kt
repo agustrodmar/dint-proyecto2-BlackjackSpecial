@@ -31,6 +31,7 @@ import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 
 /**
  * A composable function to display the main menu of the Blackjack game.
+ *
  * @param navController The NavController for navigation.
  * @param gameViewModel The ViewModel for the game.
  */
@@ -103,6 +104,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
                 )
             }
 
+            // HighestCard Game button
             Button(
                 onClick = {navController.navigate(BlackjackRoutes.HighestCardScreen.route) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),

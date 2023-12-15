@@ -12,7 +12,7 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Player
 import com.arodmar432p.blackjackspecial.cardGames.data.Rank
 
 /**
- * A ViewModel class representing the dealer in the game of Blackjack.
+ * A ViewModel class representing the game against the Dealer.
  */
 class BlackjackDealerViewModel : ViewModel() {
 
