@@ -27,9 +27,6 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.ResultsScreen
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
 
-
-
-
 /**
  * The main activity of the Blackjack game.
  */
@@ -76,7 +73,6 @@ class MainActivity : ComponentActivity() {
                         composable(BlackjackRoutes.AuthScreen.route) {
                             RegisterScreen(viewModel = authViewModel)
                         }
-
 
                         composable(BlackjackRoutes.HighestCardScreen.route) {
                             HighestCardScreen(highestCardViewModel = highestCardViewModel)
