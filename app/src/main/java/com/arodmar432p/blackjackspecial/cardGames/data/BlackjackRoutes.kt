@@ -32,4 +32,9 @@ sealed class BlackjackRoutes(val route: String) {
      */
     object HighestCardScreen : BlackjackRoutes("HighestCardScreen")
 
+    /**
+     * Represents the Authentication Screen
+     */
+    object AuthScreen : BlackjackRoutes("AuthScreen")
+
 }
