@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,6 +22,7 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.HighestCardScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.HighestCardViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.RegisterScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.ResultsScreen
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
@@ -71,8 +74,9 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(BlackjackRoutes.AuthScreen.route) {
-                            AuthScreen(navController = navController, authViewModel = authViewModel)
+                            RegisterScreen(viewModel = authViewModel)
                         }
+
 
                         composable(BlackjackRoutes.HighestCardScreen.route) {
                             HighestCardScreen(highestCardViewModel = highestCardViewModel)

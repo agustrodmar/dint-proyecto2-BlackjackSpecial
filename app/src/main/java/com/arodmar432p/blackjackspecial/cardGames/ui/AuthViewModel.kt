@@ -1,14 +1,18 @@
 package com.arodmar432p.blackjackspecial.cardGames.ui
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.cardGames.data.User
+import com.arodmar432p.blackjackspecial.cardGames.util.currentUserLiveData
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
 class AuthViewModel : ViewModel() {
     private val auth = Firebase.auth
-    val user by viewModel.userState.observeAsState()
+
+    val userState: LiveData<User?> = auth.currentUserLiveData()
+
 
 
     fun createUser(email: String, password: String) {

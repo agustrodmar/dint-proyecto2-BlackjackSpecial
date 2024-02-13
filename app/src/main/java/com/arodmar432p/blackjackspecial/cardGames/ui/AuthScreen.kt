@@ -11,7 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
 import com.arodmar432p.blackjackspecial.cardGames.data.User
+import com.arodmar432p.blackjackspecial.cardGames.util.currentUserLiveData
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
