@@ -27,9 +27,10 @@ import com.arodmar432p.blackjackspecial.R
  * @param gameViewModel The ViewModel for the game.
  */
 @Composable
-fun ResultsScreen(gameViewModel: BlackjackGameViewModel) {
+fun ResultsScreen(gameViewModel: BlackjackGameViewModel, authViewModel: AuthViewModel) {
     val player1Wins by gameViewModel.player1Wins.observeAsState(initial = 0)
     val player2Wins by gameViewModel.player2Wins.observeAsState(initial = 0)
+    val user by authViewModel.userState.observeAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -49,5 +50,10 @@ fun ResultsScreen(gameViewModel: BlackjackGameViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Victorias del Jugador 1: $player1Wins", color = Color.White)
         Text(text = "Victorias del Jugador 2: $player2Wins", color = Color.White)
+        if (user != null) {
+            Text(text = "Horas jugadas: ${user!!.hoursInApp}", color = Color.White)
+            Text(text = "Partidas jugadas: ${user!!.gamesPlayed}", color = Color.White)
+            Text(text = "Partidas ganadas: ${user!!.victories}", color = Color.White)
+        }
     }
 }
