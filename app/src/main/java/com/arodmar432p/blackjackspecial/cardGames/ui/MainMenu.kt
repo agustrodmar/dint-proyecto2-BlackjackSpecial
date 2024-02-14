@@ -36,7 +36,7 @@ import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
  * @param gameViewModel The ViewModel for the game.
  */
 @Composable
-fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel) {
+fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel, authViewModel: AuthViewModel) {
     // Remember a mutable state for the open dialog
     val openDialog = remember { mutableStateOf(false) }
     // Get the background image
@@ -123,6 +123,19 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
             ) {
                 Text("Resultados", color = Color.Black)
             }
+
+            Button(
+                onClick = {
+                    authViewModel.signOut()
+                    navController.navigate(BlackjackRoutes.AuthScreen.route)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                border = BorderStroke(2.dp, Color.White),
+                modifier = Modifier.sizeIn(minWidth = 200.dp, minHeight = 50.dp)
+            ) {
+                Text("Cerrar sesión", color = Color.Black)
+            }
+
 
             // Exit button
             Button(

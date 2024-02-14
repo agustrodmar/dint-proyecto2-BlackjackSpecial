@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = BlackjackRoutes.AuthScreen.route
                     ) {
                         composable(BlackjackRoutes.MainMenuScreen.route) {
-                            MainMenu(navController = navController, gameViewModel = vsGameViewModel)
+                            MainMenu(navController = navController, gameViewModel = vsGameViewModel, authViewModel)
                         }
                         composable(BlackjackRoutes.BlackjackScreen.route) {
                             BlackjackScreen(gameViewModel = vsGameViewModel)
@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(BlackjackRoutes.AuthScreen.route) {
-                            RegisterScreen(viewModel = authViewModel)
+                            RegisterScreen(viewModel = authViewModel, navController)
                         }
 
                         composable(BlackjackRoutes.HighestCardScreen.route) {

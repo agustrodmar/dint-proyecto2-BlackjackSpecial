@@ -225,7 +225,6 @@ class BlackjackGameViewModel : ViewModel() {
         }
     }
 
-
     /**
      * Calculates the points for a single card.
      * @param card The card to calculate points for.
