@@ -231,9 +231,9 @@ fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp), // Añade padding para centrar los campos de texto
-                verticalArrangement = Arrangement.Center, // Centra los campos de texto verticalmente
-                horizontalAlignment = Alignment.CenterHorizontally // Centra los campos de texto horizontalmente
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text("Crea una cuenta", color = Color.White, fontSize = 24.sp,
                     modifier = Modifier
