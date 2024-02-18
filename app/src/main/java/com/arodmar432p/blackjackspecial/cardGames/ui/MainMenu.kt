@@ -40,7 +40,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
     // Remember a mutable state for the open dialog
     val openDialog = remember { mutableStateOf(false) }
     // Get the background image
-    val background = painterResource(id = R.drawable.menu)
+    val background = painterResource(id = R.drawable.wallpaper1)
     // Get the current context
     val context = LocalContext.current
 

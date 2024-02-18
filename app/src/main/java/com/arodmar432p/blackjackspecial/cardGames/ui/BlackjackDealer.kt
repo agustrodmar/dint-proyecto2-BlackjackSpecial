@@ -6,24 +6,33 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
@@ -47,11 +56,19 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
     // Display the dealer screen
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.drawable.tapete),
-            contentDescription = null,
+            painter = painterResource(id = R.drawable.wallpapercpu),
+            contentDescription = "The wallpaper for the CPU game",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
+        Image(
+            painter = painterResource(id = R.drawable.texturawallpaper),
+            contentDescription = " Textura de tapete",
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.20f),
+            contentScale = ContentScale.Crop
+            )
 
         // Display the game screen or the start screen
         if (gameInProgress || isGameOver) {
@@ -80,7 +97,7 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
                         blackjackDealerViewModel.playDealSound(context)
                     },  colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                         border = BorderStroke(2.dp, Color.White)
-                        ) {
+                    ) {
                         Text("Aceptar")
 
                     }
@@ -145,6 +162,19 @@ fun GameScreen(
 ) {
     // Get the game over state from the ViewModel
     val isGameOver by blackjackDealerViewModel.isGameOver.observeAsState(false)
+    val screenSize = LocalConfiguration.current.screenWidthDp.dp
+    val density = LocalDensity.current.density
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // Aquí van tus otros composables...
+
+        LowerPanel(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+        )
+    }
 
     // Display the game screen
     Column(
@@ -157,18 +187,37 @@ fun GameScreen(
 
         // Display the dealer's cards
         Row(
-            horizontalArrangement = Arrangement.spacedBy((-80).dp)
+            horizontalArrangement = Arrangement.spacedBy((20).dp)
         ) {
             dealerHand.forEachIndexed { index, card ->
-                val cardResource = if (index != 0 && !isGameOver) R.drawable.bocabajo else card.idDrawable
+                val cardResource = if (index != 0 && !isGameOver) R.drawable.bocabajodealer else card.idDrawable
+
                 Box(
                     modifier = Modifier
-                        .size(90.dp, 150.dp)
-                        .offset { IntOffset((index * 50).dp.roundToPx(), (index * 20).dp.roundToPx()) }
+                        .size(190.dp, 250.dp)
                 ) {
+                    if (cardResource == R.drawable.bocabajodealer) {
+                        Image(
+                            painter = painterResource(id = cardResource),
+                            contentDescription = "Dealer Card when is not tapped",
+                            modifier = Modifier
+                                .scale(.7f)
+                                .offset(y = 4.dp)
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = cardResource!!),
+                            contentDescription = "Dealer Card",
+                            modifier = Modifier
+                                .offset(x = 2.5.dp, y = (-20).dp)
+                        )
+                    }
+
                     Image(
-                        painter = painterResource(id = cardResource!!),
-                        contentDescription = "Dealer Card"
+                        painter = painterResource(id = R.drawable.paneltapete),
+                        contentDescription = "El panel del tapete para colocar las cartas. ",
+                        modifier = Modifier
+                            .size(210.dp)
                     )
                 }
             }
@@ -176,17 +225,25 @@ fun GameScreen(
         Text(text = "Player Points: $playerPoints", color = Color.White)
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy((-80).dp)
+            horizontalArrangement = Arrangement.spacedBy((20).dp)
         ) {
             playerHand.forEachIndexed { index, card ->
                 Box(
                     modifier = Modifier
-                        .size(90.dp, 150.dp)
-                        .offset { IntOffset((index * 50).dp.roundToPx(), (index * 20).dp.roundToPx()) }
+                        .size(190.dp, 250.dp)
+                        .offset(y = 250.dp)
                 ) {
                     Image(
                         painter = painterResource(id = card.idDrawable!!),
-                        contentDescription = "Card ${card.rank} of ${card.suit}"
+                        contentDescription = "Card ${card.rank} of ${card.suit}",
+                        modifier = Modifier
+                            .offset(x = 2.5.dp, y = (-25).dp)
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.paneltapete),
+                        contentDescription = "El panel del tapete para colocar las cartas. ",
+                        modifier = Modifier
+                            .size(210.dp)
                     )
                 }
             }
@@ -196,18 +253,96 @@ fun GameScreen(
         Row {
             Button(
                 onClick = { blackjackDealerViewModel.playerTurn() },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                border = BorderStroke(2.dp, Color.White)
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
+                border = BorderStroke(4.dp, Color(0xFFEAEFC4)),
+                modifier = Modifier
+                    .height(50.dp)
+                    .offset(x = (-30).dp, y = 200.dp)
             ) {
-                Text("Dame carta", color = Color.Black)
+                Text("Dame carta", color = Color.White)
+
+                Icon(
+                    painter = painterResource(id = R.drawable.hitme),
+                    contentDescription = "Pass Icon",
+                    modifier = Modifier
+                        .size(20.dp)
+                        .align(Alignment.CenterVertically)
+                        .offset(10.dp)
+                )
             }
+            Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = { blackjackDealerViewModel.stand() },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                border = BorderStroke(2.dp, Color.White)
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
+                border = BorderStroke(4.dp, Color(0xFFEAEFC4)),
+                modifier = Modifier
+                    .height(50.dp)
+                    .offset(x = 30.dp, y = 200.dp)
             ) {
-                Text("Plantarse", color = Color.Black)
+                Text("Plantarse", color = Color.White)
+
+                Icon(
+                    painter = painterResource(id = R.drawable.pass),
+                    contentDescription = "Pass Icon",
+                    modifier = Modifier
+                        .size(20.dp)
+                        .align(Alignment.CenterVertically)
+                        .offset(10.dp)
+                )
             }
         }
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logotapete),
+                contentDescription = "Logo Tapete",
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .offset(y = (-350).dp)
+                    .size((330.dp * density).coerceAtMost(screenSize / 2))
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.barajafondo),
+                contentDescription = "Wallpaper decoration",
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .size((220.dp * density).coerceAtMost(screenSize / 4))
+                    .offset(x = 25.dp, y = (-520).dp * density)
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.jokerfondo),
+                contentDescription = "The Joker logo",
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .fillMaxHeight()
+                    .width((350.dp * density).coerceAtMost(screenSize / 2))
+                    .scale(1.65f)
+                    .offset(y = (-40).dp * density)
+            )
+        }
+    }
+}
+
+/**
+ * The composable that represents the lower panel in the game
+ */
+@Composable
+fun LowerPanel(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(90.dp),
+        contentAlignment = Alignment.BottomStart
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.panelinferior),
+            contentDescription = "Lower Panel",
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }

@@ -107,7 +107,7 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
             contentDescription = "joker card on the wallpaper board",
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .size(90.dp)
+                .size(150.dp)
         )
 
         Image(
@@ -115,7 +115,7 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
             contentDescription = "A blue card castle",
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .size(110.dp)
+                .size(190.dp)
                 .offset(x = (1).dp)
         )
 
@@ -130,6 +130,7 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
         Image(
             painter = texturaTapete,
             contentDescription = "Textura de un tapete",
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
                 .alpha(0.05f)
@@ -386,9 +387,9 @@ fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
             ) {
                 // Título del Dialog, puedes ajustarlo como prefieras
                 Text(
-                    "Conéctate",
+                    "Cargar partida",
                     color = Color.White,
-                    fontSize = 29.sp,
+                    fontSize = 24.sp,
                     modifier = Modifier
                         .offset(y = (-80).dp)
                         .align(Alignment.CenterHorizontally)
@@ -427,7 +428,7 @@ fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .height(50.dp)
-                        .offset(y = 30.dp)
+                        .offset(y = 0.dp)
                 )
 
                 Button(
@@ -441,7 +442,7 @@ fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth(0.35f)
                         .sizeIn(minWidth = 150.dp, minHeight = 60.dp)
-                        .offset(y = 90.dp)
+                        .offset(y = 70.dp)
                 ) {
                     Text("Cargar partida", color = Color.White)
                 }

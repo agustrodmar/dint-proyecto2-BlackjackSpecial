@@ -154,7 +154,8 @@ fun PlayerCard(player: Player, gameViewModel: BlackjackGameViewModel) {
 
         // Display the player's cards
         Box(
-            modifier = Modifier.padding(horizontal = 8.dp)
+            modifier = Modifier
+                .padding(horizontal = 88.dp)
         ) {
             player.hand.forEachIndexed { cardIndex, card ->
                 val isGameOver = gameViewModel.winner.value != null || gameViewModel.showDialog.value == true
