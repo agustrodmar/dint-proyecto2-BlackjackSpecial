@@ -105,8 +105,8 @@ fun ResultsWallpaper(){
 
         Box(
             modifier = Modifier
-                .height(450.dp) // Reduce este valor para hacer la tabla de madera más pequeña
-                .width(550.dp) // Reduce este valor para hacer la tabla de madera más pequeña
+                .height(450.dp)
+                .width(550.dp)
                 .align(Alignment.Center)
         ) {
             Image(

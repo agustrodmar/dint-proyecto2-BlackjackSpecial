@@ -4,11 +4,14 @@ package com.arodmar432p.blackjackspecial.cardGames.ui
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -163,17 +166,17 @@ fun ColumnaMenu(authViewModel: AuthViewModel) {
             contentScale = ContentScale.FillBounds
         )
 
-        Column {
+        Column (modifier = Modifier
+            .align(Alignment.Center)) {
+
             Button(
                 onClick = { showDialogNewGame.value = true },
                 shape = RectangleShape, // Esquinas completamente cuadradas
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
-                border = BorderStroke(2.dp, Color(0xFFEAEFC4)),
+                border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(top = 200.dp)
+                    .fillMaxWidth(0.6f)
                     .sizeIn(minWidth = 150.dp, minHeight = 50.dp)
-                    .offset(x = 25.dp)
             ) {
                 Text("Nueva Partida", color = Color.White)
             }
@@ -182,14 +185,26 @@ fun ColumnaMenu(authViewModel: AuthViewModel) {
                 onClick = { showDialogLoadGame.value = true },
                 shape = RectangleShape, // Esquinas completamente cuadradas
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
-                border = BorderStroke(2.dp, Color(0xFFEAEFC4)),
+                border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
                 modifier = Modifier
-                    .fillMaxWidth((0.8f))
-                    .padding(top = 175.dp)
+                    .fillMaxWidth((0.60f))
+                    .padding(top = 125.dp)
                     .sizeIn(minWidth = 150.dp, minHeight = 50.dp)
-                    .offset(x = 25.dp)
             ) {
                 Text("Cargar partida", color = Color.White)
+            }
+
+            Button(
+                onClick = { /* Salir de la aplicación */ },
+                shape = RectangleShape,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
+                border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
+                modifier = Modifier
+                    .fillMaxWidth(0.60f)
+                    .padding(top = 110.dp)
+                    .sizeIn(minWidth = 150.dp, minHeight = 50.dp)
+            ) {
+                Text("Salir", color = Color.White)
             }
         }
     }
@@ -337,30 +352,104 @@ fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
 fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val wallpaperDialog: Painter = painterResource(id = R.drawable.wallpaperdialog)
 
     Dialog(onDismissRequest = onDismissRequest) {
-        Column {
-            TextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Correo electrónico") }
-            )
-            TextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Contraseña") }
-            )
-            Button(
-                onClick = {
-                    authViewModel.signIn(email, password)
-                    onDismissRequest()
-                }
+        Surface(
+            shape = RectangleShape,
+            border = BorderStroke(2.dp, Color(0xFFEAEFC4)),
+            modifier = Modifier
+                .size(width = 600.dp, height = 550.dp)
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            Color.Transparent,
+                            Color.Transparent
+                        ), 0f, 1000f
+                    ), shape = RectangleShape
+                )
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Image(
+                    painter = wallpaperDialog,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Aceptar")
+                // Título del Dialog, puedes ajustarlo como prefieras
+                Text(
+                    "Conéctate",
+                    color = Color.White,
+                    fontSize = 29.sp,
+                    modifier = Modifier
+                        .offset(y = (-80).dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+
+                TextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Correo electrónico") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Gray,
+                        cursorColor = Color.Gray,
+                        focusedIndicatorColor = Color(0xFFEAEFC4),
+                        unfocusedIndicatorColor = Color(0xFFEAEFC4),
+                        containerColor = Color(0xFFEAEFC4)
+                    ),
+                    shape = RectangleShape,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(50.dp)
+                        .offset(y = (-30).dp)
+                )
+
+                TextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Contraseña") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Gray,
+                        cursorColor = Color.Gray,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color(0xFFEAEFC4)
+                    ),
+                    shape = RectangleShape,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(50.dp)
+                        .offset(y = 30.dp)
+                )
+
+                Button(
+                    onClick = {
+                        authViewModel.signIn(email, password)
+                        onDismissRequest()
+                    },
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
+                    border = BorderStroke(2.dp, Color(0xFFEAEFC4)),
+                    modifier = Modifier
+                        .fillMaxWidth(0.35f)
+                        .sizeIn(minWidth = 150.dp, minHeight = 60.dp)
+                        .offset(y = 90.dp)
+                ) {
+                    Text("Cargar partida", color = Color.White)
+                }
             }
         }
     }
 }
+
 
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
