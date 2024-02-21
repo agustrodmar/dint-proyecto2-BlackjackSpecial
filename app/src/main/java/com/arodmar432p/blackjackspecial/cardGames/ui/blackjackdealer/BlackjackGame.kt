@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -29,11 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
@@ -52,6 +55,9 @@ fun BlackjackGame(blackjackDealerViewModel: BlackjackDealerViewModel) {
     val dealerHand by blackjackDealerViewModel.dealerHand.observeAsState(listOf())
     val gameInProgress by blackjackDealerViewModel.gameInProgress.observeAsState(false)
     val isGameOver by blackjackDealerViewModel.isGameOver.observeAsState(false)
+    val rounds by blackjackDealerViewModel.rounds.observeAsState(0)
+    val victories by blackjackDealerViewModel.victories.observeAsState(0)
+    val defeats by blackjackDealerViewModel.defeats.observeAsState(0)
 
     // Display the dealer screen
     Box(modifier = Modifier.fillMaxSize()) {
@@ -72,9 +78,10 @@ fun BlackjackGame(blackjackDealerViewModel: BlackjackDealerViewModel) {
 
         // Display the game screen or the start screen
         if (gameInProgress || isGameOver) {
-            GameScreen2(blackjackDealerViewModel, playerPoints, playerHand, dealerHand)
+            GameScreen(blackjackDealerViewModel, playerPoints, playerHand, dealerHand, rounds,
+                victories, defeats)
         } else {
-            StartScreen2(blackjackDealerViewModel)
+            StartScreen(blackjackDealerViewModel)
         }
 
         // Display a dialog when the game is over
@@ -137,10 +144,15 @@ fun StartScreen2(blackjackDealerViewModel: BlackjackDealerViewModel) {
         // Start game button
         Button(
             onClick = { blackjackDealerViewModel.startGame() },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-            border = BorderStroke(2.dp, Color.White)
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
+            border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
+            modifier = Modifier
+                .fillMaxWidth((0.10f))
+                .padding(top = 125.dp)
+                .sizeIn(minWidth = 150.dp, minHeight = 50.dp)
         ) {
-            Text("Empezar Partida", color = Color.Black)
+            Text("Empezar Partida", color = Color.White)
         }
     }
 }
@@ -158,7 +170,10 @@ fun GameScreen2(
     blackjackDealerViewModel: BlackjackDealerViewModel,
     playerPoints: Int,
     playerHand: List<Card>,
-    dealerHand: List<Card>
+    dealerHand: List<Card>,
+    rounds: Int,
+    victories: Int,
+    defeats: Int
 ) {
     // Get the game over state from the ViewModel
     val isGameOver by blackjackDealerViewModel.isGameOver.observeAsState(false)
@@ -168,7 +183,9 @@ fun GameScreen2(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        LowerPanel2(
+        // Aquí van tus otros composables...
+
+        LowerPanel(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
         )
@@ -220,7 +237,45 @@ fun GameScreen2(
                 }
             }
         }
-        Text(text = "Player Points: $playerPoints", color = Color.White)
+        // Puntuación del jugador
+        Text(
+            text = "Puntuación: $playerPoints",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .offset(x = (-25).dp, y = 670.dp)
+        )
+
+// Rondas jugadas
+        Text(
+            text = "Rondas: $rounds",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .offset(x = (-45).dp, y = 610.dp) // Ajusta la posición según necesites
+        )
+
+// Victorias
+        Text(
+            text = "Victorias: $victories",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .offset(x = (-900).dp, y = 590.dp) // Ajusta la posición según necesites
+        )
+
+// Derrotas
+        Text(
+            text = "Derrotas: $defeats",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .offset(x = (-900).dp, y = 615.dp) // Ajusta la posición según necesites
+        )
 
         Row(
             horizontalArrangement = Arrangement.spacedBy((20).dp)

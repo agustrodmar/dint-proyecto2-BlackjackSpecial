@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -144,10 +146,15 @@ fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
         // Start game button
         Button(
             onClick = { blackjackDealerViewModel.startGame() },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-            border = BorderStroke(2.dp, Color.White)
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
+            border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
+            modifier = Modifier
+                .fillMaxWidth((0.10f))
+                .padding(top = 125.dp)
+                .sizeIn(minWidth = 150.dp, minHeight = 50.dp)
         ) {
-            Text("Empezar Partida", color = Color.Black)
+            Text("Empezar Partida", color = Color.White)
         }
     }
 }
