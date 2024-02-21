@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.cardGames.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2
 
 import android.content.Context
 import android.media.MediaPlayer

@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.cardGames.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer
 
 import android.content.Context
 import android.media.MediaPlayer
@@ -11,7 +11,7 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Deck
 import com.arodmar432p.blackjackspecial.cardGames.data.Player
 import com.arodmar432p.blackjackspecial.cardGames.data.Rank
 import com.arodmar432p.blackjackspecial.cardGames.data.User
-import com.arodmar432p.blackjackspecial.cardGames.util.toUser
+import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -19,7 +19,7 @@ import com.google.firebase.ktx.Firebase
 /**
  * A ViewModel class representing the game against the Dealer.
  */
-class BlackjackDealerViewModel : ViewModel() {
+class BlackjackDealerViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     // The deck of cards
     private val deck = Deck(cardImageMap = mapOf("corazonesa" to  R.drawable.corazonesa,
@@ -192,21 +192,9 @@ class BlackjackDealerViewModel : ViewModel() {
         }
     }
 
-
     fun saveUser(user: User) {
-        try {
-            db.collection("users").document(user.uid).set(user).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d("BlackjackDealerViewModel", "Datos del usuario guardados: $user")
-                } else {
-                    Log.e("BlackjackDealerViewModel", "Error al guardar los datos del usuario", task.exception)
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("BlackjackDealerViewModel", "Error al guardar los datos del usuario", e)
-        }
+        userRepository.saveUser(user)
     }
-
 
     /**
      * Ends the turn and determines the winner.

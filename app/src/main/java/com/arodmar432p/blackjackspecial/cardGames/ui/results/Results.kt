@@ -30,9 +30,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arodmar432p.blackjackspecial.R
-import com.arodmar432p.blackjackspecial.cardGames.ui.AuthViewModel
-import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerViewModel
-import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackGameViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDealerViewModel
 
 /**
  * A composable function to display the results screen.

@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.cardGames.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui.menu
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -39,6 +38,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
+import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
+import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2.BlackjackGameViewModel
 
 
 /**
@@ -123,7 +125,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
         }
     }
     Row(modifier = Modifier.fillMaxSize()) {
-        ColumnaMainMenu(navController, AuthViewModel(), gameViewModel = gameViewModel)
+        ColumnaMainMenu(navController, AuthViewModel(UserRepository()), gameViewModel = gameViewModel)
     }
 }
 

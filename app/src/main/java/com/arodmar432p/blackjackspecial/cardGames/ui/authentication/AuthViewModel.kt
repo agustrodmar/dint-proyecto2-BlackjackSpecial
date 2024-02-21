@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.cardGames.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui.authentication
 
 import android.content.ContentValues.TAG
 import android.util.Log
@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.cardGames.data.User
+import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.util.currentUserLiveData
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -13,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val auth = Firebase.auth
 
     val userState: LiveData<User?> = auth.currentUserLiveData()
@@ -58,16 +59,8 @@ class AuthViewModel : ViewModel() {
     }
 
     fun saveUser(user: User) {
-        val db = Firebase.firestore
-        db.collection("users").document(user.uid).set(user).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // El usuario se ha guardado con éxito
-            } else {
-                // Ha ocurrido un error
-            }
-        }
+        userRepository.saveUser(user)
     }
-
 
     fun signOut() {
         auth.signOut()

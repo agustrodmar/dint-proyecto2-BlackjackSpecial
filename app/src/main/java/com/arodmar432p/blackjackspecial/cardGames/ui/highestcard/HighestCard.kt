@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.cardGames.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui.highestcard
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

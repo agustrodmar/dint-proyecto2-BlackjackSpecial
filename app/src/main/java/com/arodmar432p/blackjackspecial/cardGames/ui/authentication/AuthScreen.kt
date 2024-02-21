@@ -1,17 +1,14 @@
-package com.arodmar432p.blackjackspecial.cardGames.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui.authentication
 
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,6 +50,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
+import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 
 
 // val userState: LiveData<User?> = Firebase.auth.currentUserLiveData() // Para comprobar si el usuario se ha conectado satisfactoriamente
@@ -136,7 +134,7 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
                 .alpha(0.05f)
         )
 
-        ColumnaMenu(AuthViewModel())
+        ColumnaMenu(AuthViewModel(UserRepository()))
     }
 }
 

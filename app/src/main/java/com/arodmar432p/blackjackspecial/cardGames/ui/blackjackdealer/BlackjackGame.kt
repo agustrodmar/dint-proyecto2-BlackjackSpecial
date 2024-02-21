@@ -1,4 +1,5 @@
-package com.arodmar432p.blackjackspecial.cardGames.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer
+
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -37,14 +38,13 @@ import androidx.compose.ui.unit.dp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
 
-
 /**
  * A composable function to display the Blackjack dealer screen.
  *
  * @param blackjackDealerViewModel The ViewModel for the dealer.
  */
 @Composable
-fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
+fun BlackjackGame(blackjackDealerViewModel: BlackjackDealerViewModel) {
     // Get the game state from the ViewModel
     val playerPoints by blackjackDealerViewModel.playerPoints.observeAsState(0)
     val winner by blackjackDealerViewModel.winner.observeAsState("")
@@ -56,7 +56,7 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
     // Display the dealer screen
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.drawable.wallpapercpu2),
+            painter = painterResource(id = R.drawable.wallpapercpu),
             contentDescription = "The wallpaper for the CPU game",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
@@ -72,9 +72,9 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
 
         // Display the game screen or the start screen
         if (gameInProgress || isGameOver) {
-            GameScreen(blackjackDealerViewModel, playerPoints, playerHand, dealerHand)
+            GameScreen2(blackjackDealerViewModel, playerPoints, playerHand, dealerHand)
         } else {
-            StartScreen(blackjackDealerViewModel)
+            StartScreen2(blackjackDealerViewModel)
         }
 
         // Display a dialog when the game is over
@@ -114,7 +114,7 @@ fun BlackjackDealerScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
  * @param winner The winner of the game.
  */
 @Composable
-fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
+fun StartScreen2(blackjackDealerViewModel: BlackjackDealerViewModel) {
 
     // Get the game reset state from the ViewModel
     val gameReset by blackjackDealerViewModel.gameReset.observeAsState(false)
@@ -154,7 +154,7 @@ fun StartScreen(blackjackDealerViewModel: BlackjackDealerViewModel) {
  * @param dealerHand The hand of the dealer.
  */
 @Composable
-fun GameScreen(
+fun GameScreen2(
     blackjackDealerViewModel: BlackjackDealerViewModel,
     playerPoints: Int,
     playerHand: List<Card>,
@@ -168,9 +168,7 @@ fun GameScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Aquí van tus otros composables...
-
-        LowerPanel(
+        LowerPanel2(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
         )
@@ -332,7 +330,7 @@ fun GameScreen(
  * The composable that represents the lower panel in the game
  */
 @Composable
-fun LowerPanel(modifier: Modifier = Modifier) {
+fun LowerPanel2(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()

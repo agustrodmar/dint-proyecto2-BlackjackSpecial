@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.cardGames.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui.highestcard
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
