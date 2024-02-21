@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.cardGames.ui
+package com.arodmar432p.blackjackspecial.cardGames.ui.results
 
 
 import androidx.compose.foundation.Image
@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arodmar432p.blackjackspecial.R
+import com.arodmar432p.blackjackspecial.cardGames.ui.AuthViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackGameViewModel
 
 /**
  * A composable function to display the results screen.
@@ -37,29 +40,24 @@ import com.arodmar432p.blackjackspecial.R
  * @param gameViewModel The ViewModel for the game.
  */
 @Composable
-fun ResultsScreen(gameViewModel: BlackjackGameViewModel, authViewModel: AuthViewModel) {
-    val player1Wins by gameViewModel.player1Wins.observeAsState(initial = 0)
-    val player2Wins by gameViewModel.player2Wins.observeAsState(initial = 0)
-    val user by authViewModel.userState.observeAsState()
-
-    ResultsWallpaper()
-
+fun ResultsScreen(blackjackDealerViewModel: BlackjackDealerViewModel, authViewModel: AuthViewModel, resultsViewModel: ResultsViewModel) {
+    val user by resultsViewModel.user.observeAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.padding(16.dp)
     ) {
-        Text(text = "Resultados 1vs1", color = Color.White, fontSize = 24.sp)
+        Text(text = "Resultados", color = Color.White, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Victorias del Jugador 1: $player1Wins", color = Color.White)
-        Text(text = "Victorias del Jugador 2: $player2Wins", color = Color.White)
         if (user != null) {
             Text(text = "Horas jugadas: ${user!!.hoursInApp}", color = Color.White)
             Text(text = "Partidas jugadas: ${user!!.gamesPlayed}", color = Color.White)
-            Text(text = "Partidas ganadas: ${user!!.victories}", color = Color.White)
+            Text(text = "Victorias: ${user!!.victories}", color = Color.White)
         }
     }
+
+    ResultsWallpaper()
 }
 
 @Composable

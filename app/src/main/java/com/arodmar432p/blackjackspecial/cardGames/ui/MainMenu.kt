@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -24,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -32,6 +35,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
@@ -48,7 +52,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
     // Remember a mutable state for the open dialog
     val openDialog = remember { mutableStateOf(false) }
     // Get the background image
-    val background = painterResource(id = R.drawable.wallpaper1)
+    val background = painterResource(id = R.drawable.wallpaper3)
     // Get the current context
     val context = LocalContext.current
 
@@ -65,36 +69,51 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
+        Image(
+            painter = painterResource(id = R.drawable.texturawallpaper),
+            contentDescription = "Texture for the background",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.12f)
+        )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(275.dp), // Increased space between columns
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(16.dp)
         ) {
             // One player game image
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Contra la mesa", color = Color.White)
+                Text("Contra la mesa", color = Color.White, fontSize = 30.sp) // Increased text size
                 Image(
                     painter = onePlayerDrawable,
                     contentDescription = "One Player Game",
                     modifier = Modifier
-                        .sizeIn(minWidth = 200.dp, minHeight = 50.dp)
+                        .size(260.dp)
                         .clickable { navController.navigate(BlackjackRoutes.BlackjackDealerScreen.route) }
                 )
             }
 
             // Two players game image
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Dos jugadores", color = Color.White)
+                Text("Dos jugadores", color = Color.White, fontSize = 30.sp) // Increased text size
                 Image(
                     painter = twoPlayersDrawable,
                     contentDescription = "Two Players Game",
                     modifier = Modifier
-                        .sizeIn(minWidth = 200.dp, minHeight = 50.dp)
+                        .size(250.dp)
                         .clickable { navController.navigate(BlackjackRoutes.BlackjackScreen.route) }
                 )
             }
         }
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "App logo",
+            modifier = Modifier
+                .offset(y = (-340).dp)
+                .size(350.dp)
+        )
     }
 
     // Music toggle button

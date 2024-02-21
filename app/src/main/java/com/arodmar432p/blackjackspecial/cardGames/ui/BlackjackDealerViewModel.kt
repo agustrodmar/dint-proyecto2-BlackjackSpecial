@@ -10,6 +10,11 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Card
 import com.arodmar432p.blackjackspecial.cardGames.data.Deck
 import com.arodmar432p.blackjackspecial.cardGames.data.Player
 import com.arodmar432p.blackjackspecial.cardGames.data.Rank
+import com.arodmar432p.blackjackspecial.cardGames.data.User
+import com.arodmar432p.blackjackspecial.cardGames.util.toUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 /**
  * A ViewModel class representing the game against the Dealer.
@@ -71,6 +76,8 @@ class BlackjackDealerViewModel : ViewModel() {
         "trebolesk" to R.drawable.trebolesk,
     ))
 
+    private val auth = Firebase.auth
+    private val db = Firebase.firestore
     // The player
     private val player = Player("Player", mutableListOf(), 0)
 
@@ -186,10 +193,27 @@ class BlackjackDealerViewModel : ViewModel() {
     }
 
 
+    fun saveUser(user: User) {
+        try {
+            db.collection("users").document(user.uid).set(user).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("BlackjackDealerViewModel", "Datos del usuario guardados: $user")
+                } else {
+                    Log.e("BlackjackDealerViewModel", "Error al guardar los datos del usuario", task.exception)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("BlackjackDealerViewModel", "Error al guardar los datos del usuario", e)
+        }
+    }
+
+
     /**
      * Ends the turn and determines the winner.
      */
     private fun endTurn() {
+        val firebaseUser = auth.currentUser
+
         when {
             player.points > 21 -> winner.value = "Dealer"
             dealer.points > 21 -> winner.value = "Player"
@@ -198,8 +222,21 @@ class BlackjackDealerViewModel : ViewModel() {
             else -> winner.value = "Draw"
         }
         isGameOver.value = true
-    }
 
+        if (firebaseUser != null) {
+            db.collection("users").document(firebaseUser.uid).get()
+                .addOnSuccessListener { document ->
+                    val user = document.toObject(User::class.java)
+                    if (user != null) {
+                        user.gamesPlayed++
+                        if (winner.value == "Player") {
+                            user.victories++
+                        }
+                        saveUser(user)
+                    }
+                }
+        }
+    }
     /**
      * Closes the game over dialog and resets the game.
      */

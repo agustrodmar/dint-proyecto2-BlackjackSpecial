@@ -8,22 +8,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackGameViewModel
-import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.MainMenu
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.ui.AuthViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerViewModel
+import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackGame
 import com.arodmar432p.blackjackspecial.cardGames.ui.HighestCardScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.HighestCardViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.RegisterScreen
-import com.arodmar432p.blackjackspecial.cardGames.ui.ResultsScreen
+import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsScreen
+import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsViewModel
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
 
@@ -61,13 +60,13 @@ class MainActivity : ComponentActivity() {
                             MainMenu(navController = navController, gameViewModel = vsGameViewModel)
                         }
                         composable(BlackjackRoutes.BlackjackScreen.route) {
-                            BlackjackScreen(gameViewModel = vsGameViewModel)
+                            BlackjackGame(blackjackDealerViewModel = dealerGameViewModel)
                         }
                         composable(BlackjackRoutes.BlackjackDealerScreen.route) {
                             BlackjackDealerScreen(blackjackDealerViewModel = dealerGameViewModel)
                         }
                         composable(BlackjackRoutes.ResultsScreen.route) {
-                            ResultsScreen(gameViewModel = vsGameViewModel, authViewModel)
+                            ResultsScreen(blackjackDealerViewModel = BlackjackDealerViewModel(), authViewModel, resultsViewModel = ResultsViewModel())
                         }
 
                         composable(BlackjackRoutes.AuthScreen.route) {
