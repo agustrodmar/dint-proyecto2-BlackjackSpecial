@@ -56,7 +56,7 @@ fun BlackjackGame(blackjackDealerViewModel: BlackjackDealerViewModel) {
     // Display the dealer screen
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.drawable.wallpapercpu),
+            painter = painterResource(id = R.drawable.wallpaper3),
             contentDescription = "The wallpaper for the CPU game",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds

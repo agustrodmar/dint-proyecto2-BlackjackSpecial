@@ -93,6 +93,9 @@ class BlackjackDealerViewModel(private val userRepository: UserRepository) : Vie
     val gameInProgress = MutableLiveData<Boolean>()
     val isGameOver = MutableLiveData(false)
     val gameReset = MutableLiveData(false)
+    val rounds = MutableLiveData(0)
+    val victories = MutableLiveData(0)
+    val defeats = MutableLiveData(0)
 
     // MediaPlayer to play the shuffle sound
     private var dealSoundPlayer: MediaPlayer? = null
@@ -201,13 +204,29 @@ class BlackjackDealerViewModel(private val userRepository: UserRepository) : Vie
      */
     private fun endTurn() {
         val firebaseUser = auth.currentUser
+        //Local counting for rounds
+        rounds.value = (rounds.value ?: 0) +1
 
         when {
-            player.points > 21 -> winner.value = "Dealer"
-            dealer.points > 21 -> winner.value = "Player"
-            player.points > dealer.points -> winner.value = "Player"
-            dealer.points > player.points -> winner.value = "Dealer"
-            else -> winner.value = "Draw"
+            player.points > 21 -> {
+                winner.value = "Dealer"
+                defeats.value = (defeats.value ?: 0) + 1
+            }
+            dealer.points > 21 -> {
+                winner.value = "Player"
+                victories.value = (victories.value ?: 0) + 1
+            }
+            player.points > dealer.points -> {
+                winner.value = "Player"
+                victories.value = (victories.value ?: 0) + 1
+            }
+            player.points < dealer.points -> {
+                winner.value = "Dealer"
+                defeats.value = (defeats.value ?: 0) + 1
+            }
+            else -> {
+                winner.value = "Draw"
+            }
         }
         isGameOver.value = true
 

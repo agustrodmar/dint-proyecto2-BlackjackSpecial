@@ -76,7 +76,7 @@ fun RegisterScreen(viewModel: AuthViewModel, navController: NavController) {
 
 @Composable
 fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
-    val wallpaper : Painter = painterResource(id = R.drawable.wallpaper1)
+    val wallpaper : Painter = painterResource(id = R.drawable.wallpaper3)
     val textoInicio: Painter = painterResource(id = R.drawable.textomenuprincipal)
     val jokerWallpaper: Painter = painterResource(id = R.drawable.jokerwallpaper)
     val castilloNaipes: Painter = painterResource(id = R.drawable.castillonaipesazul)

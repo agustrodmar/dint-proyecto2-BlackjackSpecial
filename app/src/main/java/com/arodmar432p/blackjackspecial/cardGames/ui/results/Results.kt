@@ -61,7 +61,7 @@ fun ResultsScreen(blackjackDealerViewModel: BlackjackDealerViewModel, authViewMo
 
 @Composable
 fun LeaderboardImage(maxWidth: Dp, maxHeight: Dp) {
-    val leaderboardImage: Painter = painterResource(id = R.drawable.leaderboard)
+    val leaderboardImage: Painter = painterResource(id = R.drawable.leaderboardwallpaper)
 
     Box(
         modifier = Modifier
@@ -72,7 +72,7 @@ fun LeaderboardImage(maxWidth: Dp, maxHeight: Dp) {
             contentDescription = "El Leaderboard",
             modifier = Modifier
                 .align(Alignment.Center)
-                .offset(x = 78.dp)
+                .offset(x = 78.dp, y = 40.dp)
                 .border(1.dp, Color(0xFFEAEFC4), RectangleShape),
             contentScale = ContentScale.Fit
         )
@@ -85,7 +85,7 @@ fun ResultsWallpaper(){
     Box(modifier = Modifier.fillMaxSize()) {
 
         Image(
-            painter = painterResource(id = R.drawable.wallpaper1),
+            painter = painterResource(id = R.drawable.wallpaper3),
             contentDescription = "El wallpaper de Results",
             modifier = Modifier
                 .fillMaxSize(),
@@ -97,7 +97,7 @@ fun ResultsWallpaper(){
             contentDescription = "Textura de un tapete",
             modifier = Modifier
                 .fillMaxSize()
-                .alpha(0.08f)
+                .alpha(0.02f)
         )
 
         Box(
@@ -105,6 +105,8 @@ fun ResultsWallpaper(){
                 .height(450.dp)
                 .width(550.dp)
                 .align(Alignment.Center)
+
+
         ) {
             Image(
                 painter = painterResource(id = R.drawable.backgroundmadera),
@@ -112,6 +114,7 @@ fun ResultsWallpaper(){
                 modifier = Modifier
                     .size(450.dp)
                     .height(450.dp)
+                    .offset(y = 50.dp, x = 50.dp)
                     .border(1.dp, Color(0xFFEAEFC4), RectangleShape),
                 contentScale = ContentScale.Crop
             )
