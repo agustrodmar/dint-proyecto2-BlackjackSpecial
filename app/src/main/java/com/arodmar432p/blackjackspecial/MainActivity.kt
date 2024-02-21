@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackGameViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.MainMenu
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
+import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.ui.AuthViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.BlackjackDealerViewModel
@@ -66,7 +67,9 @@ class MainActivity : ComponentActivity() {
                             BlackjackDealerScreen(blackjackDealerViewModel = dealerGameViewModel)
                         }
                         composable(BlackjackRoutes.ResultsScreen.route) {
-                            ResultsScreen(blackjackDealerViewModel = BlackjackDealerViewModel(), authViewModel, resultsViewModel = ResultsViewModel())
+                            ResultsScreen(blackjackDealerViewModel = BlackjackDealerViewModel(), authViewModel, resultsViewModel = ResultsViewModel(
+                                UserRepository()
+                            ))
                         }
 
                         composable(BlackjackRoutes.AuthScreen.route) {

@@ -1,5 +1,7 @@
 package com.arodmar432p.blackjackspecial.cardGames.ui
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -45,13 +47,14 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signIn(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // Log in successful
-            } else {
-                // I must handle the error situation
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Inicio de sesión exitoso
+                } else {
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                }
             }
-        }
     }
 
     fun saveUser(user: User) {
