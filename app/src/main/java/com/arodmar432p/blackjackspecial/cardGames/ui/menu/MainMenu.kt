@@ -21,8 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -51,8 +49,6 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2.BlackjackGameV
  */
 @Composable
 fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel) {
-    // Remember a mutable state for the open dialog
-    val openDialog = remember { mutableStateOf(false) }
     // Get the background image
     val background = painterResource(id = R.drawable.wallpaper3)
     // Get the current context
@@ -132,10 +128,6 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
 @Composable
 fun ColumnaMainMenu(navController: NavController, authViewModel: AuthViewModel, gameViewModel: BlackjackGameViewModel) {
     val columna: Painter = painterResource(id = R.drawable.columna)
-    // Get the current context
-    val context = LocalContext.current
-
-
     Box(
         modifier = Modifier
             .fillMaxHeight()
@@ -154,14 +146,28 @@ fun ColumnaMainMenu(navController: NavController, authViewModel: AuthViewModel, 
 
             Button(
                 onClick = { navController.navigate(BlackjackRoutes.ResultsScreen.route) },
-                shape = RectangleShape, // Esquinas completamente cuadradas
+                shape = RectangleShape,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
+                border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .sizeIn(minWidth = 150.dp, minHeight = 50.dp)
+                    .offset(y = (-105).dp)
+
+            ) {
+                Text("Resultados", color = Color.White)
+            }
+
+            Button(
+                onClick = { navController.navigate(BlackjackRoutes.ResultsScreen.route) },
+                shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .sizeIn(minWidth = 150.dp, minHeight = 50.dp)
             ) {
-                Text("Resultados", color = Color.White)
+                Text("Ranking", color = Color.White)
             }
 
             Button(
@@ -169,7 +175,7 @@ fun ColumnaMainMenu(navController: NavController, authViewModel: AuthViewModel, 
                     authViewModel.signOut()
                     navController.navigate(BlackjackRoutes.AuthScreen.route)
                 },
-                shape = RectangleShape, // Esquinas completamente cuadradas
+                shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
                 modifier = Modifier

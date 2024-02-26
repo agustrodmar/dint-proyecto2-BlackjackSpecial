@@ -51,16 +51,14 @@ import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
+import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2.BlackjackGameViewModel
 
-
-// val userState: LiveData<User?> = Firebase.auth.currentUserLiveData() // Para comprobar si el usuario se ha conectado satisfactoriamente
 
 @Composable
 fun RegisterScreen(viewModel: AuthViewModel, navController: NavController) {
 
 
     val snackbarHostState = remember { SnackbarHostState() }
-    // val errorMessage by viewModel.errorMessage.observeAsState()
 
     AuthScreenWallpaper()
 
@@ -84,8 +82,6 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
     val texturaTapete: Painter = painterResource(id = R.drawable.texturawallpaper)
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
-        // val screenWidth = constraints.maxWidth.dp
-        // val screenHeight = constraints.maxHeight.dp
 
         Image(
             painter = wallpaper,
@@ -134,12 +130,12 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
                 .alpha(0.05f)
         )
 
-        ColumnaMenu(AuthViewModel(UserRepository()))
+        ColumnaMenu(AuthViewModel(UserRepository()), gameViewModel = BlackjackGameViewModel())
     }
 }
 
 @Composable
-fun ColumnaMenu(authViewModel: AuthViewModel) {
+fun ColumnaMenu(authViewModel: AuthViewModel, gameViewModel: BlackjackGameViewModel) {
     val showDialogNewGame = remember { mutableStateOf(false)}
     val showDialogLoadGame = remember { mutableStateOf(false)}
     val columna: Painter = painterResource(id = R.drawable.columna)
@@ -170,7 +166,7 @@ fun ColumnaMenu(authViewModel: AuthViewModel) {
 
             Button(
                 onClick = { showDialogNewGame.value = true },
-                shape = RectangleShape, // Esquinas completamente cuadradas
+                shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
                 modifier = Modifier
@@ -182,7 +178,7 @@ fun ColumnaMenu(authViewModel: AuthViewModel) {
 
             Button(
                 onClick = { showDialogLoadGame.value = true },
-                shape = RectangleShape, // Esquinas completamente cuadradas
+                shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
                 modifier = Modifier
@@ -194,7 +190,7 @@ fun ColumnaMenu(authViewModel: AuthViewModel) {
             }
 
             Button(
-                onClick = { /* Salir de la aplicación */ },
+                onClick = { gameViewModel.closeApp()},
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
@@ -260,8 +256,8 @@ fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Gray,
                         cursorColor = Color.Gray,
-                        focusedIndicatorColor = Color.Transparent, // Elimina el indicador cuando el campo de texto está enfocado
-                        unfocusedIndicatorColor = Color.Transparent, // Elimina el indicador cuando el campo de texto no está enfocado
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
                         containerColor = Color(0xFFEAEFC4)
                     ),
                     shape = RectangleShape,

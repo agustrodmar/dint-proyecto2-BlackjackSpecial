@@ -4,10 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.cardGames.data.Ranking
-import com.arodmar432p.blackjackspecial.cardGames.data.User
 import com.arodmar432p.blackjackspecial.cardGames.repository.RankingRepository
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.QuerySnapshot
+
 
 class RankingViewModel(private val rankingRepository: RankingRepository) : ViewModel() {
 

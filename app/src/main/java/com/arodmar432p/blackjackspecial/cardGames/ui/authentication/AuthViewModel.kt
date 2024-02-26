@@ -24,24 +24,24 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     fun createUser(email: String, password: String, username: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Usuario registrado con éxito
+
                 val firebaseUser = auth.currentUser
                 if (firebaseUser != null) {
                     val user = User(firebaseUser.uid, username, email, 0, 0, 0, 0)
                     saveUser(user)
                 }
             } else {
-                // Debo manejar la situación de error
+
                 val exception = task.exception
                 if (exception is FirebaseAuthUserCollisionException) {
-                    // El correo electrónico ya está en uso
+
                     errorMessage.value = "El correo electrónico ya está en uso."
                 } else if (exception is FirebaseAuthWeakPasswordException) {
-                    // La contraseña es demasiado débil
+
                     errorMessage.value = "La contraseña es demasiado débil."
                 }
                 else {
-                    // Otro error ocurrió
+
                     errorMessage.value = "Ocurrió un error desconocido."
                 }
             }
