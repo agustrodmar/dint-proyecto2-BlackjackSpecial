@@ -3,7 +3,6 @@ package com.arodmar432p.blackjackspecial
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -47,11 +46,11 @@ class MainActivity : ComponentActivity() {
         val factory = MyViewModelFactory(userRepository)
 
         // Crear ViewModel con la fábrica
-        vsGameViewModel = ViewModelProvider(this, factory).get(BlackjackGameViewModel::class.java)
-        dealerGameViewModel = ViewModelProvider(this, factory).get(BlackjackDealerViewModel::class.java)
-        highestCardViewModel = ViewModelProvider(this, factory).get(HighestCardViewModel::class.java)
-        authViewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
-        resultsViewModel = ViewModelProvider(this, factory).get(ResultsViewModel::class.java)
+        vsGameViewModel = ViewModelProvider(this, factory)[BlackjackGameViewModel::class.java]
+        dealerGameViewModel = ViewModelProvider(this, factory)[BlackjackDealerViewModel::class.java]
+        highestCardViewModel = ViewModelProvider(this, factory)[HighestCardViewModel::class.java]
+        authViewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
+        resultsViewModel = ViewModelProvider(this, factory)[ResultsViewModel::class.java]
 
 
         setContent {
@@ -77,7 +76,8 @@ class MainActivity : ComponentActivity() {
                             BlackjackDealerScreen(blackjackDealerViewModel = dealerGameViewModel)
                         }
                         composable(BlackjackRoutes.ResultsScreen.route) {
-                            ResultsScreen(blackjackDealerViewModel = dealerGameViewModel, authViewModel, resultsViewModel = ResultsViewModel(userRepository))
+                            ResultsScreen(authViewModel,
+                                resultsViewModel = ResultsViewModel(userRepository))
                         }
                         composable(BlackjackRoutes.AuthScreen.route) {
                             RegisterScreen(viewModel = authViewModel, navController)

@@ -9,10 +9,11 @@ import com.arodmar432p.blackjackspecial.cardGames.data.User
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.util.currentUserLiveData
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.firestore
+import kotlin.math.max
 
 class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val auth = Firebase.auth

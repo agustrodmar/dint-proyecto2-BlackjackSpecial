@@ -3,8 +3,6 @@ package com.arodmar432p.blackjackspecial.cardGames.ui.results
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.cardGames.data.User
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository

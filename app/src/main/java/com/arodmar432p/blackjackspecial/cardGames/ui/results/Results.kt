@@ -4,10 +4,8 @@ package com.arodmar432p.blackjackspecial.cardGames.ui.results
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -20,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -29,6 +26,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -47,7 +45,7 @@ import com.google.firebase.ktx.Firebase
  * @param gameViewModel The ViewModel for the game.
  */
 @Composable
-fun ResultsScreen(blackjackDealerViewModel: BlackjackDealerViewModel, authViewModel: AuthViewModel, resultsViewModel: ResultsViewModel) {
+fun ResultsScreen(authViewModel: AuthViewModel, resultsViewModel: ResultsViewModel) {
 
     val user by resultsViewModel.user.collectAsState()
     val isLoading by resultsViewModel.isLoading.collectAsState()
@@ -56,9 +54,7 @@ fun ResultsScreen(blackjackDealerViewModel: BlackjackDealerViewModel, authViewMo
         UserRepository()
     ))
 
-    // Asegúrate de que 'UserResults' se está recomponiendo correctamente
     LaunchedEffect(Unit) {
-        // Obtiene el usuario actual
         val uid = Firebase.auth.currentUser?.uid
         if (uid != null) {
             resultsViewModel.getUser(uid)
@@ -66,6 +62,19 @@ fun ResultsScreen(blackjackDealerViewModel: BlackjackDealerViewModel, authViewMo
     }
 
     UserResults(user = user, isLoading = isLoading)
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.avatar),
+            contentDescription = "avatar de usuario",
+            modifier = Modifier
+                .size(65.dp)
+                .height(20.dp)
+                .width(20.dp)
+                .offset(x = 780.dp, y = 385.dp),
+        )
+    }
+
 }
 @Composable
 fun LeaderboardImage(maxWidth: Dp, maxHeight: Dp) {
@@ -94,17 +103,26 @@ fun UserResults(user: User?, isLoading: Boolean) {
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Resultados", color = Color.White, fontSize = 94.sp)
-        Spacer(modifier = Modifier.height(16.dp))
         if (isLoading) {
-            Text(text = "Cargando datos del usuario...", color = Color.White)
+            Text(text = "Cargando datos del usuario...", color = Color.Black,
+                modifier = Modifier.offset(y = 390.dp))
         } else if (user != null) {
-            Text(text = "Nombre de usuario: ${if (user.username.isNotEmpty()) user.username else "Usuario sin nombre de usuario"}", color = Color.White)
-            Text(text = "Horas jugadas: ${user.hoursInApp}", color = Color.White)
-            Text(text = "Partidas jugadas: ${user.gamesPlayed}", color = Color.White)
-            Text(text = "Victorias: ${user.victories}", color = Color.White)
+            Text(text = user.username, color = (Color(0xFFEAEFC4)),
+                fontWeight = FontWeight.Bold, fontSize = 30.sp,
+                modifier = Modifier.offset(x= (-40).dp, y = 380.dp))
+            Text(text = "Horas de juego: ${user.hoursInApp}", color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.offset(x= (100).dp, y = 355.dp))
+            Text(text = "Total partidas: ${user.gamesPlayed}", color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.offset(x= (-105).dp, y = 415.dp))
+            Text(text = "Victorias: ${user.victories}", color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.offset(x= (-128).dp, y = 450.dp) )
         } else {
-            Text(text = "No se encontraron datos del usuario.", color = Color.White)
+            Text(text = "No se encontraron datos del usuario.", color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.offset(y = 390.dp) )
         }
     }
 }
@@ -172,5 +190,6 @@ fun ResultsWallpaper(blackjackDealerViewModel: BlackjackDealerViewModel, authVie
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
 fun ResultsScreenPreview(){
-    ResultsWallpaper(BlackjackDealerViewModel(UserRepository()), AuthViewModel(UserRepository()), ResultsViewModel(UserRepository()))
+    ResultsWallpaper(BlackjackDealerViewModel(UserRepository()),
+        AuthViewModel(UserRepository()), ResultsViewModel(UserRepository()))
 }
