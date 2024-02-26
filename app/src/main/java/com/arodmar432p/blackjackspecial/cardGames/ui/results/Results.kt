@@ -1,6 +1,7 @@
 package com.arodmar432p.blackjackspecial.cardGames.ui.results
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -30,8 +34,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arodmar432p.blackjackspecial.R
+import com.arodmar432p.blackjackspecial.cardGames.data.User
+import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDealerViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 /**
  * A composable function to display the results screen.
@@ -40,25 +48,25 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDe
  */
 @Composable
 fun ResultsScreen(blackjackDealerViewModel: BlackjackDealerViewModel, authViewModel: AuthViewModel, resultsViewModel: ResultsViewModel) {
-    val user by resultsViewModel.user.observeAsState()
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = Modifier.padding(16.dp)
-    ) {
-        Text(text = "Resultados", color = Color.White, fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(16.dp))
-        if (user != null) {
-            Text(text = "Horas jugadas: ${user!!.hoursInApp}", color = Color.White)
-            Text(text = "Partidas jugadas: ${user!!.gamesPlayed}", color = Color.White)
-            Text(text = "Victorias: ${user!!.victories}", color = Color.White)
+    val user by resultsViewModel.user.collectAsState()
+    val isLoading by resultsViewModel.isLoading.collectAsState()
+
+    ResultsWallpaper(BlackjackDealerViewModel(UserRepository()), AuthViewModel(UserRepository()), ResultsViewModel(
+        UserRepository()
+    ))
+
+    // Asegúrate de que 'UserResults' se está recomponiendo correctamente
+    LaunchedEffect(Unit) {
+        // Obtiene el usuario actual
+        val uid = Firebase.auth.currentUser?.uid
+        if (uid != null) {
+            resultsViewModel.getUser(uid)
         }
     }
 
-    ResultsWallpaper()
+    UserResults(user = user, isLoading = isLoading)
 }
-
 @Composable
 fun LeaderboardImage(maxWidth: Dp, maxHeight: Dp) {
     val leaderboardImage: Painter = painterResource(id = R.drawable.leaderboardwallpaper)
@@ -79,8 +87,37 @@ fun LeaderboardImage(maxWidth: Dp, maxHeight: Dp) {
     }
 }
 
+
 @Composable
-fun ResultsWallpaper(){
+fun UserResults(user: User?, isLoading: Boolean) {
+    Column(
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Resultados", color = Color.White, fontSize = 94.sp)
+        Spacer(modifier = Modifier.height(16.dp))
+        if (isLoading) {
+            Text(text = "Cargando datos del usuario...", color = Color.White)
+        } else if (user != null) {
+            Text(text = "Nombre de usuario: ${if (user.username.isNotEmpty()) user.username else "Usuario sin nombre de usuario"}", color = Color.White)
+            Text(text = "Horas jugadas: ${user.hoursInApp}", color = Color.White)
+            Text(text = "Partidas jugadas: ${user.gamesPlayed}", color = Color.White)
+            Text(text = "Victorias: ${user.victories}", color = Color.White)
+        } else {
+            Text(text = "No se encontraron datos del usuario.", color = Color.White)
+        }
+    }
+}
+
+@Composable
+fun ResultsWallpaper(blackjackDealerViewModel: BlackjackDealerViewModel, authViewModel: AuthViewModel, resultsViewModel: ResultsViewModel){
+
+
+    val user by resultsViewModel.user.collectAsState()
+
+    SideEffect {
+        Log.d("ResultsScreen", "ResultsScreen se ha recomponido. Datos del usuario: $user")
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -135,5 +172,5 @@ fun ResultsWallpaper(){
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
 fun ResultsScreenPreview(){
-    ResultsWallpaper()
+    ResultsWallpaper(BlackjackDealerViewModel(UserRepository()), AuthViewModel(UserRepository()), ResultsViewModel(UserRepository()))
 }
