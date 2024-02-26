@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2.BlackjackGameViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.menu.MainMenu
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
+import com.arodmar432p.blackjackspecial.cardGames.repository.RankingRepository
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDealerScreen
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
         // Create UserRepository and MyViewModelFactory
         val userRepository = UserRepository()
-        val factory = MyViewModelFactory(userRepository)
+        val factory = MyViewModelFactory(userRepository, RankingRepository())
 
         // Crear ViewModel con la fábrica
         vsGameViewModel = ViewModelProvider(this, factory)[BlackjackGameViewModel::class.java]

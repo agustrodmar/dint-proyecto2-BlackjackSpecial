@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -50,11 +51,16 @@ import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
-import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2.BlackjackGameViewModel
 
+
+// val userState: LiveData<User?> = Firebase.auth.currentUserLiveData() // Para comprobar si el usuario se ha conectado satisfactoriamente
 
 @Composable
 fun RegisterScreen(viewModel: AuthViewModel, navController: NavController) {
+
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    // val errorMessage by viewModel.errorMessage.observeAsState()
 
     AuthScreenWallpaper()
 
@@ -64,6 +70,8 @@ fun RegisterScreen(viewModel: AuthViewModel, navController: NavController) {
             navController.navigate(BlackjackRoutes.MainMenuScreen.route)
         }
     }
+
+    SnackbarHost(hostState = snackbarHostState)
 }
 
 @Composable
@@ -76,9 +84,12 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
     val texturaTapete: Painter = painterResource(id = R.drawable.texturawallpaper)
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+        // val screenWidth = constraints.maxWidth.dp
+        // val screenHeight = constraints.maxHeight.dp
+
         Image(
             painter = wallpaper,
-            contentDescription = "Register Screen wallpaper",
+            contentDescription = "Fondo de pantalla de Register Screen",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()
         )
@@ -123,19 +134,19 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
                 .alpha(0.05f)
         )
 
-        MenuColumn(BlackjackGameViewModel(), AuthViewModel(UserRepository()))
+        ColumnaMenu(AuthViewModel(UserRepository()))
     }
 }
 
-/**
- * This is the side left column where the buttons are displayed
- */
 @Composable
-fun MenuColumn(gameViewModel: BlackjackGameViewModel, authViewModel: AuthViewModel) {
+fun ColumnaMenu(authViewModel: AuthViewModel) {
     val showDialogNewGame = remember { mutableStateOf(false)}
     val showDialogLoadGame = remember { mutableStateOf(false)}
     val columna: Painter = painterResource(id = R.drawable.columna)
 
+    if (showDialogNewGame.value) {
+        DialogNewGame(authViewModel, onDismissRequest = { showDialogNewGame.value = false })
+    }
 
     if (showDialogLoadGame.value) {
         DialogLoadGame(authViewModel, onDismissRequest = { showDialogLoadGame.value = false })
@@ -149,7 +160,7 @@ fun MenuColumn(gameViewModel: BlackjackGameViewModel, authViewModel: AuthViewMod
     ) {
         Image(
             painter = columna,
-            contentDescription = "wood column",
+            contentDescription = "Columna de madera",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
@@ -159,7 +170,7 @@ fun MenuColumn(gameViewModel: BlackjackGameViewModel, authViewModel: AuthViewMod
 
             Button(
                 onClick = { showDialogNewGame.value = true },
-                shape = RectangleShape,
+                shape = RectangleShape, // Esquinas completamente cuadradas
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
                 modifier = Modifier
@@ -171,7 +182,7 @@ fun MenuColumn(gameViewModel: BlackjackGameViewModel, authViewModel: AuthViewMod
 
             Button(
                 onClick = { showDialogLoadGame.value = true },
-                shape = RectangleShape,
+                shape = RectangleShape, // Esquinas completamente cuadradas
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
                 modifier = Modifier
@@ -183,7 +194,7 @@ fun MenuColumn(gameViewModel: BlackjackGameViewModel, authViewModel: AuthViewMod
             }
 
             Button(
-                onClick = { gameViewModel.closeApp() },
+                onClick = { /* Salir de la aplicación */ },
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
@@ -198,25 +209,15 @@ fun MenuColumn(gameViewModel: BlackjackGameViewModel, authViewModel: AuthViewMod
     }
 }
 
-/**
- * Dialog for creating a new game
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit, onPasswordChange: (String) -> Unit) {
+fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isAdult by remember { mutableStateOf(false) }
     val wallpaperDialog : Painter = painterResource(id = R.drawable.wallpaperdialog)
-    val errorMessage by authViewModel.errorMessage.observeAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    LaunchedEffect(errorMessage) {
-        if (errorMessage != null) {
-            snackbarHostState.showSnackbar(errorMessage!!)
-        }
-    }
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
@@ -259,8 +260,8 @@ fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit, on
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Gray,
                         cursorColor = Color.Gray,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent, // Elimina el indicador cuando el campo de texto está enfocado
+                        unfocusedIndicatorColor = Color.Transparent, // Elimina el indicador cuando el campo de texto no está enfocado
                         containerColor = Color(0xFFEAEFC4)
                     ),
                     shape = RectangleShape,
@@ -330,9 +331,9 @@ fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit, on
                             authViewModel.errorMessage.value = "Debes ser mayor de 18 años para registrarte."
                         }
                     },
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
-                    border = BorderStroke(2.dp, Color(0xFFEAEFC4)),
+                    shape = RectangleShape, // Esquinas completamente cuadradas
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)), // Marrón por dentro
+                    border = BorderStroke(2.dp, Color(0xFFEAEFC4)), // Borde del color especificado
                     modifier = Modifier
                         .fillMaxWidth(0.35f)
                         .sizeIn(minWidth = 150.dp, minHeight = 60.dp)
@@ -344,10 +345,6 @@ fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit, on
         }
     }
 }
-
-/**
- * Dialog for Loading a game
- */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -386,6 +383,7 @@ fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Título del Dialog, puedes ajustarlo como prefieras
                 Text(
                     "Cargar partida",
                     color = Color.White,
@@ -451,13 +449,9 @@ fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
     }
 }
 
-/**
- * AuthScreenWallpaper preview
- */
 
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
 fun PreviewAuthScreenWallpaper() {
     AuthScreenWallpaper()
 }
-

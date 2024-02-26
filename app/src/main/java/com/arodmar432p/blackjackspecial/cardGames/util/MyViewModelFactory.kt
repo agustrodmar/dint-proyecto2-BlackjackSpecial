@@ -21,7 +21,7 @@ class MyViewModelFactory(
             return AuthViewModel(userRepository) as T
         }
         if (modelClass.isAssignableFrom(BlackjackDealerViewModel::class.java)) {
-            return BlackjackDealerViewModel(userRepository) as T
+            return BlackjackDealerViewModel(userRepository, RankingRepository()) as T
         }
         if (modelClass.isAssignableFrom(ResultsViewModel::class.java)) {
             return ResultsViewModel(userRepository) as T

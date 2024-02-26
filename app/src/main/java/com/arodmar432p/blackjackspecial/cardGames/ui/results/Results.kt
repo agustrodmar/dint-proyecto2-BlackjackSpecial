@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.User
+import com.arodmar432p.blackjackspecial.cardGames.repository.RankingRepository
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDealerViewModel
@@ -50,7 +51,7 @@ fun ResultsScreen(authViewModel: AuthViewModel, resultsViewModel: ResultsViewMod
     val user by resultsViewModel.user.collectAsState()
     val isLoading by resultsViewModel.isLoading.collectAsState()
 
-    ResultsWallpaper(BlackjackDealerViewModel(UserRepository()), AuthViewModel(UserRepository()), ResultsViewModel(
+    ResultsWallpaper(BlackjackDealerViewModel(UserRepository(), RankingRepository()), AuthViewModel(UserRepository()), ResultsViewModel(
         UserRepository()
     ))
 
@@ -109,10 +110,10 @@ fun UserResults(user: User?, isLoading: Boolean) {
         } else if (user != null) {
             Text(text = user.username, color = (Color(0xFFEAEFC4)),
                 fontWeight = FontWeight.Bold, fontSize = 30.sp,
-                modifier = Modifier.offset(x= (-40).dp, y = 380.dp))
+                modifier = Modifier.offset(x= (-25).dp, y = 380.dp))
             Text(text = "Horas de juego: ${user.hoursInApp}", color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.offset(x= (100).dp, y = 355.dp))
+                modifier = Modifier.offset(x= (100).dp, y = 433.dp))
             Text(text = "Total partidas: ${user.gamesPlayed}", color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.offset(x= (-105).dp, y = 415.dp))
@@ -190,6 +191,6 @@ fun ResultsWallpaper(blackjackDealerViewModel: BlackjackDealerViewModel, authVie
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
 fun ResultsScreenPreview(){
-    ResultsWallpaper(BlackjackDealerViewModel(UserRepository()),
+    ResultsWallpaper(BlackjackDealerViewModel(UserRepository(), RankingRepository()),
         AuthViewModel(UserRepository()), ResultsViewModel(UserRepository()))
 }

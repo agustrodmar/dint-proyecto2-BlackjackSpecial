@@ -1,5 +1,7 @@
 package com.arodmar432p.blackjackspecial.cardGames.ui.ranking
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.cardGames.data.Ranking
 import com.arodmar432p.blackjackspecial.cardGames.data.User
@@ -9,12 +11,17 @@ import com.google.firebase.firestore.QuerySnapshot
 
 class RankingViewModel(private val rankingRepository: RankingRepository) : ViewModel() {
 
-    fun updateRanking(user: User) {
-        val ranking = Ranking(user.uid, user.username, user.victories + 1)
-        rankingRepository.saveRanking(ranking)
+    private val _rankings = MutableLiveData<List<Ranking>>()
+    val rankings: LiveData<List<Ranking>> get() = _rankings
+
+    init {
+        getRanking()
     }
 
-    fun getRanking(): Task<QuerySnapshot> {
-        return rankingRepository.getRankings()
+    private fun getRanking() {
+        rankingRepository.getRankings().addOnSuccessListener { querySnapshot ->
+            val rankings = querySnapshot.documents.mapNotNull { it.toObject(Ranking::class.java) }
+            _rankings.value = rankings
+        }
     }
 }

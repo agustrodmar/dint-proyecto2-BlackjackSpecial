@@ -10,7 +10,9 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Card
 import com.arodmar432p.blackjackspecial.cardGames.data.Deck
 import com.arodmar432p.blackjackspecial.cardGames.data.Player
 import com.arodmar432p.blackjackspecial.cardGames.data.Rank
+import com.arodmar432p.blackjackspecial.cardGames.data.Ranking
 import com.arodmar432p.blackjackspecial.cardGames.data.User
+import com.arodmar432p.blackjackspecial.cardGames.repository.RankingRepository
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -19,7 +21,8 @@ import com.google.firebase.ktx.Firebase
 /**
  * A ViewModel class representing the game against the Dealer.
  */
-class BlackjackDealerViewModel(private val userRepository: UserRepository) : ViewModel() {
+class BlackjackDealerViewModel(private val userRepository: UserRepository,
+private val rankingRepository: RankingRepository) : ViewModel() {
 
     // The deck of cards
     private val deck = Deck(cardImageMap = mapOf("corazonesa" to  R.drawable.corazonesa,
@@ -200,7 +203,13 @@ class BlackjackDealerViewModel(private val userRepository: UserRepository) : Vie
     }
 
     /**
-     * Ends the turn and determines the winner.
+     * This function is called at the end of each turn in the game.
+     * It determines the winner of the game based on the points of the player and the dealer.
+     * If the player's points exceed 21, the dealer wins.
+     * If the dealer's points exceed 21, the player wins.
+     * If neither the player nor the dealer has points exceeding 21, the one with higher points wins.
+     * In case of a tie, the game is declared a draw.
+     * The function also updates the user's game statistics in Firestore and updates the ranking.
      */
     private fun endTurn() {
         val firebaseUser = auth.currentUser
@@ -240,10 +249,24 @@ class BlackjackDealerViewModel(private val userRepository: UserRepository) : Vie
                             user.victories++
                         }
                         saveUser(user)
+                        // Actualizar el ranking
+                        updateRanking(user)
                     }
                 }
         }
     }
+
+    /**
+     * This function is used to update the ranking of a user.
+     * It creates a new Ranking object with the user's details and calls the saveRanking function of the RankingRepository.
+     * The saveRanking function saves the ranking to Firestore.
+     * @param user The User object containing the details of the user.
+     */
+    private fun updateRanking(user: User) {
+        val ranking = Ranking(user.uid, user.username, user.victories)
+        rankingRepository.saveRanking(ranking)
+    }
+
     /**
      * Closes the game over dialog and resets the game.
      */
