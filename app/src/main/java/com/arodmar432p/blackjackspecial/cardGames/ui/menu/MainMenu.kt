@@ -159,7 +159,7 @@ fun ColumnaMainMenu(navController: NavController, authViewModel: AuthViewModel, 
             }
 
             Button(
-                onClick = { navController.navigate(BlackjackRoutes.ResultsScreen.route) },
+                onClick = { navController.navigate(BlackjackRoutes.RankingScreen.route) },
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),

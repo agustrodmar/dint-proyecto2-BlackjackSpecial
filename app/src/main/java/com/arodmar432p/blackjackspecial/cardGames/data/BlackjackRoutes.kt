@@ -37,4 +37,9 @@ sealed class BlackjackRoutes(val route: String) {
      */
     object AuthScreen : BlackjackRoutes("AuthScreen")
 
+    /**
+     * Represents the Ranking Screen
+     */
+    object RankingScreen : BlackjackRoutes("RankingScreen")
+
 }

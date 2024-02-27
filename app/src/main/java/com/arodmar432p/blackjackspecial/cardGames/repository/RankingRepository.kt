@@ -6,6 +6,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 
+/**
+ *
+ */
 class RankingRepository {
     private val db = FirebaseFirestore.getInstance()
 
@@ -15,6 +18,9 @@ class RankingRepository {
     }
 
     fun getRankings(): Task<QuerySnapshot> {
-        return db.collection("rankings").orderBy("victories", Query.Direction.DESCENDING).get()
+        return db.collection("rankings")
+            .orderBy("victories", Query.Direction.DESCENDING)
+            .limit(3)
+            .get()
     }
 }

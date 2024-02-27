@@ -1,6 +1,7 @@
 package com.arodmar432p.blackjackspecial
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,8 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackGa
 import com.arodmar432p.blackjackspecial.cardGames.ui.highestcard.HighestCardScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.highestcard.HighestCardViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.RegisterScreen
+import com.arodmar432p.blackjackspecial.cardGames.ui.ranking.RankingScreen
+import com.arodmar432p.blackjackspecial.cardGames.ui.ranking.RankingViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsViewModel
 import com.arodmar432p.blackjackspecial.cardGames.util.MyViewModelFactory
@@ -41,8 +44,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
-        // Create UserRepository and MyViewModelFactory
         val userRepository = UserRepository()
         val factory = MyViewModelFactory(userRepository, RankingRepository())
 
@@ -52,6 +55,7 @@ class MainActivity : ComponentActivity() {
         highestCardViewModel = ViewModelProvider(this, factory)[HighestCardViewModel::class.java]
         authViewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
         resultsViewModel = ViewModelProvider(this, factory)[ResultsViewModel::class.java]
+        val rankingViewModel = ViewModelProvider(this, factory)[RankingViewModel::class.java]
 
 
         setContent {
@@ -85,6 +89,10 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(BlackjackRoutes.HighestCardScreen.route) {
                             HighestCardScreen(highestCardViewModel = highestCardViewModel)
+                        }
+
+                        composable(BlackjackRoutes.RankingScreen.route) {
+                            RankingScreen(rankingViewModel)
                         }
                     }
                 }
