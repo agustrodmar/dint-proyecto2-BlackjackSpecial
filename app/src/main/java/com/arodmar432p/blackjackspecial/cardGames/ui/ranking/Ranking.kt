@@ -37,6 +37,11 @@ import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Ranking
 
 
+/**
+ * This function displays the ranking screen.
+ *
+ * @param rankingViewModel The ViewModel that this function will use to handle ranking tasks.
+ */
 @Composable
 fun RankingScreen(rankingViewModel: RankingViewModel) {
 
@@ -58,6 +63,11 @@ fun RankingScreen(rankingViewModel: RankingViewModel) {
 }
 
 
+/**
+ * This function displays the ranking wallpaper.
+ *
+ * @param rankings The list of rankings that this function will display.
+ */
 @Composable
 fun RankingWallpaper(rankings: List<Ranking>) {
 
@@ -108,7 +118,7 @@ fun RankingWallpaper(rankings: List<Ranking>) {
 
         Box(
             modifier = Modifier
-                .height(740.dp) // Increase the height of the LazyColumn
+                .height(740.dp)
                 .width(550.dp)
                 .align(Alignment.Center)
                 .offset(y = 100.dp)
@@ -118,7 +128,7 @@ fun RankingWallpaper(rankings: List<Ranking>) {
                     .fillMaxSize()
                     .padding(100.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy((-6).dp) // Add space between items
+                verticalArrangement = Arrangement.spacedBy((-6).dp)
             ) {
                 items(rankings) { ranking ->
                     Box(

@@ -8,7 +8,11 @@ import com.arodmar432p.blackjackspecial.cardGames.repository.RankingRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-
+/**
+ * This class handles the ranking data.
+ *
+ * @param rankingRepository The repository that this ViewModel will use to handle ranking tasks.
+ */
 class RankingViewModel(private val rankingRepository: RankingRepository) : ViewModel() {
 
     private val _rankings = MutableStateFlow<List<Ranking>>(emptyList())
@@ -18,6 +22,10 @@ class RankingViewModel(private val rankingRepository: RankingRepository) : ViewM
         getRanking()
     }
 
+    /**
+     * This function retrieves the rankings from the repository.
+     * It updates the `_rankings` value with the retrieved rankings.
+     */
     fun getRanking() {
         rankingRepository.getRankings().addOnSuccessListener { querySnapshot ->
             val rankings = querySnapshot.documents.mapNotNull { it.toObject(Ranking::class.java) }

@@ -74,7 +74,7 @@ fun BlackjackGame(blackjackDealerViewModel: BlackjackDealerViewModel) {
         )
         Image(
             painter = painterResource(id = R.drawable.texturawallpaper),
-            contentDescription = " Textura de tapete",
+            contentDescription = " Board texture",
             modifier = Modifier
                 .fillMaxSize()
                 .alpha(0.20f),
@@ -270,7 +270,7 @@ fun GameScreen2(
 
                     Image(
                         painter = painterResource(id = R.drawable.paneltapete),
-                        contentDescription = "El panel del tapete para colocar las cartas. ",
+                        contentDescription = "Yellow pannel surrounding cards ",
                         modifier = Modifier
                             .size(210.dp)
                     )
@@ -334,7 +334,7 @@ fun GameScreen2(
                     )
                     Image(
                         painter = painterResource(id = R.drawable.paneltapete),
-                        contentDescription = "El panel del tapete para colocar las cartas. ",
+                        contentDescription = "yellow board surrounding cards ",
                         modifier = Modifier
                             .size(210.dp)
                     )
@@ -391,7 +391,7 @@ fun GameScreen2(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logotapete),
-                contentDescription = "Logo Tapete",
+                contentDescription = "Board logo",
                 modifier = Modifier
                     .align(Alignment.Center)
                     .offset(y = (-350).dp)

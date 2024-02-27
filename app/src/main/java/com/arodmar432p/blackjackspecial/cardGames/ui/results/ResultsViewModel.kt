@@ -13,12 +13,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 
+/**
+ * ViewModel for handling results-related operations.
+ */
 class ResultsViewModel : ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
     private val _user = MutableStateFlow<User?>(null)
+
+    /**
+     * StateFlow that represents the current user.
+     */
     val user: StateFlow<User?> get() = _user
     private val _isLoading = MutableStateFlow(true)
+
+    /**
+     * StateFlow that represents whether the ViewModel is currently loading data.
+     */
     val isLoading: StateFlow<Boolean> get() = _isLoading
 
     init {
@@ -28,6 +39,12 @@ class ResultsViewModel : ViewModel() {
         }
     }
 
+
+    /**
+     * Retrieves a user with the given UID.
+     *
+     * @param uid The UID of the user to retrieve.
+     */
     fun getUser(uid: String) {
         _isLoading.value = true
         val db = FirebaseFirestore.getInstance()

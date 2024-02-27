@@ -39,7 +39,7 @@ import com.google.firebase.ktx.Firebase
 /**
  * A composable function to display the results screen.
  *
- * @param gameViewModel The ViewModel for the game.
+ * @param resultsViewModel The ViewModel for showing the results.
  */
 @Composable
 fun ResultsScreen(resultsViewModel: ResultsViewModel) {
@@ -61,7 +61,7 @@ fun ResultsScreen(resultsViewModel: ResultsViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.avatar),
-            contentDescription = "avatar de usuario",
+            contentDescription = "User avatar",
             modifier = Modifier
                 .size(65.dp)
                 .height(20.dp)
@@ -71,8 +71,15 @@ fun ResultsScreen(resultsViewModel: ResultsViewModel) {
     }
 
 }
+
+/**
+ * This function displays the leaderboard image.
+ *
+ * @param maxWidth The maximum width of the leaderboard image.
+ * @param maxHeight The maximum height of the leaderboard image.
+ */
 @Composable
-fun LeaderboardImage(maxWidth: Dp, maxHeight: Dp) {
+fun ResultsImage(maxWidth: Dp, maxHeight: Dp) {
     val leaderboardImage: Painter = painterResource(id = R.drawable.leaderboardwallpaper)
 
     Box(
@@ -81,7 +88,7 @@ fun LeaderboardImage(maxWidth: Dp, maxHeight: Dp) {
     ) {
         Image(
             painter = leaderboardImage,
-            contentDescription = "El Leaderboard",
+            contentDescription = "Results board",
             modifier = Modifier
                 .align(Alignment.Center)
                 .offset(x = 78.dp, y = 40.dp)
@@ -91,7 +98,12 @@ fun LeaderboardImage(maxWidth: Dp, maxHeight: Dp) {
     }
 }
 
-
+/**
+ * This function displays the user results.
+ *
+ * @param user The user whose results will be displayed.
+ * @param isLoading A boolean indicating whether the user data is still loading.
+ */
 @Composable
 fun UserResults(user: User?, isLoading: Boolean) {
     Column(
@@ -122,6 +134,11 @@ fun UserResults(user: User?, isLoading: Boolean) {
     }
 }
 
+/**
+ * This function displays the results wallpaper.
+ *
+ * @param resultsViewModel The ViewModel that this function will use to handle results tasks.
+ */
 @Composable
 fun ResultsWallpaper(resultsViewModel: ResultsViewModel){
 
@@ -136,7 +153,7 @@ fun ResultsWallpaper(resultsViewModel: ResultsViewModel){
 
         Image(
             painter = painterResource(id = R.drawable.wallpaper3),
-            contentDescription = "El wallpaper de Results",
+            contentDescription = "Results wallpaper",
             modifier = Modifier
                 .fillMaxSize(),
             contentScale = ContentScale.FillBounds
@@ -160,7 +177,7 @@ fun ResultsWallpaper(resultsViewModel: ResultsViewModel){
         ) {
             Image(
                 painter = painterResource(id = R.drawable.backgroundmadera),
-                contentDescription = "Tabla de madera sobre la que se situa el Leaderboard",
+                contentDescription = "a Wood backbround below the Results board",
                 modifier = Modifier
                     .size(450.dp)
                     .height(450.dp)
@@ -169,7 +186,7 @@ fun ResultsWallpaper(resultsViewModel: ResultsViewModel){
                 contentScale = ContentScale.Crop
             )
 
-            LeaderboardImage(maxWidth = 390.dp, maxHeight = 650.dp)
+            ResultsImage(maxWidth = 390.dp, maxHeight = 650.dp)
         }
 
         Image(
@@ -182,6 +199,10 @@ fun ResultsWallpaper(resultsViewModel: ResultsViewModel){
         )
     }
 }
+
+/**
+ * This function previews the results screen.
+ */
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
 fun ResultsScreenPreview(){

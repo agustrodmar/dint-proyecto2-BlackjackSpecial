@@ -41,7 +41,7 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewMode
  * A composable function to display the main menu of the Blackjack game.
  *
  * @param navController The NavController for navigation.
- * @param gameViewModel The ViewModel for the game.
+ * @param authViewModel The ViewModel Authentication. It's called here in order to Exit the app.
  */
 @Composable
 fun MainMenu(navController: NavController, authViewModel: AuthViewModel) {
@@ -113,6 +113,13 @@ fun MainMenu(navController: NavController, authViewModel: AuthViewModel) {
     }
 }
 
+
+/**
+ * This function displays the main menu in a column format.
+ *
+ * @param navController The NavController that this function will use to navigate between screens.
+ * @param authViewModel The ViewModel that this function will use to handle authentication tasks.
+ */
 @Composable
 fun ColumnMainMenu(navController: NavController, authViewModel: AuthViewModel) {
     val columna: Painter = painterResource(id = R.drawable.columna)

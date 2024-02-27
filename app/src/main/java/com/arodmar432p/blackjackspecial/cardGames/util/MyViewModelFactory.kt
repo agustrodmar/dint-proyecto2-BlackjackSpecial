@@ -9,6 +9,13 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDe
 import com.arodmar432p.blackjackspecial.cardGames.ui.ranking.RankingViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsViewModel
 
+
+/**
+ * A ViewModelProvider.Factory that creates ViewModels with custom constructors.
+ *
+ * @property userRepository The UserRepository to pass to the ViewModels.
+ * @property rankingRepository The RankingRepository to pass to the ViewModels.
+ */
 @Suppress("UNCHECKED_CAST")
 class MyViewModelFactory(
     private val userRepository: UserRepository,
