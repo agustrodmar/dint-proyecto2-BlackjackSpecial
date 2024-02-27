@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,7 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,7 +35,7 @@ import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
-import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2.BlackjackGameViewModel
+
 
 
 /**
@@ -48,13 +45,11 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2.BlackjackGameV
  * @param gameViewModel The ViewModel for the game.
  */
 @Composable
-fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel) {
+fun MainMenu(navController: NavController) {
     // Get the background image
     val background = painterResource(id = R.drawable.wallpaper3)
-    // Get the current context
-    val context = LocalContext.current
 
-    // I Get the drawables for the game modes
+    // Get the drawables for the game modes
     val onePlayerDrawable = painterResource(id = R.drawable.unjugador)
     val twoPlayersDrawable = painterResource(id = R.drawable.dosjugadores)
 
@@ -77,13 +72,13 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(275.dp), // Increased space between columns
+            horizontalArrangement = Arrangement.spacedBy(275.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(16.dp)
         ) {
             // One player game image
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Contra la mesa", color = Color.White, fontSize = 30.sp) // Increased text size
+                Text("Contra la mesa", color = Color.White, fontSize = 30.sp)
                 Image(
                     painter = onePlayerDrawable,
                     contentDescription = "One Player Game",
@@ -95,7 +90,7 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
 
             // Two players game image
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Dos jugadores", color = Color.White, fontSize = 30.sp) // Increased text size
+                Text("Dos jugadores", color = Color.White, fontSize = 30.sp)
                 Image(
                     painter = twoPlayersDrawable,
                     contentDescription = "Two Players Game",
@@ -114,19 +109,13 @@ fun MainMenu(navController: NavController, gameViewModel: BlackjackGameViewModel
         )
     }
 
-    // Music toggle button
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
-        IconButton(onClick = { gameViewModel.toggleMusic(context) }) {
-            Icon(painterResource(R.drawable.icmusicnote), contentDescription = "Toggle Music")
-        }
-    }
     Row(modifier = Modifier.fillMaxSize()) {
-        ColumnaMainMenu(navController, AuthViewModel(UserRepository()), gameViewModel = gameViewModel)
+        ColumnMainMenu(navController, AuthViewModel(UserRepository()))
     }
 }
 
 @Composable
-fun ColumnaMainMenu(navController: NavController, authViewModel: AuthViewModel, gameViewModel: BlackjackGameViewModel) {
+fun ColumnMainMenu(navController: NavController, authViewModel: AuthViewModel) {
     val columna: Painter = painterResource(id = R.drawable.columna)
     Box(
         modifier = Modifier
@@ -136,7 +125,7 @@ fun ColumnaMainMenu(navController: NavController, authViewModel: AuthViewModel, 
     ) {
         Image(
             painter = columna,
-            contentDescription = "Columna de madera",
+            contentDescription = "Wood column",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
@@ -187,7 +176,7 @@ fun ColumnaMainMenu(navController: NavController, authViewModel: AuthViewModel, 
             }
 
             Button(
-                onClick = { gameViewModel.closeApp()},
+                onClick = { authViewModel.closeApp()},
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),

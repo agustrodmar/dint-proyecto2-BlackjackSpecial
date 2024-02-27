@@ -3,6 +3,7 @@ package com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -38,6 +40,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.Card
 
@@ -58,6 +62,7 @@ fun BlackjackGame(blackjackDealerViewModel: BlackjackDealerViewModel) {
     val rounds by blackjackDealerViewModel.rounds.observeAsState(0)
     val victories by blackjackDealerViewModel.victories.observeAsState(0)
     val defeats by blackjackDealerViewModel.defeats.observeAsState(0)
+    val context = LocalContext.current
 
     // Display the dealer screen
     Box(modifier = Modifier.fillMaxSize()) {
@@ -78,38 +83,75 @@ fun BlackjackGame(blackjackDealerViewModel: BlackjackDealerViewModel) {
 
         // Display the game screen or the start screen
         if (gameInProgress || isGameOver) {
-            GameScreen(blackjackDealerViewModel, playerPoints, playerHand, dealerHand, rounds,
+            GameScreen2(blackjackDealerViewModel, playerPoints, playerHand, dealerHand, rounds,
                 victories, defeats)
         } else {
-            StartScreen(blackjackDealerViewModel)
+            StartScreen2(blackjackDealerViewModel)
         }
 
         // Display a dialog when the game is over
         if (isGameOver) {
-            AlertDialog(
-                onDismissRequest = { blackjackDealerViewModel.closeDialog() },
-                title = { Text(text = "Fin de la ronda") },
-                text = {
-                    if (winner == "Draw") {
-                        Text(text = "Empate")
-                    } else {
-                        Text(text = "El ganador es: $winner")
+            Dialog(onDismissRequest = { blackjackDealerViewModel.closeDialog() }) {
+                Surface(
+                    shape = RectangleShape,
+                    border = BorderStroke(2.dp, Color(0xFFEAEFC4)),
+                    modifier = Modifier
+                        .size(width = 600.dp, height = 550.dp)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                listOf(
+                                    Color.Transparent,
+                                    Color.Transparent
+                                ), 0f, 1000f
+                            ), shape = RectangleShape
+                        )
+                ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Image(
+                            painter = painterResource(id = R.drawable.wallpaperdialog),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
                     }
-                },
-                confirmButton = {
-                    val context = LocalContext.current
-                    Button(onClick = {
-                        blackjackDealerViewModel.closeDialog()
-                        blackjackDealerViewModel.startGame()
-                        blackjackDealerViewModel.playDealSound(context)
-                    },  colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
-                        border = BorderStroke(2.dp, Color.White)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Aceptar")
-
+                        Text("Fin de la ronda", color = Color.White, fontSize = 24.sp,
+                            modifier = Modifier
+                                .offset(y = (-80).dp)
+                                .align(Alignment.CenterHorizontally))
+                        Text(
+                            text = if (winner == "Draw") "Empate" else "El ganador es: $winner",
+                            color = Color.White,
+                            fontSize = 24.sp,
+                            modifier = Modifier
+                                .offset(y = (-30).dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                        Button(
+                            onClick = {
+                                blackjackDealerViewModel.closeDialog()
+                                blackjackDealerViewModel.startGame()
+                                blackjackDealerViewModel.playDealSound(context)
+                            },
+                            shape = RectangleShape,
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
+                            border = BorderStroke(2.dp, Color(0xFFEAEFC4)),
+                            modifier = Modifier
+                                .fillMaxWidth(0.35f)
+                                .sizeIn(minWidth = 150.dp, minHeight = 60.dp)
+                                .offset(y = 70.dp)
+                        ) {
+                            Text("Aceptar", color = Color.White)
+                        }
                     }
                 }
-            )
+            }
         }
     }
 }
@@ -183,9 +225,7 @@ fun GameScreen2(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Aquí van tus otros composables...
-
-        LowerPanel(
+        LowerPanel2(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
         )
@@ -237,7 +277,7 @@ fun GameScreen2(
                 }
             }
         }
-        // Puntuación del jugador
+        // Player Points
         Text(
             text = "Puntuación: $playerPoints",
             color = Color.White,
@@ -247,14 +287,14 @@ fun GameScreen2(
                 .offset(x = (-25).dp, y = 670.dp)
         )
 
-// Rondas jugadas
+// Played rounds
         Text(
             text = "Rondas: $rounds",
             color = Color.White,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .offset(x = (-45).dp, y = 610.dp) // Ajusta la posición según necesites
+                .offset(x = (-45).dp, y = 610.dp)
         )
 
 // Victorias
@@ -264,23 +304,23 @@ fun GameScreen2(
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .offset(x = (-900).dp, y = 590.dp) // Ajusta la posición según necesites
+                .offset(x = (-900).dp, y = 590.dp)
         )
 
-// Derrotas
+// Defeats
         Text(
             text = "Derrotas: $defeats",
             color = Color.White,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .offset(x = (-900).dp, y = 615.dp) // Ajusta la posición según necesites
+                .offset(x = (-900).dp, y = 615.dp)
         )
 
         Row(
             horizontalArrangement = Arrangement.spacedBy((20).dp)
         ) {
-            playerHand.forEachIndexed { index, card ->
+            playerHand.forEachIndexed { _, card ->
                 Box(
                     modifier = Modifier
                         .size(190.dp, 250.dp)

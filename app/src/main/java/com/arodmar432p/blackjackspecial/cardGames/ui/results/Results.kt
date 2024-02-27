@@ -33,10 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.User
-import com.arodmar432p.blackjackspecial.cardGames.repository.RankingRepository
-import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
-import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
-import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDealerViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -46,14 +42,12 @@ import com.google.firebase.ktx.Firebase
  * @param gameViewModel The ViewModel for the game.
  */
 @Composable
-fun ResultsScreen(authViewModel: AuthViewModel, resultsViewModel: ResultsViewModel) {
+fun ResultsScreen(resultsViewModel: ResultsViewModel) {
 
     val user by resultsViewModel.user.collectAsState()
     val isLoading by resultsViewModel.isLoading.collectAsState()
 
-    ResultsWallpaper(BlackjackDealerViewModel(UserRepository(), RankingRepository()), AuthViewModel(UserRepository()), ResultsViewModel(
-        UserRepository()
-    ))
+    ResultsWallpaper(ResultsViewModel())
 
     LaunchedEffect(Unit) {
         val uid = Firebase.auth.currentUser?.uid
@@ -129,7 +123,7 @@ fun UserResults(user: User?, isLoading: Boolean) {
 }
 
 @Composable
-fun ResultsWallpaper(blackjackDealerViewModel: BlackjackDealerViewModel, authViewModel: AuthViewModel, resultsViewModel: ResultsViewModel){
+fun ResultsWallpaper(resultsViewModel: ResultsViewModel){
 
 
     val user by resultsViewModel.user.collectAsState()
@@ -191,6 +185,5 @@ fun ResultsWallpaper(blackjackDealerViewModel: BlackjackDealerViewModel, authVie
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
 fun ResultsScreenPreview(){
-    ResultsWallpaper(BlackjackDealerViewModel(UserRepository(), RankingRepository()),
-        AuthViewModel(UserRepository()), ResultsViewModel(UserRepository()))
+    ResultsWallpaper(ResultsViewModel())
 }

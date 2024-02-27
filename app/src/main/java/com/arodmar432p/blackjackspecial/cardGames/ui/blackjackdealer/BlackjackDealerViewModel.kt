@@ -198,7 +198,7 @@ private val rankingRepository: RankingRepository) : ViewModel() {
         }
     }
 
-    fun saveUser(user: User) {
+    private fun saveUser(user: User) {
         userRepository.saveUser(user)
     }
 

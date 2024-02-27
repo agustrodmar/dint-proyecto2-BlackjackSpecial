@@ -1,5 +1,7 @@
 package com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2
 
+
+/*
 import android.content.Context
 import android.media.MediaPlayer
 import android.util.Log
@@ -12,6 +14,7 @@ import com.arodmar432p.blackjackspecial.cardGames.data.Card
 import com.arodmar432p.blackjackspecial.cardGames.data.Deck
 import com.arodmar432p.blackjackspecial.cardGames.data.Player
 import com.arodmar432p.blackjackspecial.cardGames.data.Rank
+
 
 /**
  * A ViewModel class representing the game of Blackjack.
@@ -77,8 +80,8 @@ class BlackjackGameViewModel : ViewModel() {
     val players: LiveData<List<Player>> get() = _players
     private val _winner = MutableLiveData<Player?>()
     val winner: LiveData<Player?> get() = _winner
-    private val _currentTurn = MutableLiveData<Player>()
-    val currentTurn: LiveData<Player> get() = _currentTurn
+    private val _currentTurn = MutableLiveData<Player?>()
+    val currentTurn: MutableLiveData<Player?> get() = _currentTurn
     private val _gameInProgress = MutableLiveData<Boolean>()
     val gameInProgress: LiveData<Boolean> get() = _gameInProgress
 
@@ -340,3 +343,5 @@ class BlackjackGameViewModel : ViewModel() {
         _eventCloseApp.value = false
     }
 }
+
+*/

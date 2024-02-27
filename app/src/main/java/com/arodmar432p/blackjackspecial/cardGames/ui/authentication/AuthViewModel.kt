@@ -9,18 +9,38 @@ import com.arodmar432p.blackjackspecial.cardGames.data.User
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.util.currentUserLiveData
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.auth
-import kotlin.math.max
 
+
+/**
+ * ViewModel for handling authentication-related operations.
+ *
+ * @property userRepository The UserRepository used for user-related operations.
+ */
 class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val auth = Firebase.auth
+    private val _eventCloseApp = MutableLiveData<Boolean>()
+    val eventCloseApp: LiveData<Boolean> get() = _eventCloseApp
 
+    /**
+     * LiveData that represents the current user.
+     */
     val userState: LiveData<User?> = auth.currentUserLiveData()
+    /**
+     * MutableLiveData that represents any error messages that occur during authentication operations.
+     */
     val errorMessage = MutableLiveData<String>()
 
+
+    /**
+     * Creates a new user with the given email, password, and username.
+     *
+     * @param email The email of the new user.
+     * @param password The password of the new user.
+     * @param username The username of the new user.
+     */
     fun createUser(email: String, password: String, username: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -32,22 +52,32 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
                 }
             } else {
 
-                val exception = task.exception
-                if (exception is FirebaseAuthUserCollisionException) {
+                when (task.exception) {
+                    is FirebaseAuthUserCollisionException -> {
 
-                    errorMessage.value = "El correo electrónico ya está en uso."
-                } else if (exception is FirebaseAuthWeakPasswordException) {
+                        errorMessage.value = "El correo electrónico ya está en uso."
+                    }
 
-                    errorMessage.value = "La contraseña es demasiado débil."
-                }
-                else {
+                    is FirebaseAuthWeakPasswordException -> {
 
-                    errorMessage.value = "Ocurrió un error desconocido."
+                        errorMessage.value = "La contraseña es demasiado débil."
+                    }
+
+                    else -> {
+
+                        errorMessage.value = "Ocurrió un error desconocido."
+                    }
                 }
             }
         }
     }
 
+    /**
+     * Signs in a user with the given email and password.
+     *
+     * @param email The email of the user.
+     * @param password The password of the user.
+     */
     fun signIn(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
@@ -59,10 +89,34 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
             }
     }
 
-    fun saveUser(user: User) {
+
+    /**
+     * Closes the app.
+     */
+    fun closeApp() {
+        _eventCloseApp.value = true
+    }
+
+    /**
+     * Resets the close app event after the app is closed.
+     */
+    fun onAppClosed() {
+        _eventCloseApp.value = false
+    }
+
+
+    /**
+     * Saves a user to the UserRepository.
+     *
+     * @param user The user to save.
+     */
+    private fun saveUser(user: User) {
         userRepository.saveUser(user)
     }
 
+    /**
+     * Signs out the current user.
+     */
     fun signOut() {
         auth.signOut()
     }

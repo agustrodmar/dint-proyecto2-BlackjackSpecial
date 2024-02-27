@@ -1,9 +1,10 @@
 package com.arodmar432p.blackjackspecial
 
+import android.os.Build
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -12,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2.BlackjackGameViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.menu.MainMenu
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.repository.RankingRepository
@@ -21,9 +21,7 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewMode
 import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDealerScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDealerViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackGame
-import com.arodmar432p.blackjackspecial.cardGames.ui.highestcard.HighestCardScreen
-import com.arodmar432p.blackjackspecial.cardGames.ui.highestcard.HighestCardViewModel
-import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.RegisterScreen
+import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.ranking.RankingScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.ranking.RankingViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsScreen
@@ -36,23 +34,23 @@ import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
  * The main activity of the Blackjack game.
  */
 class MainActivity : ComponentActivity() {
-    private lateinit var vsGameViewModel: BlackjackGameViewModel
+    // private lateinit var vsGameViewModel: BlackjackGameViewModel
     private lateinit var dealerGameViewModel: BlackjackDealerViewModel
-    private lateinit var highestCardViewModel: HighestCardViewModel
+   //  private lateinit var highestCardViewModel: HighestCardViewModel
     private lateinit var authViewModel: AuthViewModel
     private lateinit var resultsViewModel: ResultsViewModel
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         val userRepository = UserRepository()
         val factory = MyViewModelFactory(userRepository, RankingRepository())
 
-        // Crear ViewModel con la fábrica
-        vsGameViewModel = ViewModelProvider(this, factory)[BlackjackGameViewModel::class.java]
+        // Creating Factory ViewModel.
+        // vsGameViewModel = ViewModelProvider(this, factory)[BlackjackGameViewModel::class.java]
         dealerGameViewModel = ViewModelProvider(this, factory)[BlackjackDealerViewModel::class.java]
-        highestCardViewModel = ViewModelProvider(this, factory)[HighestCardViewModel::class.java]
+        // highestCardViewModel = ViewModelProvider(this, factory)[HighestCardViewModel::class.java]
         authViewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
         resultsViewModel = ViewModelProvider(this, factory)[ResultsViewModel::class.java]
         val rankingViewModel = ViewModelProvider(this, factory)[RankingViewModel::class.java]
@@ -72,7 +70,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = BlackjackRoutes.AuthScreen.route
                     ) {
                         composable(BlackjackRoutes.MainMenuScreen.route) {
-                            MainMenu(navController = navController, gameViewModel = vsGameViewModel)
+                            MainMenu(navController = navController)
                         }
                         composable(BlackjackRoutes.BlackjackScreen.route) {
                             BlackjackGame(blackjackDealerViewModel = dealerGameViewModel)
@@ -81,15 +79,14 @@ class MainActivity : ComponentActivity() {
                             BlackjackDealerScreen(blackjackDealerViewModel = dealerGameViewModel)
                         }
                         composable(BlackjackRoutes.ResultsScreen.route) {
-                            ResultsScreen(authViewModel,
-                                resultsViewModel = ResultsViewModel(userRepository))
+                            ResultsScreen(ResultsViewModel())
                         }
                         composable(BlackjackRoutes.AuthScreen.route) {
-                            RegisterScreen(viewModel = authViewModel, navController)
+                            AuthScreen(viewModel = authViewModel, navController)
                         }
-                        composable(BlackjackRoutes.HighestCardScreen.route) {
+                        /*composable(BlackjackRoutes.HighestCardScreen.route) {
                             HighestCardScreen(highestCardViewModel = highestCardViewModel)
-                        }
+                        }*/
 
                         composable(BlackjackRoutes.RankingScreen.route) {
                             RankingScreen(rankingViewModel)
@@ -100,10 +97,10 @@ class MainActivity : ComponentActivity() {
         }
 
         // Observe the event to close the app
-        vsGameViewModel.eventCloseApp.observe(this) { event ->
+        authViewModel.eventCloseApp.observe(this) { event ->
             if (event) {
                 finish()
-                vsGameViewModel.onAppClosed()
+                authViewModel.onAppClosed()
             }
         }
     }

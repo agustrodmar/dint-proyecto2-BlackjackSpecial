@@ -5,7 +5,6 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.arodmar432p.blackjackspecial.cardGames.data.User
-import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -14,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 
-class ResultsViewModel(private val userRepository: UserRepository) : ViewModel() {
+class ResultsViewModel : ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
     private val _user = MutableStateFlow<User?>(null)
@@ -49,9 +48,5 @@ class ResultsViewModel(private val userRepository: UserRepository) : ViewModel()
                 Log.d(TAG, "get failed with ", exception)
                 _isLoading.value = false
             }
-    }
-
-    fun saveUser(user: User) {
-        userRepository.saveUser(user)
     }
 }

@@ -1,8 +1,8 @@
 package com.arodmar432p.blackjackspecial.cardGames.data
 
 /**
- * The data class that represents
- * the ranking in the game.
+ * The data class that represents the ranking in the game.
+ * It's also my second Firestore entity.
  *
  * @property uid hashcode that represents the user ID.
  * @property username username login in the App.

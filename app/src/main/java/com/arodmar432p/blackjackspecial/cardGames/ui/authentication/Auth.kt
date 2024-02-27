@@ -51,11 +51,17 @@ import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
-import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackvs2.BlackjackGameViewModel
 
 
+
+/**
+ * Represents the registration screen of the app.
+ *
+ * @param viewModel The ViewModel that holds the state of the authentication.
+ * @param navController The NavController that manages app navigation.
+ */
 @Composable
-fun RegisterScreen(viewModel: AuthViewModel, navController: NavController) {
+fun AuthScreen(viewModel: AuthViewModel, navController: NavController) {
 
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -72,6 +78,12 @@ fun RegisterScreen(viewModel: AuthViewModel, navController: NavController) {
     SnackbarHost(hostState = snackbarHostState)
 }
 
+
+/**
+ * Represents the wallpaper of the auth screen.
+ *
+ * @param modifier The Modifier to be applied to the wallpaper.
+ */
 @Composable
 fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
     val wallpaper : Painter = painterResource(id = R.drawable.wallpaper3)
@@ -130,12 +142,19 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
                 .alpha(0.05f)
         )
 
-        ColumnaMenu(AuthViewModel(UserRepository()), gameViewModel = BlackjackGameViewModel())
+        ColumnMenu(AuthViewModel(UserRepository()))
     }
 }
 
+
+/**
+ * Represents the menu column in the auth screen.
+ *
+ * @param authViewModel The ViewModel that holds the state of the authentication.
+ * @param gameViewModel The ViewModel that holds the state of the game.
+ */
 @Composable
-fun ColumnaMenu(authViewModel: AuthViewModel, gameViewModel: BlackjackGameViewModel) {
+fun ColumnMenu(authViewModel: AuthViewModel) {
     val showDialogNewGame = remember { mutableStateOf(false)}
     val showDialogLoadGame = remember { mutableStateOf(false)}
     val columna: Painter = painterResource(id = R.drawable.columna)
@@ -190,7 +209,7 @@ fun ColumnaMenu(authViewModel: AuthViewModel, gameViewModel: BlackjackGameViewMo
             }
 
             Button(
-                onClick = { gameViewModel.closeApp()},
+                onClick = { authViewModel.closeApp()},
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF231513)),
                 border = BorderStroke(3.dp, Color(0xFFEAEFC4)),
@@ -206,6 +225,12 @@ fun ColumnaMenu(authViewModel: AuthViewModel, gameViewModel: BlackjackGameViewMo
 }
 
 
+/**
+ * Represents a dialog for creating a new game.
+ *
+ * @param authViewModel The ViewModel that holds the state of the authentication.
+ * @param onDismissRequest A function to be called when the dialog is dismissed.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
@@ -342,6 +367,12 @@ fun DialogNewGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
     }
 }
 
+/**
+ * Represents a dialog for loading a game.
+ *
+ * @param authViewModel The ViewModel that holds the state of the auth.
+ * @param onDismissRequest A function to be called when the dialog is dismissed.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
@@ -379,7 +410,7 @@ fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Título del Dialog, puedes ajustarlo como prefieras
+
                 Text(
                     "Cargar partida",
                     color = Color.White,
@@ -446,6 +477,9 @@ fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
 }
 
 
+/**
+ * A preview of the AuthScreenWallpaper composable.
+ */
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
 fun PreviewAuthScreenWallpaper() {
