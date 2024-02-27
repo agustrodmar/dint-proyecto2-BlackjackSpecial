@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
 import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
-import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
 
 
@@ -45,7 +44,7 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewMode
  * @param gameViewModel The ViewModel for the game.
  */
 @Composable
-fun MainMenu(navController: NavController) {
+fun MainMenu(navController: NavController, authViewModel: AuthViewModel) {
     // Get the background image
     val background = painterResource(id = R.drawable.wallpaper3)
 
@@ -110,7 +109,7 @@ fun MainMenu(navController: NavController) {
     }
 
     Row(modifier = Modifier.fillMaxSize()) {
-        ColumnMainMenu(navController, AuthViewModel(UserRepository()))
+        ColumnMainMenu(navController, authViewModel)
     }
 }
 

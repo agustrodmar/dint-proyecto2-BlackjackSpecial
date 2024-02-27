@@ -66,7 +66,7 @@ fun AuthScreen(viewModel: AuthViewModel, navController: NavController) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    AuthScreenWallpaper()
+    AuthScreenWallpaper(viewModel, Modifier)
 
     val user by viewModel.userState.observeAsState()
     LaunchedEffect(user) {
@@ -85,7 +85,7 @@ fun AuthScreen(viewModel: AuthViewModel, navController: NavController) {
  * @param modifier The Modifier to be applied to the wallpaper.
  */
 @Composable
-fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
+fun AuthScreenWallpaper(authViewModel: AuthViewModel, modifier: Modifier) {
     val wallpaper : Painter = painterResource(id = R.drawable.wallpaper3)
     val textoInicio: Painter = painterResource(id = R.drawable.textomenuprincipal)
     val jokerWallpaper: Painter = painterResource(id = R.drawable.jokerwallpaper)
@@ -142,7 +142,7 @@ fun AuthScreenWallpaper(modifier: Modifier = Modifier) {
                 .alpha(0.05f)
         )
 
-        ColumnMenu(AuthViewModel(UserRepository()))
+        ColumnMenu(authViewModel)
     }
 }
 
@@ -175,7 +175,7 @@ fun ColumnMenu(authViewModel: AuthViewModel) {
     ) {
         Image(
             painter = columna,
-            contentDescription = "Columna de madera",
+            contentDescription = "Wood column",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
@@ -483,5 +483,5 @@ fun DialogLoadGame(authViewModel: AuthViewModel, onDismissRequest: () -> Unit) {
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
 fun PreviewAuthScreenWallpaper() {
-    AuthScreenWallpaper()
+    AuthScreenWallpaper(AuthViewModel(UserRepository()), Modifier)
 }

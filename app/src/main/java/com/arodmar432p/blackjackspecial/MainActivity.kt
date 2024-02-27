@@ -2,6 +2,7 @@ package com.arodmar432p.blackjackspecial
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -70,7 +71,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = BlackjackRoutes.AuthScreen.route
                     ) {
                         composable(BlackjackRoutes.MainMenuScreen.route) {
-                            MainMenu(navController = navController)
+                            MainMenu(navController = navController, authViewModel)
                         }
                         composable(BlackjackRoutes.BlackjackScreen.route) {
                             BlackjackGame(blackjackDealerViewModel = dealerGameViewModel)
@@ -98,9 +99,11 @@ class MainActivity : ComponentActivity() {
 
         // Observe the event to close the app
         authViewModel.eventCloseApp.observe(this) { event ->
+            Log.d("MainActivity", "eventCloseApp observed, value: $event")
             if (event) {
                 finish()
                 authViewModel.onAppClosed()
+                Log.d("MainActivity", "App finished and onAppClosed() called")
             }
         }
     }

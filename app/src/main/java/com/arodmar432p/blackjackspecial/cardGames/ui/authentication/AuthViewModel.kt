@@ -94,7 +94,9 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
      * Closes the app.
      */
     fun closeApp() {
+        Log.d("AuthViewModel", "closeApp() called")
         _eventCloseApp.value = true
+        Log.d("AuthViewModel", "_eventCloseApp value set to true")
     }
 
     /**
