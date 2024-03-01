@@ -27,7 +27,7 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.ranking.RankingScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.ranking.RankingViewModel
 import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsViewModel
-import com.arodmar432p.blackjackspecial.cardGames.util.MyViewModelFactory
+import com.arodmar432p.blackjackspecial.cardGames.util.BlackjackViewModelFactory
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
 
 
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val userRepository = UserRepository()
-        val factory = MyViewModelFactory(userRepository, RankingRepository())
+        val factory = BlackjackViewModelFactory(userRepository, RankingRepository())
 
         // Creating Factory ViewModel.
         // vsGameViewModel = ViewModelProvider(this, factory)[BlackjackGameViewModel::class.java]

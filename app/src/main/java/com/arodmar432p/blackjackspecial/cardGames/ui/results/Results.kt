@@ -4,14 +4,19 @@ package com.arodmar432p.blackjackspecial.cardGames.ui.results
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,34 +48,40 @@ import com.google.firebase.ktx.Firebase
  */
 @Composable
 fun ResultsScreen(resultsViewModel: ResultsViewModel) {
+    BoxWithConstraints {
+        val maxWidth = this.maxWidth
+        val maxHeight = this.maxHeight
 
-    val user by resultsViewModel.user.collectAsState()
-    val isLoading by resultsViewModel.isLoading.collectAsState()
+        val user by resultsViewModel.user.collectAsState()
+        val isLoading by resultsViewModel.isLoading.collectAsState()
 
-    ResultsWallpaper(ResultsViewModel())
+        ResultsWallpaper(ResultsViewModel(), maxWidth, maxHeight)
 
-    LaunchedEffect(Unit) {
-        val uid = Firebase.auth.currentUser?.uid
-        if (uid != null) {
-            resultsViewModel.getUser(uid)
+        LaunchedEffect(Unit) {
+            val uid = Firebase.auth.currentUser?.uid
+            if (uid != null) {
+                resultsViewModel.getUser(uid)
+            }
+        }
+
+        UserResults(user = user, isLoading = isLoading, maxWidth, maxHeight)
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.avatar),
+                contentDescription = "User avatar",
+                modifier = Modifier
+                    .size(65.dp)
+                    .offset(x = 790.dp, y = 390.dp)
+            )
         }
     }
-
-    UserResults(user = user, isLoading = isLoading)
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.avatar),
-            contentDescription = "User avatar",
-            modifier = Modifier
-                .size(65.dp)
-                .height(20.dp)
-                .width(20.dp)
-                .offset(x = 780.dp, y = 385.dp),
-        )
-    }
-
 }
+
 
 /**
  * This function displays the leaderboard image.
@@ -105,31 +116,44 @@ fun ResultsImage(maxWidth: Dp, maxHeight: Dp) {
  * @param isLoading A boolean indicating whether the user data is still loading.
  */
 @Composable
-fun UserResults(user: User?, isLoading: Boolean) {
+fun UserResults(user: User?, isLoading: Boolean, maxWidth: Dp, maxHeight: Dp) {
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (isLoading) {
             Text(text = "Cargando datos del usuario...", color = Color.Black,
-                modifier = Modifier.offset(y = 390.dp))
+                modifier = Modifier
+                    .offset(y = 390.dp)
+                    .wrapContentSize())
         } else if (user != null) {
+
+
             Text(text = user.username, color = (Color(0xFFEAEFC4)),
                 fontWeight = FontWeight.Bold, fontSize = 30.sp,
-                modifier = Modifier.offset(x= (-25).dp, y = 380.dp))
+                modifier = Modifier.offset(x= (-25).dp, y = 380.dp)
+                                   .wrapContentSize())
             Text(text = "Horas de juego: ${user.hoursInApp}", color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.offset(x= (100).dp, y = 433.dp))
+                modifier = Modifier
+                    .offset(x= (100).dp, y = 433.dp)
+                    .wrapContentSize())
             Text(text = "Total partidas: ${user.gamesPlayed}", color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.offset(x= (-105).dp, y = 415.dp))
             Text(text = "Victorias: ${user.victories}", color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.offset(x= (-128).dp, y = 450.dp) )
+                modifier = Modifier
+                    .offset(x= (-128).dp, y = 450.dp)
+                    .wrapContentSize())
         } else {
             Text(text = "No se encontraron datos del usuario.", color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.offset(y = 390.dp) )
+                modifier = Modifier
+                    .offset(y = 390.dp)
+                    .wrapContentSize())
         }
     }
 }
@@ -140,8 +164,7 @@ fun UserResults(user: User?, isLoading: Boolean) {
  * @param resultsViewModel The ViewModel that this function will use to handle results tasks.
  */
 @Composable
-fun ResultsWallpaper(resultsViewModel: ResultsViewModel){
-
+fun ResultsWallpaper(resultsViewModel: ResultsViewModel, maxWidth: Dp, maxHeight: Dp){
 
     val user by resultsViewModel.user.collectAsState()
 
@@ -205,6 +228,11 @@ fun ResultsWallpaper(resultsViewModel: ResultsViewModel){
  */
 @Preview(showBackground = true, name = "Preview AuthScreenWallpaper", widthDp = 1920, heightDp = 1080)
 @Composable
-fun ResultsScreenPreview(){
-    ResultsWallpaper(ResultsViewModel())
+fun ResultsScreenPreview() {
+    BoxWithConstraints {
+        val maxWidth = this.maxWidth
+        val maxHeight = this.maxHeight
+
+        ResultsWallpaper(ResultsViewModel(), maxWidth, maxHeight)
+    }
 }

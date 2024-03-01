@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arodmar432p.blackjackspecial.R
@@ -53,13 +55,30 @@ fun RankingScreen(rankingViewModel: RankingViewModel) {
 
     Log.d("RankingScreen", "Datos de ranking: $rankings")
 
-    Box(
-        modifier = Modifier
-            .height(450.dp)
-            .width(550.dp)
-    ) {
-        RankingWallpaper(rankings)
+    BoxWithConstraints {
+        val maxWidth = this.maxWidth
+        val maxHeight = this.maxHeight
+
+        RankingWallpaper(rankings, maxWidth, maxHeight)
+        AppLogo()
     }
+}
+
+@Composable
+fun AppLogo(){
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "The App logo",
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .size(380.dp)
+                .offset(y = (-40).dp)
+        )
+    }
+
 }
 
 
@@ -69,7 +88,7 @@ fun RankingScreen(rankingViewModel: RankingViewModel) {
  * @param rankings The list of rankings that this function will display.
  */
 @Composable
-fun RankingWallpaper(rankings: List<Ranking>) {
+fun RankingWallpaper(rankings: List<Ranking>, maxWidth: Dp, maxHeight: Dp) {
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -106,15 +125,6 @@ fun RankingWallpaper(rankings: List<Ranking>) {
                 contentScale = ContentScale.Crop
             )
         }
-
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "The App logo",
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .size(350.dp)
-                .offset(y = (-30).dp)
-        )
 
         Box(
             modifier = Modifier

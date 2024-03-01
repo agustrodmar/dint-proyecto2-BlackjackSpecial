@@ -17,7 +17,7 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsViewModel
  * @property rankingRepository The RankingRepository to pass to the ViewModels.
  */
 @Suppress("UNCHECKED_CAST")
-class MyViewModelFactory(
+class BlackjackViewModelFactory(
     private val userRepository: UserRepository,
     private val rankingRepository: RankingRepository
 ) : ViewModelProvider.Factory {
