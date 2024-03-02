@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.arodmar432p.blackjackspecial.R
-import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
+import com.arodmar432p.blackjackspecial.cardGames.navigation.BlackjackRoutes
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 
 

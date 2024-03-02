@@ -2,6 +2,7 @@ package com.arodmar432p.blackjackspecial.cardGames.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.arodmar432p.blackjackspecial.cardGames.repository.AvatarRepository
 import com.arodmar432p.blackjackspecial.cardGames.repository.RankingRepository
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
 import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
@@ -19,21 +20,24 @@ import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsViewModel
 @Suppress("UNCHECKED_CAST")
 class BlackjackViewModelFactory(
     private val userRepository: UserRepository,
-    private val rankingRepository: RankingRepository
+    private val rankingRepository: RankingRepository,
+    private val avatarRepository: AvatarRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
-            return AuthViewModel(userRepository) as T
+        return when {
+            modelClass.isAssignableFrom(AuthViewModel::class.java) -> {
+                AuthViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(BlackjackDealerViewModel::class.java) -> {
+                BlackjackDealerViewModel(userRepository, rankingRepository) as T
+            }
+            modelClass.isAssignableFrom(ResultsViewModel::class.java) -> {
+                ResultsViewModel(avatarRepository) as T
+            }
+            modelClass.isAssignableFrom(RankingViewModel::class.java) -> {
+                RankingViewModel(rankingRepository) as T
+            }
+            else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
-        if (modelClass.isAssignableFrom(BlackjackDealerViewModel::class.java)) {
-            return BlackjackDealerViewModel(userRepository, RankingRepository()) as T
-        }
-        if (modelClass.isAssignableFrom(ResultsViewModel::class.java)) {
-            return ResultsViewModel() as T
-        }
-        if (modelClass.isAssignableFrom(RankingViewModel::class.java)) {
-            return RankingViewModel(rankingRepository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -11,24 +11,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.arodmar432p.blackjackspecial.cardGames.ui.menu.MainMenu
-import com.arodmar432p.blackjackspecial.cardGames.data.BlackjackRoutes
+import com.arodmar432p.blackjackspecial.cardGames.navigation.BlackjackNavHost
+import com.arodmar432p.blackjackspecial.cardGames.repository.AvatarRepository
 import com.arodmar432p.blackjackspecial.cardGames.repository.RankingRepository
 import com.arodmar432p.blackjackspecial.cardGames.repository.UserRepository
+import com.arodmar432p.blackjackspecial.cardGames.service.AvatarApi
 import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthViewModel
-import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDealerScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackDealerViewModel
-import com.arodmar432p.blackjackspecial.cardGames.ui.blackjackdealer.BlackjackGame
-import com.arodmar432p.blackjackspecial.cardGames.ui.authentication.AuthScreen
-import com.arodmar432p.blackjackspecial.cardGames.ui.ranking.RankingScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.ranking.RankingViewModel
-import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsScreen
 import com.arodmar432p.blackjackspecial.cardGames.ui.results.ResultsViewModel
 import com.arodmar432p.blackjackspecial.cardGames.util.BlackjackViewModelFactory
 import com.arodmar432p.blackjackspecial.ui.theme.BlackjackSpecialTheme
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
@@ -40,22 +36,33 @@ class MainActivity : ComponentActivity() {
    //  private lateinit var highestCardViewModel: HighestCardViewModel
     private lateinit var authViewModel: AuthViewModel
     private lateinit var resultsViewModel: ResultsViewModel
+    private lateinit var rankingViewModel: RankingViewModel
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.multiavatar.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val avatarApi = retrofit.create(AvatarApi::class.java)
+        val avatarRepository = AvatarRepository(avatarApi)
         val userRepository = UserRepository()
-        val factory = BlackjackViewModelFactory(userRepository, RankingRepository())
+
+        val factory = BlackjackViewModelFactory(userRepository, RankingRepository(), avatarRepository)
 
         // Creating Factory ViewModel.
-        // vsGameViewModel = ViewModelProvider(this, factory)[BlackjackGameViewModel::class.java]
-        dealerGameViewModel = ViewModelProvider(this, factory)[BlackjackDealerViewModel::class.java]
-        // highestCardViewModel = ViewModelProvider(this, factory)[HighestCardViewModel::class.java]
-        authViewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
-        resultsViewModel = ViewModelProvider(this, factory)[ResultsViewModel::class.java]
-        val rankingViewModel = ViewModelProvider(this, factory)[RankingViewModel::class.java]
-
+        try {
+            dealerGameViewModel = ViewModelProvider(this, factory)[BlackjackDealerViewModel::class.java]
+            authViewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
+            resultsViewModel = ViewModelProvider(this, factory)[ResultsViewModel::class.java]
+            Log.d("MainActivity", "ResultsViewModel instance: $resultsViewModel")
+            rankingViewModel = ViewModelProvider(this, factory)[RankingViewModel::class.java]
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Error al crear ViewModel", e)
+        }
 
         setContent {
             BlackjackSpecialTheme {
@@ -65,34 +72,13 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-
-                    NavHost(
+                    BlackjackNavHost(
                         navController = navController,
-                        startDestination = BlackjackRoutes.AuthScreen.route
-                    ) {
-                        composable(BlackjackRoutes.MainMenuScreen.route) {
-                            MainMenu(navController = navController, authViewModel)
-                        }
-                        composable(BlackjackRoutes.BlackjackScreen.route) {
-                            BlackjackGame(blackjackDealerViewModel = dealerGameViewModel)
-                        }
-                        composable(BlackjackRoutes.BlackjackDealerScreen.route) {
-                            BlackjackDealerScreen(blackjackDealerViewModel = dealerGameViewModel)
-                        }
-                        composable(BlackjackRoutes.ResultsScreen.route) {
-                            ResultsScreen(ResultsViewModel())
-                        }
-                        composable(BlackjackRoutes.AuthScreen.route) {
-                            AuthScreen(viewModel = authViewModel, navController)
-                        }
-                        /*composable(BlackjackRoutes.HighestCardScreen.route) {
-                            HighestCardScreen(highestCardViewModel = highestCardViewModel)
-                        }*/
-
-                        composable(BlackjackRoutes.RankingScreen.route) {
-                            RankingScreen(rankingViewModel)
-                        }
-                    }
+                        authViewModel = authViewModel,
+                        dealerGameViewModel = dealerGameViewModel,
+                        rankingViewModel = rankingViewModel,
+                        resultsViewModel = resultsViewModel
+                    ).Create()
                 }
             }
         }

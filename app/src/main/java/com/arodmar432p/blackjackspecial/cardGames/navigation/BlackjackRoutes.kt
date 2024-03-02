@@ -1,4 +1,4 @@
-package com.arodmar432p.blackjackspecial.cardGames.data
+package com.arodmar432p.blackjackspecial.cardGames.navigation
 
 /**
  * A sealed class representing the different routes in the Blackjack game.
@@ -27,10 +27,13 @@ sealed class BlackjackRoutes(val route: String) {
      */
     object ResultsScreen : BlackjackRoutes("ResultsScreen")
 
+    /*
     /**
      * Represents the Highest Card Game Screen
      */
     object HighestCardScreen : BlackjackRoutes("HighestCardScreen")
+
+     */
 
     /**
      * Represents the Authentication Screen
